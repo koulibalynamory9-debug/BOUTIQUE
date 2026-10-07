@@ -1,0 +1,836 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Espace Commercial</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; font-family: Arial, sans-serif; }
+body { background: linear-gradient(135deg, #2c5f2d, #4a7c4b); min-height: 100vh; }
+.cacher { display: none !important; }
+
+.cadre-centre { display: flex; align-items: center; justify-content: center; min-height: 100vh; padding: 15px; }
+.carte { background: white; border-radius: 16px; padding: 25px; max-width: 420px; width: 100%; box-shadow: 0 10px 40px rgba(0,0,0,0.2); }
+.carte h1 { text-align: center; color: #2c5f2d; margin-bottom: 10px; font-size: 22px; }
+.sous-titre { text-align: center; color: #666; margin-bottom: 20px; font-size: 14px; }
+.champ { width: 100%; padding: 12px; font-size: 16px; border: 2px solid #ddd; border-radius: 8px; margin: 6px 0; background: white; color: #333; }
+.champ:focus { outline: none; border-color: #2e7d32; }
+select.champ { color: #333; background-color: white; }
+select.champ option { color: #333; background: white; }
+.calcul-auto { background: #e8f5e9; border: 2px solid #2e7d32; padding: 12px; border-radius: 8px; margin: 10px 0; text-align: center; font-weight: bold; font-size: 17px; color: #1b5e20; }
+.panier-boite { background: #fff8e1; border: 2px solid #ff8f00; border-radius: 10px; padding: 15px; margin: 15px 0; }
+.panier-titre { font-weight: bold; font-size: 16px; color: #e65100; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; }
+.panier-item { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px dashed #ffcc80; align-items: center; flex-wrap: wrap; gap: 6px; color: #333; }
+.panier-suppr { color: #d32f2f; cursor: pointer; font-weight: bold; padding: 4px 10px; border-radius: 4px; background: #ffebee; border: none; font-size: 14px; }
+.btn-vert, .btn-orange, .btn-rouge, .btn-gris { width: 100%; padding: 14px; border: none; border-radius: 10px; font-size: 16px; font-weight: bold; cursor: pointer; margin: 6px 0; touch-action: manipulation; }
+.btn-vert { background: #2e7d32; color: white; }
+.btn-orange { background: linear-gradient(90deg, #ff6f00, #ff9800); color: white; }
+.btn-rouge { background: #d32f2f; color: white; }
+.btn-gris { background: #6c757d; color: white; }
+.btn-panier { background: #ff8f00; color: white; padding: 12px 16px; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; white-space: nowrap; touch-action: manipulation; }
+.btn-panier:active { transform: scale(0.97); }
+.btn-modifier { background: #1976d2; color: white; border: none; padding: 6px 10px; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 13px; }
+.lien { text-align: center; margin-top: 15px; font-size: 14px; color: #2c5f2d; cursor: pointer; text-decoration: underline; }
+.mention { margin-top: 20px; font-size: 11px; color: #888; text-align: center; }
+
+.entete { background: white; padding: 12px 15px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+.entete-gauche h1 { color: #2c5f2d; font-size: 17px; display: flex; align-items: center; gap: 8px; }
+.badge-admin { background: #1b5e20; color: white; font-size: 11px; padding: 3px 8px; border-radius: 10px; }
+.badge-essai { background: #ff9800; color: white; font-size: 11px; padding: 3px 8px; border-radius: 10px; }
+.btn-deconnexion { background: #d32f2f; color: white; border: none; padding: 10px 15px; border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 15px; min-height: 44px; touch-action: manipulation; }
+.contenu { padding: 15px; color: white; max-width: 1200px; margin: 0 auto; }
+.jours-restants { background: rgba(255,255,255,0.15); padding: 12px; border-radius: 8px; margin-bottom: 20px; text-align: center; font-weight: bold; font-size: 15px; }
+.grille { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; margin-top: 20px; }
+.carte-menu { background: rgba(255,255,255,0.1); padding: 20px 12px; border-radius: 12px; text-align: center; cursor: pointer; transition: all 0.2s; touch-action: manipulation; color: white; }
+.carte-menu:hover { background: rgba(255,255,255,0.2); }
+.carte-menu h3 { margin-top: 8px; font-size: 14px; color: white; }
+.carte-admin { border: 2px solid #4caf50; display: none; }
+.carte-admin.visible { display: block; }
+.retour { display: inline-block; margin-bottom: 15px; color: white; cursor: pointer; text-decoration: underline; font-size: 15px; }
+.titre-section { margin: 15px 0; font-size: 19px; color: white; }
+.tableau { width: 100%; border-collapse: collapse; margin-top: 15px; background: white; border-radius: 10px; overflow: hidden; }
+.tableau th, .tableau td { padding: 10px 6px; text-align: left; border-bottom: 1px solid #eee; color: #333; font-size: 13px; }
+.tableau th { background: #2c5f2d; color: white; }
+.facture { background: white; color: #333; padding: 25px; border-radius: 10px; max-width: 420px; margin: 0 auto; }
+.facture h2 { text-align: center; border-bottom: 2px solid #2c5f2d; padding-bottom: 10px; margin-bottom: 20px; color: #2c5f2d; }
+.facture .ligne { display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px dashed #ddd; font-size: 15px; color: #333; }
+.facture .total { font-weight: bold; font-size: 17px; border-top: 2px solid #333; padding-top: 10px; margin-top: 10px; }
+.facture .verse { color: #2e7d32; font-weight: bold; }
+.facture .reste { color: #d32f2f; font-weight: bold; }
+.bloc-stats { background: rgba(255,255,255,0.1); padding: 18px; border-radius: 10px; margin: 15px 0; }
+.stat { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.2); font-size: 15px; color: white; }
+.flex-ligne { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+.flex-ligne .champ { flex: 1; margin: 0; min-width: 120px; }
+.info-paiement { background: #fff3e0; border-left: 4px solid #ff6f00; padding: 15px; border-radius: 6px; margin: 15px 0; text-align: center; }
+.info-paiement strong { font-size: 22px; color: #e65100; }
+.btn-payer-ligne { background: #2e7d32; color: white; border: none; padding: 8px 12px; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 14px; touch-action: manipulation; }
+.btn-payer-ligne:active { transform: scale(0.97); }
+.modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center; padding: 20px; z-index: 1000; }
+.modal-contenu { background: white; padding: 25px; border-radius: 12px; max-width: 360px; width: 100%; }
+.modal-contenu h3 { color: #2c5f2d; margin-bottom: 15px; text-align: center; }
+.modal-boutons { display: flex; gap: 10px; margin-top: 15px; }
+.modal-boutons button { flex: 1; padding: 12px; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; }
+@media print {
+body { background: white; color: #333; }
+.entete, .retour, .btn-deconnexion, button:not(.imprimable) { display: none !important; }
+.facture { margin: 0; padding: 0; }
+}
+</style>
+</head>
+<body>
+
+<script>
+// === CODES D'ACCÈS — AJOUTEZ VOS NOUVEAUX CODES ICI ===
+const CODE_ADMIN = "4321";
+const DUREE_ESSAI_JOURS = 7;
+const CODES_CLIENTS = ["4322", "4323", "4324", "4325"];
+const CODES_DISPONIBLES = [CODE_ADMIN, ...CODES_CLIENTS];
+let panier = [];
+let clientEnCoursPaiement = null;
+let produitEnCoursModif = null;
+</script>
+
+<!-- PAGE CONNEXION — CONSERVÉE -->
+<div class="cadre-centre" id="pageConnexion">
+<div class="carte">
+<h1>🛒 Espace Commercial</h1>
+<p class="sous-titre">✅ Essai gratuit de 7 jours — Accès illimité ensuite</p>
+<input type="text" id="codeAcces" class="champ" placeholder="Entrez votre code d'accès" autocomplete="off">
+<button class="btn-vert" onclick="verifierCode()">✅ Valider et accéder</button>
+<p style="text-align:center; margin:15px 0; color:#666;">— Ou —</p>
+<button class="btn-orange" onclick="afficherDemandeCode()">📩 Demander un code d'accès</button>
+<p class="lien" onclick="afficherDemandeCode()">💳 J'ai déjà payé — Activer mon accès</p>
+<p class="mention">© 2026 Espace Commercial — Tous droits réservés.</p>
+</div>
+</div>
+
+<!-- PAGE DEMANDE DE CODE — CONSERVÉE -->
+<div class="cadre-centre cacher" id="pageDemandeCode">
+<div class="carte" style="max-width: 450px;">
+<h1>📥 Demande de code</h1>
+<p class="sous-titre">Pour obtenir votre code d'accès :</p>
+
+<div style="text-align: left; margin: 15px 0; padding-left: 10px;">
+<p style="margin: 8px 0;">✅ Accès à vie</p>
+<p style="margin: 8px 0;">✅ Téléphone & Ordinateur</p>
+<p style="margin: 8px 0;">✅ Mises à jour gratuites</p>
+</div>
+
+<div class="info-paiement">
+<p>Prix : <strong>356 830 GNF</strong></p>
+<p style="font-size: 12px; color: #666; margin-top: 5px;">(Dont 350 000 GNF net + frais Orange Money)</p>
+</div>
+
+<div style="background: #e8f5e9; padding: 15px; border-radius: 8px; margin: 15px 0;">
+<p style="font-weight: bold; text-align: center; margin-bottom: 8px;">Versez sur ce compte :</p>
+<p style="text-align: center; font-size: 24px; font-weight: bold; color: #1b5e20;">622149602</p>
+<p style="text-align: center; font-size: 13px; color: #666; margin-top: 5px;">Orange Money — Compte Marchand</p>
+</div>
+
+<p style="font-size: 13px; color: #555; margin: 10px 0; text-align: center;">
+Après paiement, envoyez un message sur WhatsApp au propriétaire pour recevoir votre code.
+</p>
+
+<button class="btn-vert" onclick="retourConnexion()">← Retour</button>
+</div>
+</div>
+
+<!-- PAGE ESSAI EXPIRÉ -->
+<div class="cadre-centre cacher" id="pagePaiementRequis">
+<div class="carte">
+<h1>⏰ Période terminée</h1>
+<div style="background:#ffebee; border-left:4px solid #d32f2f; padding:15px; margin:15px 0; border-radius:6px;">
+<strong>Vos 7 jours d'essai sont écoulés.</strong>
+</div>
+<button class="btn-orange" onclick="afficherDemandeCode()">💳 Activer l'accès définitif</button>
+<button class="btn-gris" onclick="deconnecter()">🚪 Se déconnecter</button>
+</div>
+</div>
+
+<!-- MODAL PAIEMENT -->
+<div id="modalPaiement" class="modal cacher">
+<div class="modal-contenu">
+<h3>💰 Enregistrer un paiement</h3>
+<p style="margin-bottom:10px; color:#555;">Client : <strong id="nomClientPaiement"></strong></p>
+<p style="margin-bottom:15px; color:#d32f2f;">Reste à payer : <strong id="resteAPayer"></strong> GNF</p>
+<input type="number" id="montantPaiement" class="champ" placeholder="Montant versé par le client">
+<div class="modal-boutons">
+<button style="background:#6c757d; color:white;" onclick="fermerModalPaiement()">Annuler</button>
+<button style="background:#2e7d32; color:white;" onclick="validerPaiement()">✅ Enregistrer</button>
+</div>
+</div>
+</div>
+
+<!-- MODAL MODIFIER PRODUIT -->
+<div id="modalModifierProduit" class="modal cacher">
+<div class="modal-contenu">
+<h3>✏️ Modifier le produit</h3>
+<input type="text" id="modifNom" class="champ" placeholder="Nom du produit">
+<input type="number" id="modifAchat" class="champ" placeholder="Prix d'achat">
+<input type="number" id="modifVente" class="champ" placeholder="Prix de vente">
+<input type="number" id="modifStock" class="champ" placeholder="Quantité en stock">
+<div class="modal-boutons">
+<button style="background:#6c757d; color:white;" onclick="fermerModifProduit()">Annuler</button>
+<button style="background:#1976d2; color:white;" onclick="enregistrerModifProduit()">💾 Enregistrer</button>
+</div>
+</div>
+</div>
+
+<!-- APPLICATION PRINCIPALE -->
+<div id="application" class="cacher">
+<div class="entete">
+<div class="entete-gauche">
+<h1>🛒 Espace Commercial
+<span class="badge-admin" id="badgeAdmin">ADMIN</span>
+<span class="badge-essai" id="badgeEssai">ESSAI</span>
+</h1>
+</div>
+<button class="btn-deconnexion" onclick="deconnecter()">🚪 Déconnexion</button>
+</div>
+
+<!-- TABLEAU DE BORD -->
+<div class="contenu" id="pageAccueil">
+<div class="jours-restants" id="affichageJours">
+⏳ Essai : <span id="nbJoursRestants">7</span> jour(s) restant(s)
+</div>
+<h2>Tableau de bord</h2>
+<div class="grille">
+<div class="carte-menu" onclick="ouvrirModule('produits')">
+<span style="font-size:26px;">📦</span>
+<h3>Produits</h3>
+</div>
+<div class="carte-menu" onclick="ouvrirModule('ventes')">
+<span style="font-size:26px;">🛒</span>
+<h3>Ventes</h3>
+</div>
+<div class="carte-menu" onclick="ouvrirModule('facturation')">
+<span style="font-size:26px;">🧾</span>
+<h3>Facturation</h3>
+</div>
+<div class="carte-menu" onclick="ouvrirModule('credits')">
+<span style="font-size:26px;">📝</span>
+<h3>Crédits Impayés</h3>
+</div>
+<div class="carte-menu" onclick="ouvrirModule('stock')">
+<span style="font-size:26px;">📊</span>
+<h3>Suivi Stock</h3>
+</div>
+<div class="carte-menu" onclick="ouvrirModule('rapports')">
+<span style="font-size:26px;">📈</span>
+<h3>Rapports & CA</h3>
+</div>
+<div class="carte-menu carte-admin" id="menuAdminUsers" onclick="ouvrirModule('utilisateurs')">
+<span style="font-size:26px;">👥</span>
+<h3>Gérer Utilisateurs</h3>
+</div>
+<div class="carte-menu carte-admin" id="menuAdminGlobal" onclick="ouvrirModule('global')">
+<span style="font-size:26px;">🔍</span>
+<h3>Vue Globale</h3>
+</div>
+</div>
+</div>
+
+<!-- PRODUITS — AVEC BOUTON MODIFIER -->
+<div class="contenu cacher" id="module-produits">
+<span class="retour" onclick="retourAccueil()">← Retour</span>
+<h2 class="titre-section">📦 Gestion des Produits</h2>
+<input type="text" id="prodNom" class="champ" placeholder="Nom du produit *">
+<input type="number" id="prodAchat" class="champ" placeholder="Prix d'achat (GNF) *">
+<input type="number" id="prodVente" class="champ" placeholder="Prix de vente (GNF) *">
+<input type="number" id="prodStock" class="champ" placeholder="Quantité en stock">
+<button class="btn-vert" onclick="enregistrerProduit()">✅ Enregistrer le produit</button>
+
+<h3 style="margin-top:25px; color:white;">Liste des produits disponibles</h3>
+<table class="tableau">
+<thead><tr><th>Nom du produit</th><th>Prix d'achat</th><th>Prix de vente</th><th>Stock</th><th>Bénéfice</th><th>Actions</th></tr></thead>
+<tbody id="listeProduits"></tbody>
+</table>
+</div>
+
+<!-- VENTES AVEC PANIER -->
+<div class="contenu cacher" id="module-ventes">
+<span class="retour" onclick="retourAccueil()">← Retour</span>
+<h2 class="titre-section">🛒 Enregistrer une Vente — Panier</h2>
+
+<input type="text" id="venteClient" class="champ" placeholder="Nom du client *">
+<input type="text" id="venteTel" class="champ" placeholder="Téléphone du client">
+
+<div class="flex-ligne">
+<select id="venteProduit" class="champ" onchange="calculerTotalInstant()">
+<option value="">Choisir un produit *</option>
+</select>
+<input type="number" id="venteQte" class="champ" style="max-width: 110px;" placeholder="Qté" oninput="calculerTotalInstant()">
+<button class="btn-panier" onclick="ajouterAuPanier()">🛒 Ajouter au panier</button>
+</div>
+
+<div class="calcul-auto">
+Total ligne : <span id="totalAffichage">0</span> GNF
+</div>
+
+<div class="panier-boite">
+<div class="panier-titre">
+🛒 Panier (<span id="nbArticles">0</span>)
+<strong>Total : <span id="totalPanier">0</span> GNF</strong>
+</div>
+<div id="listePanierVide" style="color:#888; text-align:center; padding:15px;">
+Aucun produit dans le panier.
+</div>
+<div id="listePanier"></div>
+</div>
+
+<input type="number" id="montantVerse" class="champ" placeholder="Montant versé (si paiement partiel)">
+
+<div class="flex-ligne">
+<button class="btn-vert" onclick="validerPanier()" style="flex: 1;">✅ Valider la vente</button>
+<button class="btn-gris" onclick="viderPanier()" style="flex: 1;">🗑️ Vider</button>
+</div>
+
+<h3 style="margin-top:25px; color:white;">Historique des ventes</h3>
+<table class="tableau">
+<thead><tr><th>Date</th><th>Client</th><th>Produits</th><th>Total</th><th>Versé</th><th>Reste</th></tr></thead>
+<tbody id="listeVentes"></tbody>
+</table>
+</div>
+
+<!-- FACTURATION -->
+<div class="contenu cacher" id="module-facturation">
+<span class="retour" onclick="retourAccueil()">← Retour</span>
+<h2 class="titre-section">🧾 Facturation</h2>
+<input type="text" id="factNomClient" class="champ" placeholder="Nom du client *">
+<input type="text" id="factTelClient" class="champ" placeholder="Téléphone du client">
+<button class="btn-vert" onclick="genererFacture()">📄 Générer la facture</button>
+<div id="blocFacture" class="cacher" style="margin-top:25px;">
+<div class="facture" id="contenuFacture"></div>
+<div style="margin-top:15px; display:flex; gap:10px; flex-wrap:wrap;">
+<button class="btn-vert imprimable" onclick="window.print()">🖨️ Imprimer</button>
+<button class="btn-orange" onclick="partagerFacture()">📲 Partager WhatsApp</button>
+</div>
+</div>
+</div>
+
+<!-- CRÉDITS IMPAYÉS -->
+<div class="contenu cacher" id="module-credits">
+<span class="retour" onclick="retourAccueil()">← Retour</span>
+<h2 class="titre-section">📝 Crédits Impayés</h2>
+<table class="tableau">
+<thead><tr><th>Client</th><th>Téléphone</th><th>Total dû</th><th>Versé</th><th>Reste à payer</th><th>Action</th></tr></thead>
+<tbody id="listeCredits"></tbody>
+</table>
+</div>
+
+<!-- SUIVI STOCK -->
+<div class="contenu cacher" id="module-stock">
+<span class="retour" onclick="retourAccueil()">← Retour</span>
+<h2 class="titre-section">📊 Suivi du Stock</h2>
+<table class="tableau">
+<thead><tr><th>Produit</th><th>Quantité en stock</th><th>État</th></tr></thead>
+<tbody id="listeStock"></tbody>
+</table>
+</div>
+
+<!-- RAPPORTS -->
+<div class="contenu cacher" id="module-rapports">
+<span class="retour" onclick="retourAccueil()">← Retour</span>
+<h2 class="titre-section">📈 Rapports & CA</h2>
+<div class="bloc-stats">
+<div class="stat"><strong>CA du jour</strong> <span id="caJour">0</span> GNF</div>
+<div class="stat"><strong>CA Global</strong> <span id="caGlobal">0</span> GNF</div>
+<div class="stat"><strong>Total impayé</strong> <span id="totalImpaye">0</span> GNF</div>
+</div>
+</div>
+
+<!-- GESTION UTILISATEURS AMÉLIORÉE -->
+<div class="contenu cacher" id="module-utilisateurs">
+<span class="retour" onclick="retourAccueil()">← Retour</span>
+<h2 class="titre-section">👥 Gestion des Utilisateurs</h2>
+<p style="color:white; margin-bottom:15px;">Espace réservé à l'administrateur</p>
+<input type="text" id="nouvCodeUser" class="champ" placeholder="Code du nouvel utilisateur">
+<button class="btn-vert" onclick="ajouterUtilisateur()">✅ Ajouter</button>
+<p style="color:#ffd700; margin-top:10px; font-size:13px;">⚠️ N'oubliez pas d'ajouter ce code dans la liste CODES_CLIENTS en haut du code pour qu'il soit définitif.</p>
+</div>
+
+<!-- VUE GLOBALE -->
+<div class="contenu cacher" id="module-global">
+<span class="retour" onclick="retourAccueil()">← Retour</span>
+<h2 class="titre-section">🔍 Vue Globale</h2>
+<div class="bloc-stats">
+<div class="stat"><strong>Total des ventes</strong> <span id="globalTotal">0</span> GNF</div>
+<div class="stat"><strong>Total impayé</strong> <span id="globalImpaye">0</span> GNF</div>
+</div>
+</div>
+</div>
+
+<script>
+// === STOCKAGE ===
+function lireProduits() { return JSON.parse(localStorage.getItem('prod') || '[]'); }
+function sauverProduits(p) { localStorage.setItem('prod', JSON.stringify(p)); }
+function lireVentes() { return JSON.parse(localStorage.getItem('vent') || '[]'); }
+function sauverVentes(v) { localStorage.setItem('vent', JSON.stringify(v)); }
+
+// === NAVIGATION ===
+function cacherTout() {
+document.querySelectorAll('.cadre-centre, .contenu').forEach(el => el.classList.add('cacher'));
+}
+function retourConnexion() { location.reload(); }
+function afficherDemandeCode() { cacherTout(); document.getElementById('pageDemandeCode').classList.remove('cacher'); }
+function afficherPaiementRequis() { cacherTout(); document.getElementById('pagePaiementRequis').classList.remove('cacher'); }
+function retourAccueil() {
+cacherTout();
+document.getElementById('application').classList.remove('cacher');
+document.getElementById('pageAccueil').classList.remove('cacher');
+}
+function ouvrirModule(nom) {
+document.querySelectorAll('.contenu').forEach(el => el.classList.add('cacher'));
+document.getElementById('application').classList.remove('cacher');
+document.getElementById('pageAccueil').classList.add('cacher');
+document.getElementById(`module-${nom}`).classList.remove('cacher');
+
+if(nom==='produits') afficherListeProduits();
+if(nom==='ventes') { chargerListeProduitsDansSelect(); afficherListeVentes(); viderPanier(); }
+if(nom==='credits') afficherCredits();
+if(nom==='stock') afficherStock();
+if(nom==='rapports') afficherRapports();
+if(nom==='global') chargerVueGlobale();
+}
+
+function deconnecter() {
+if(confirm("Voulez-vous vraiment vous déconnecter ?")) {
+localStorage.removeItem('estAdmin');
+localStorage.removeItem('codeUtilise');
+location.href = location.pathname;
+}
+}
+
+// === PÉRIODE D'ESSAI ===
+function verifierPeriodeEssai() {
+if(localStorage.getItem('estAdmin')==='oui') return { autorise:true, estAdmin:true };
+let debut = localStorage.getItem('dateDebutEssai');
+if(!debut) {
+localStorage.setItem('dateDebutEssai', new Date().toISOString());
+return { autorise:true, joursRestants:DUREE_ESSAI_JOURS };
+}
+const ecoule = Math.floor((Date.now() - new Date(debut))/(1000*60*60*24));
+const restant = DUREE_ESSAI_JOURS - ecoule;
+return restant <= 0 ? { autorise:false, joursRestants:0 } : { autorise:true, joursRestants:restant };
+}
+
+// === CONNEXION ===
+function verifierCode() {
+const saisie = document.getElementById('codeAcces').value.trim();
+if(!saisie) { alert("⚠️ Entrez un code d'accès !"); return; }
+
+if(saisie === CODE_ADMIN) {
+localStorage.setItem('estAdmin','oui');
+localStorage.setItem('codeUtilise', saisie);
+ouvrirSession(true);
+return;
+}
+if(!CODES_DISPONIBLES.includes(saisie)) { alert("❌ Code incorrect ! Vérifiez ou demandez-en un."); return; }
+
+localStorage.setItem('codeUtilise', saisie);
+localStorage.setItem('estAdmin','non');
+const statut = verifierPeriodeEssai();
+if(!statut.autorise) { afficherPaiementRequis(); return; }
+ouvrirSession(false, statut.joursRestants);
+}
+
+function ouvrirSession(estAdmin, joursRestants=DUREE_ESSAI_JOURS) {
+cacherTout();
+document.getElementById('application').classList.remove('cacher');
+document.getElementById('pageAccueil').classList.remove('cacher');
+
+if(estAdmin) {
+document.getElementById('badgeAdmin').style.display='inline';
+document.getElementById('badgeEssai').style.display='none';
+document.getElementById('affichageJours').style.display='none';
+document.getElementById('menuAdminUsers').classList.add('visible');
+document.getElementById('menuAdminGlobal').classList.add('visible');
+} else {
+document.getElementById('badgeAdmin').style.display='none';
+document.getElementById('badgeEssai').style.display='inline';
+document.getElementById('nbJoursRestants').textContent = joursRestants;
+document.getElementById('menuAdminUsers').classList.remove('visible');
+document.getElementById('menuAdminGlobal').classList.remove('visible');
+}
+}
+
+// === AJOUTER UTILISATEUR ===
+function ajouterUtilisateur() {
+const nouveauCode = document.getElementById('nouvCodeUser').value.trim();
+if(!nouveauCode) { alert("⚠️ Saisissez un code !"); return; }
+
+if(CODES_DISPONIBLES.includes(nouveauCode)) {
+alert("⚠️ Ce code existe déjà !");
+return;
+}
+
+CODES_CLIENTS.push(nouveauCode);
+CODES_DISPONIBLES.push(nouveauCode);
+
+alert(`✅ Utilisateur ajouté !\nCode : ${nouveauCode}\n\n⚠️ N'oubliez pas d'ajouter "${nouveauCode}" dans la liste CODES_CLIENTS en haut du code pour qu'il reste actif.`);
+document.getElementById('nouvCodeUser').value = '';
+}
+
+// === PRODUITS — AVEC MODIFICATION ===
+function enregistrerProduit() {
+const nom = document.getElementById('prodNom').value.trim();
+const achat = Number(document.getElementById('prodAchat').value);
+const vente = Number(document.getElementById('prodVente').value);
+const stock = Number(document.getElementById('prodStock').value) || 0;
+
+if(!nom || !achat || !vente) { alert("⚠️ Remplissez tous les champs obligatoires !"); return; }
+const liste = lireProduits();
+if(liste.find(p => p.nom.toLowerCase() === nom.toLowerCase())) { alert("⚠️ Ce produit existe déjà !"); return; }
+
+liste.push({id:Date.now(), nom, achat, vente, stock});
+sauverProduits(liste);
+alert("✅ Produit enregistré !");
+document.getElementById('prodNom').value='';
+document.getElementById('prodAchat').value='';
+document.getElementById('prodVente').value='';
+document.getElementById('prodStock').value='';
+afficherListeProduits();
+}
+
+function afficherListeProduits() {
+const liste = lireProduits();
+document.getElementById('listeProduits').innerHTML = liste.map(p => `
+<tr>
+<td><strong>${p.nom}</strong></td>
+<td>${p.achat.toLocaleString('fr-FR')}</td>
+<td>${p.vente.toLocaleString('fr-FR')}</td>
+<td>${p.stock}</td>
+<td style="color:green; font-weight:bold;">${(p.vente - p.achat).toLocaleString('fr-FR')}</td>
+<td>
+<button class="btn-modifier" onclick="ouvrirModifProduit(${p.id})">✏️ Modifier</button>
+<button class="panier-suppr" onclick="supprimerProduit(${p.id})">🗑️ Supprimer</button>
+</td>
+</tr>`).join('') || '<tr><td colspan="6" style="text-align:center; color:#666;">Aucun produit</td></tr>';
+}
+
+function ouvrirModifProduit(id) {
+const prod = lireProduits().find(p => p.id === id);
+if(!prod) return;
+produitEnCoursModif = prod;
+
+document.getElementById('modifNom').value = prod.nom;
+document.getElementById('modifAchat').value = prod.achat;
+document.getElementById('modifVente').value = prod.vente;
+document.getElementById('modifStock').value = prod.stock;
+document.getElementById('modalModifierProduit').classList.remove('cacher');
+}
+
+function fermerModifProduit() {
+document.getElementById('modalModifierProduit').classList.add('cacher');
+produitEnCoursModif = null;
+}
+
+function enregistrerModifProduit() {
+if(!produitEnCoursModif) return;
+
+const nom = document.getElementById('modifNom').value.trim();
+const achat = Number(document.getElementById('modifAchat').value);
+const vente = Number(document.getElementById('modifVente').value);
+const stock = Number(document.getElementById('modifStock').value) || 0;
+
+if(!nom || !achat || !vente) { alert("⚠️ Remplissez tous les champs !"); return; }
+
+const liste = lireProduits();
+const doublon = liste.find(p => p.nom.toLowerCase() === nom.toLowerCase() && p.id !== produitEnCoursModif.id);
+if(doublon) { alert("⚠️ Ce nom est déjà utilisé par un autre produit !"); return; }
+
+const index = liste.findIndex(p => p.id === produitEnCoursModif.id);
+liste[index] = { id: produitEnCoursModif.id, nom, achat, vente, stock };
+
+sauverProduits(liste);
+alert("✅ Produit modifié avec succès !");
+fermerModifProduit();
+afficherListeProduits();
+chargerListeProduitsDansSelect();
+}
+
+function supprimerProduit(id) {
+if(!confirm("Supprimer ce produit ?")) return;
+sauverProduits(lireProduits().filter(p => p.id !== id));
+afficherListeProduits();
+chargerListeProduitsDansSelect();
+}
+
+// === PANIER & VENTES ===
+function chargerListeProduitsDansSelect() {
+const sel = document.getElementById('venteProduit');
+const produits = lireProduits();
+sel.innerHTML = '<option value="">Choisir un produit *</option>' +
+produits.map(p => `<option value="${p.nom}" data-prix="${p.vente}" data-stock="${p.stock}">${p.nom} — ${p.vente.toLocaleString('fr-FR')} GNF (Stock: ${p.stock})</option>`).join('');
+}
+
+function calculerTotalInstant() {
+const opt = document.getElementById('venteProduit').selectedOptions[0];
+const qte = Number(document.getElementById('venteQte').value) || 0;
+if(!opt || !opt.value || qte <= 0) {
+document.getElementById('totalAffichage').textContent = '0';
+return;
+}
+document.getElementById('totalAffichage').textContent = (Number(opt.dataset.prix) * qte).toLocaleString('fr-FR');
+}
+
+function ajouterAuPanier() {
+const nom = document.getElementById('venteProduit').value;
+const qte = Number(document.getElementById('venteQte').value) || 0;
+if(!nom || qte <= 0) { alert("⚠️ Choisissez produit et quantité !"); return; }
+
+const prod = lireProduits().find(p => p.nom === nom);
+if(!prod) { alert("❌ Produit introuvable !"); return; }
+
+const existant = panier.find(a => a.nom === nom);
+if(existant) {
+if(prod.stock < existant.qte + qte) { alert(`⚠️ Stock insuffisant !`); return; }
+existant.qte += qte;
+} else {
+if(prod.stock < qte) { alert(`⚠️ Stock insuffisant ! Disponible: ${prod.stock}`); return; }
+panier.push({ nom, prix: prod.vente, qte });
+}
+
+document.getElementById('venteProduit').value = '';
+document.getElementById('venteQte').value = '';
+document.getElementById('totalAffichage').textContent = '0';
+mettreAJourPanier();
+}
+
+function mettreAJourPanier() {
+document.getElementById('nbArticles').textContent = panier.length;
+const total = panier.reduce((s,a) => s + a.prix * a.qte, 0);
+document.getElementById('totalPanier').textContent = total.toLocaleString('fr-FR');
+
+if(panier.length === 0) {
+document.getElementById('listePanierVide').style.display = 'block';
+document.getElementById('listePanier').innerHTML = '';
+return;
+}
+document.getElementById('listePanierVide').style.display = 'none';
+document.getElementById('listePanier').innerHTML = panier.map((a,i) => `
+<div class="panier-item">
+<span><strong>${a.nom}</strong> × ${a.qte}</span>
+<span>${(a.prix*a.qte).toLocaleString('fr-FR')} GNF</span>
+<button class="panier-suppr" onclick="retirerDuPanier(${i})">✕</button>
+</div>`).join('');
+}
+
+function retirerDuPanier(i) { panier.splice(i,1); mettreAJourPanier(); }
+function viderPanier() { if(panier.length && !confirm("Vider le panier ?")) return; panier=[]; mettreAJourPanier(); }
+
+function validerPanier() {
+const nomCli = document.getElementById('venteClient').value.trim();
+const telCli = document.getElementById('venteTel').value.trim();
+const verse = Number(document.getElementById('montantVerse').value) || 0;
+
+if(!nomCli) { alert("⚠️ Nom du client obligatoire !"); return; }
+if(panier.length === 0) { alert("⚠️ Ajoutez des produits !"); return; }
+
+const total = panier.reduce((s,a) => s + a.prix * a.qte, 0);
+const reste = total - verse;
+
+const ventes = lireVentes();
+ventes.push({
+id: Date.now(),
+date: new Date().toLocaleDateString('fr-FR'),
+client: nomCli,
+tel: telCli,
+articles: panier.map(a => ({...a})),
+total, verse, reste
+});
+sauverVentes(ventes);
+
+const produits = lireProduits();
+panier.forEach(a => { const p = produits.find(x => x.nom === a.nom); if(p) p.stock -= a.qte; });
+sauverProduits(produits);
+
+alert(`✅ Enregistré !\nTotal: ${total.toLocaleString('fr-FR')}\nVersé: ${verse.toLocaleString('fr-FR')}\nReste: ${reste.toLocaleString('fr-FR')}`);
+
+document.getElementById('venteClient').value = '';
+document.getElementById('venteTel').value = '';
+document.getElementById('montantVerse').value = '';
+panier = [];
+mettreAJourPanier();
+chargerListeProduitsDansSelect();
+afficherListeVentes();
+}
+
+function afficherListeVentes() {
+const v = lireVentes().reverse();
+document.getElementById('listeVentes').innerHTML = v.map(x => `
+<tr>
+<td>${x.date}</td>
+<td>${x.client}</td>
+<td>${x.articles.map(a=>a.nom+'×'+a.qte).join(', ')}</td>
+<td><strong>${x.total.toLocaleString('fr-FR')}</strong></td>
+<td style="color:green;">${x.verse.toLocaleString('fr-FR')}</td>
+<td style="color:${x.reste>0?'red':'green'}; font-weight:bold;">${x.reste.toLocaleString('fr-FR')}</td>
+</tr>`).join('') || '<tr><td colspan="6" style="text-align:center; color:#666;">Aucune vente</td></tr>';
+}
+
+// === FACTURATION ===
+function genererFacture() {
+const nom = document.getElementById('factNomClient').value.trim();
+const tel = document.getElementById('factTelClient').value.trim();
+if(!nom) { alert("⚠️ Nom du client !"); return; }
+
+const auj = new Date().toLocaleDateString('fr-FR');
+const ventes = lireVentes().filter(v => v.client === nom && v.date === auj);
+if(!ventes.length) { alert("❌ Aucune vente aujourd'hui pour ce client !"); return; }
+
+let total=0, verse=0, articles=[];
+ventes.forEach(v => { total+=v.total; verse+=v.verse; articles=articles.concat(v.articles); });
+const reste = total - verse;
+
+document.getElementById('contenuFacture').innerHTML = `
+<h2>🧾 FACTURE</h2>
+<p><strong>N° :</strong> FACT-${Date.now()}</p>
+<p><strong>Date :</strong> ${auj}</p>
+<p><strong>Client :</strong> ${nom}</p>
+<p><strong>Téléphone :</strong> ${tel||'—'}</p>
+<hr style="margin:12px 0; border:none; border-top:1px solid #ddd;">
+${articles.map(a=>`<div class="ligne"><span>${a.nom} × ${a.qte}</span><span>${(a.prix*a.qte).toLocaleString('fr-FR')} GNF</span></div>`).join('')}
+<div class="ligne total"><strong>TOTAL</strong><strong>${total.toLocaleString('fr-FR')} GNF</strong></div>
+<div class="ligne verse"><strong>Versé</strong><strong>${verse.toLocaleString('fr-FR')} GNF</strong></div>
+<div class="ligne reste"><strong>RESTE À PAYER</strong><strong>${reste.toLocaleString('fr-FR')} GNF</strong></div>
+<p style="margin-top:25px; text-align:center; color:#666;">Merci pour votre confiance !</p>`;
+document.getElementById('blocFacture').classList.remove('cacher');
+}
+function partagerFacture() { alert("✅ Copiez le texte et envoyez sur WhatsApp !"); }
+
+// === CRÉDITS & PAIEMENT ===
+function afficherCredits() {
+const ventes = lireVentes();
+const parClient = {};
+
+ventes.forEach(v => {
+if(!parClient[v.client]) {
+parClient[v.client] = { nom: v.client, tel: v.tel || '', du: 0, verse: 0 };
+}
+parClient[v.client].du += v.total;
+parClient[v.client].verse += v.verse;
+});
+
+const liste = Object.values(parClient).map(c => ({
+...c,
+reste: c.du - c.verse
+}));
+
+document.getElementById('listeCredits').innerHTML = liste.map(c => `
+<tr>
+<td><strong>${c.nom}</strong></td>
+<td>${c.tel || 'Non renseigné'}</td>
+<td>${c.du.toLocaleString('fr-FR')}</td>
+<td>${c.verse.toLocaleString('fr-FR')}</td>
+<td style="color:${c.reste>0?'red':'green'}; font-weight:bold;">${c.reste.toLocaleString('fr-FR')}</td>
+<td>
+${c.reste > 0 
+? `<button class="btn-payer-ligne" onclick="ouvrirModalPaiement('${c.nom}')">💰 Payer</button>` 
+: '<span style="color:green;">✅ Réglé</span>'}
+</td>
+</tr>`).join('') || '<tr><td colspan="6" style="text-align:center; color:#666;">Aucun impayé ✅</td></tr>';
+}
+
+function ouvrirModalPaiement(nomClient) {
+const ventes = lireVentes();
+const parClient = {};
+ventes.forEach(v => {
+if(!parClient[v.client]) parClient[v.client] = { du:0, verse:0 };
+parClient[v.client].du += v.total;
+parClient[v.client].verse += v.verse;
+});
+
+const reste = parClient[nomClient].du - parClient[nomClient].verse;
+clientEnCoursPaiement = nomClient;
+
+document.getElementById('nomClientPaiement').textContent = nomClient;
+document.getElementById('resteAPayer').textContent = reste.toLocaleString('fr-FR');
+document.getElementById('montantPaiement').value = '';
+document.getElementById('modalPaiement').classList.remove('cacher');
+}
+
+function fermerModalPaiement() {
+document.getElementById('modalPaiement').classList.add('cacher');
+clientEnCoursPaiement = null;
+}
+
+function validerPaiement() {
+const montant = Number(document.getElementById('montantPaiement').value);
+if(!montant || montant <= 0) { alert("⚠️ Saisissez un montant valide !"); return; }
+
+const ventes = lireVentes();
+const nomCli = clientEnCoursPaiement;
+let restant = montant;
+
+ventes.forEach(v => {
+if(v.client === nomCli && v.reste > 0 && restant > 0) {
+const affecter = Math.min(v.reste, restant);
+v.verse += affecter;
+v.reste -= affecter;
+restant -= affecter;
+}
+});
+
+sauverVentes(ventes);
+alert(`✅ Paiement enregistré !\nMontant : ${montant.toLocaleString('fr-FR')} GNF`);
+
+fermerModalPaiement();
+afficherCredits();
+}
+
+// === SUIVI STOCK ===
+function afficherStock() {
+document.getElementById('listeStock').innerHTML = lireProduits().map(p => `
+<tr>
+<td><strong>${p.nom}</strong></td>
+<td style="font-weight:bold; font-size:16px;">${p.stock}</td>
+<td style="color:${p.stock<5?'red':'green'}; font-weight:bold;">
+${p.stock<5?'⚠️ Stock bas — Réapprovisionner !':'✅ Stock suffisant'}
+</td>
+</tr>`).join('') || '<tr><td colspan="3" style="text-align:center; color:#666;">Aucun produit enregistré</td></tr>';
+}
+
+// === RAPPORTS & CA ===
+function afficherRapports() {
+const auj = new Date().toLocaleDateString('fr-FR');
+const ventes = lireVentes();
+
+const caJour = ventes.filter(v => v.date === auj).reduce((s, v) => s + v.total, 0);
+const caGlobal = ventes.reduce((s, v) => s + v.total, 0);
+const totalImpaye = ventes.reduce((s, v) => s + v.reste, 0);
+
+document.getElementById('caJour').textContent = caJour.toLocaleString('fr-FR');
+document.getElementById('caGlobal').textContent = caGlobal.toLocaleString('fr-FR');
+document.getElementById('totalImpaye').textContent = totalImpaye.toLocaleString('fr-FR');
+}
+
+// === VUE GLOBALE ===
+function chargerVueGlobale() {
+const ventes = lireVentes();
+const totalVentes = ventes.reduce((s, v) => s + v.total, 0);
+const totalImpaye = ventes.reduce((s, v) => s + v.reste, 0);
+
+document.getElementById('globalTotal').textContent = totalVentes.toLocaleString('fr-FR') + ' GNF';
+document.getElementById('globalImpaye').textContent = totalImpaye.toLocaleString('fr-FR') + ' GNF';
+}
+
+// === AU CHARGEMENT DE LA PAGE ===
+window.addEventListener('DOMContentLoaded', function() {
+const codeEnCours = localStorage.getItem('codeUtilise');
+if(codeEnCours) {
+const estAdmin = localStorage.getItem('estAdmin') === 'oui';
+const statut = verifierPeriodeEssai();
+if(!estAdmin && !statut.autorise) {
+cacherTout();
+afficherPaiementRequis();
+return;
+}
+cacherTout();
+ouvrirSession(estAdmin, statut.joursRestants);
+}
+});
+</script>
+
+</body>
+</html>
