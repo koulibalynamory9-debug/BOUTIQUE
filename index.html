@@ -14,7 +14,7 @@ body { background: linear-gradient(135deg, #4b0082, #9c27b0); min-height: 100vh;
 .carte { background: white; border-radius: 16px; padding: 25px; max-width: 420px; width: 100%; box-shadow: 0 10px 40px rgba(0,0,0,0.2); }
 .carte h1 { text-align: center; color: #4b0082; margin-bottom: 5px; font-size: 22px; }
 .sous-titre { text-align: center; color: #666; margin-bottom: 20px; font-size: 14px; line-height: 1.5; }
-.alerte-rouge { background: #ffebee; border-left: 4px solid #d32f2f; padding: 12px; border-radius: 8px; margin: 12px 0; color: #b71c1c; font-weight: bold; text-align: center; }
+.alerte-rouge { background: #ffebee; border-left: 4px solid #d32f2f; padding: 12px; border-radius: 8px; margin: 12px 0; color: #b71c1c; font-weight: bold; text-align: center; white-space: pre-line; }
 .champ { width: 100%; padding: 14px; font-size: 16px; border: 2px solid #ddd; border-radius: 10px; margin: 8px 0; }
 .champ:focus { outline: none; border-color: #4b0082; }
 button { cursor: pointer; touch-action: manipulation; -webkit-tap-highlight-color: transparent; }
@@ -23,21 +23,21 @@ button { cursor: pointer; touch-action: manipulation; -webkit-tap-highlight-colo
 .btn-vert { background: #2e7d32; color: white; }
 .btn-rouge { background: #d32f2f; color: white; }
 .btn-orange { background: #ff6f00; color: white; }
+.btn-petit { width: auto; padding: 8px 12px; font-size: 13px; min-height: 36px; }
 .info-paiement { background: #fff3e0; border-left: 4px solid #ff6f00; padding: 18px; border-radius: 8px; margin: 15px 0; text-align: center; }
 .info-paiement strong { font-size: 24px; color: #e65100; }
 
 /* -- ENTÊTE FACTURE -- */
 .entete-facture { text-align: center; border-bottom: 2px solid #4b0082; padding-bottom: 15px; margin-bottom: 15px; }
-.logo-facture { max-height: 80px; margin-bottom: 10px; }
 .nom-entreprise { font-size: 22px; font-weight: bold; color: #4b0082; }
 .slogan-entreprise { font-style: italic; color: #666; margin: 5px 0; }
 .info-entreprise { font-size: 13px; color: #555; line-height: 1.5; margin-top: 8px; }
 
 /* -- APPLICATION -- */
 .entete { background: linear-gradient(90deg, #4b0082, #9c27b0); padding: 15px; color: white; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; }
-.entete-gauche h1 { font-size: 20px; }
-.badge-admin { background: gold; color: #4b0082; font-size: 12px; padding: 3px 8px; border-radius: 10px; font-weight: bold; margin-left: 8px; }
-.btn-deconnexion { background: #d32f2f; color: white; border: none; padding: 10px 18px; border-radius: 8px; font-weight: bold; min-height: 48px; font-size: 14px; }
+.entete-gauche h1 { font-size: 18px; }
+.badge-admin { background: gold; color: #4b0082; font-size: 11px; padding: 3px 6px; border-radius: 10px; font-weight: bold; margin-left: 6px; }
+.btn-deconnexion { background: #d32f2f; color: white; border: none; padding: 10px 14px; border-radius: 8px; font-weight: bold; min-height: 44px; font-size: 13px; }
 .contenu { padding: 15px; max-width: 1200px; margin: 0 auto; padding-bottom: 80px; }
 .jours-restants { background: rgba(255,255,255,0.2); padding: 12px; border-radius: 10px; margin-bottom: 20px; text-align: center; font-weight: bold; color: white; }
 .banniere-admin { background: #fff9c4; border-left: 4px solid #fbc02d; padding: 12px; border-radius: 8px; margin-bottom: 20px; font-weight: bold; color: #f57f17; }
@@ -50,69 +50,71 @@ button { cursor: pointer; touch-action: manipulation; -webkit-tap-highlight-colo
 .total-panier { font-size: 22px; font-weight: bold; color: #4b0082; text-align: right; padding: 15px 10px; background: #f3e5f5; border-radius: 8px; margin-top: 10px; }
 
 /* -- TABLEAU DE BORD -- */
-.grille-dashboard { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin-bottom: 25px; }
-.carte-valeur { background: white; border-radius: 12px; padding: 20px 15px; text-align: center; box-shadow: 0 3px 10px rgba(0,0,0,0.1); }
-.carte-valeur .titre { font-size: 15px; color: #666; margin-bottom: 8px; }
-.carte-valeur .nombre { font-size: 28px; font-weight: bold; color: #4b0082; }
+.grille-dashboard { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-bottom: 25px; }
+.carte-valeur { background: white; border-radius: 12px; padding: 18px 12px; text-align: center; box-shadow: 0 3px 10px rgba(0,0,0,0.1); }
+.carte-valeur .titre { font-size: 14px; color: #666; margin-bottom: 6px; }
+.carte-valeur .nombre { font-size: 24px; font-weight: bold; color: #4b0082; }
 .carte-pleine { grid-column: 1 / -1; background: white; border-radius: 12px; padding: 20px; text-align: center; box-shadow: 0 3px 10px rgba(0,0,0,0.1); }
-.carte-pleine .nombre { font-size: 32px; font-weight: bold; color: #4b0082; }
+.carte-pleine .nombre { font-size: 28px; font-weight: bold; color: #4b0082; }
 
 /* -- MENU INFÉRIEUR -- */
 .nav-bas { position: fixed; bottom: 0; left: 0; right: 0; background: white; display: flex; justify-content: space-around; padding: 8px 0; box-shadow: 0 -2px 10px rgba(0,0,0,0.1); z-index: 100; }
 .nav-bouton { text-align: center; background: transparent; border: none; color: #666; font-size: 10px; padding: 5px 3px; min-height: 44px; }
 .nav-bouton.actif { color: #4b0082; font-weight: bold; }
-.nav-bouton .icone { font-size: 20px; display: block; margin-bottom: 2px; }
+.nav-bouton .icone { font-size: 18px; display: block; margin-bottom: 2px; }
 
 /* -- MODULES -- */
 .module { display: none; }
 .module.actif { display: block; }
 .titre-section { color: white; margin: 15px 0; font-size: 20px; }
 .tableau { width: 100%; border-collapse: collapse; margin-top: 15px; background: white; border-radius: 10px; overflow: hidden; }
-.tableau th, .tableau td { padding: 12px 10px; text-align: left; border-bottom: 1px solid #eee; font-size: 14px; }
+.tableau th, .tableau td { padding: 10px 8px; text-align: left; border-bottom: 1px solid #eee; font-size: 13px; }
 .tableau th { background: #4b0082; color: white; }
+.action-col { text-align: center; }
 </style>
 </head>
 <body>
 
 <script>
-// === PARAMÈTRES ===
+// === PARAMÈTRES — MODIFIEZ ICI LES CODES ===
 const CODE_ADMIN = "4321";
 const DUREE_ESSAI_JOURS = 7;
 const CODES_CLIENTS = ["4322", "4323", "4324", "4325"];
 const CODES_DISPONIBLES = [CODE_ADMIN, ...CODES_CLIENTS];
 const NUMERO_ORANGE_MONEY = "622149602";
-const PRIX_ACCES = "350 000 GNF";
 
-// === GESTION DES SESSIONS : 1 code = 1 appareil ===
+// === PROTECTION RENFORCÉE : 1 code = 1 appareil ===
 function genererIdentifiantAppareil() {
-// Identifiant unique de l'appareil
-let id = localStorage.getItem('appareil_id');
+let id = localStorage.getItem('appareil_id_unique');
 if(!id) {
-id = 'app_' + Date.now() + '_' + Math.random().toString(36).substr(2,9);
-localStorage.setItem('appareil_id', id);
+id = 'app_' + Date.now() + '_' + Math.random().toString(36).substr(2,12);
+localStorage.setItem('appareil_id_unique', id);
 }
 return id;
 }
 
 function verifierSessionActive(code) {
 const idAppareil = genererIdentifiantAppareil();
-const sessions = JSON.parse(localStorage.getItem('sessions_actives') || '{}');
+const sessions = JSON.parse(localStorage.getItem('sessions_verrouillees') || '{}');
 
-// Si ce code est déjà utilisé sur un autre appareil
-if(sessions[code] && sessions[code] !== idAppareil) {
-return { autorise: false, message: "❌ Ce code est déjà utilisé sur un autre appareil ! Déconnectez-vous d'abord ailleurs." };
+if(sessions[code]) {
+if(sessions[code] !== idAppareil) {
+return { 
+autorise: false, 
+message: "❌ CODE DÉJÀ UTILISÉ !\n\nCe code est actif sur un autre appareil.\n\n➡️ Déconnectez-vous d'abord là-bas,\npuis réessayez ici." 
+};
 }
-
-// Enregistrer cet appareil comme utilisateur du code
+} else {
 sessions[code] = idAppareil;
-localStorage.setItem('sessions_actives', JSON.stringify(sessions));
+localStorage.setItem('sessions_verrouillees', JSON.stringify(sessions));
+}
 return { autorise: true };
 }
 
 function libererSession(code) {
-const sessions = JSON.parse(localStorage.getItem('sessions_actives') || '{}');
+const sessions = JSON.parse(localStorage.getItem('sessions_verrouillees') || '{}');
 delete sessions[code];
-localStorage.setItem('sessions_actives', JSON.stringify(sessions));
+localStorage.setItem('sessions_verrouillees', JSON.stringify(sessions));
 }
 </script>
 
@@ -120,14 +122,13 @@ localStorage.setItem('sessions_actives', JSON.stringify(sessions));
 <div class="cadre-centre" id="pageConnexion">
 <div class="carte">
 <h1>🛒 Koolby224-Press</h1>
-<p class="sous-titre">
-Gestion Commerciale — Ventes, Stocks, Facturation & Crédits
-</p>
+<p class="sous-titre">Gestion Commerciale — Ventes, Stocks & Crédits</p>
 <div id="messageErreur" class="alerte-rouge cacher"></div>
-<input type="text" id="codeAcces" class="champ" placeholder="Entrez votre code d'accès" autocomplete="off">
-<button class="btn-violet" onclick="verifierCode()">✅ Accéder à l'application</button>
-<p style="text-align:center; margin:15px 0; color:#888;">— Ou —</p>
-<button class="btn-vert" onclick="afficherDemandePaiement()">💳 Demander un code d'accès</button>
+<input type="text" id="codeAcces" class="champ" placeholder="Votre code d'accès" autocomplete="off">
+<button class="btn-violet" onclick="verifierCode()">✅ Se connecter</button>
+<p style="text-align:center; margin:12px 0; color:#888; font-size:12px;">⚠️ 1 code = 1 seul appareil à la fois</p>
+<p style="text-align:center; margin:10px 0; color:#888;">— Ou —</p>
+<button class="btn-vert" onclick="afficherDemandePaiement()">💳 Demander un code</button>
 </div>
 </div>
 
@@ -135,7 +136,7 @@ Gestion Commerciale — Ventes, Stocks, Facturation & Crédits
 <div class="cadre-centre cacher" id="pageDemandePaiement">
 <div class="carte">
 <h1>💳 Accès Définitif</h1>
-<p class="sous-titre">Versez et recevez votre code d'accès à vie.<br>⚠️ Un code = UN seul appareil à la fois</p>
+<p class="sous-titre">Versez et recevez votre code d'accès</p>
 <div class="info-paiement">
 <p>Prix d'accès :</p>
 <strong>350 000 GNF</strong>
@@ -171,7 +172,7 @@ Gestion Commerciale — Ventes, Stocks, Facturation & Crédits
 ⏳ Essai : <span id="nbJoursRestants">7</span> jour(s) restant(s)
 </div>
 <div class="banniere-admin cacher" id="banniereAdmin">
-👑 MODE ADMINISTRATEUR — Vous contrôlez TOUT l'application
+👑 MODE ADMINISTRATEUR
 </div>
 
 <!-- ACCUEIL -->
@@ -203,31 +204,29 @@ Gestion Commerciale — Ventes, Stocks, Facturation & Crédits
 
 <!-- ENTREPRISE -->
 <div class="module" id="mod-entreprise">
-<h2 class="titre-section">🏢 Informations de l'Entreprise</h2>
+<h2 class="titre-section">🏢 Infos Entreprise</h2>
 <input type="text" id="entNom" class="champ" placeholder="Nom de l'entreprise">
-<input type="text" id="entSlogan" class="champ" placeholder="Slogan / Activité">
-<input type="text" id="entAdresse" class="champ" placeholder="Adresse complète">
-<input type="text" id="entTelephone" class="champ" placeholder="Téléphone(s)">
+<input type="text" id="entSlogan" class="champ" placeholder="Activité / Slogan">
+<input type="text" id="entAdresse" class="champ" placeholder="Adresse">
+<input type="text" id="entTelephone" class="champ" placeholder="Téléphone">
 <input type="text" id="entRCCM" class="champ" placeholder="N° RCCM">
-<input type="file" id="entLogo" accept="image/*" class="champ" style="padding:10px;">
-<button class="btn-violet" onclick="sauvegarderEntreprise()">✅ Enregistrer les informations</button>
-
+<button class="btn-violet" onclick="sauvegarderEntreprise()">✅ Enregistrer</button>
 <h3 style="color:white; margin-top:25px;">Aperçu Facture</h3>
 <div style="background:white; padding:20px; border-radius:10px;">
 <div id="apercuEntete">
-<p style="color:#888; text-align:center;">Enregistrez vos informations pour voir l'aperçu</p>
+<p style="color:#888; text-align:center;">Enregistrez vos infos d'abord</p>
 </div>
 </div>
 </div>
 
 <!-- PRODUITS -->
 <div class="module" id="mod-produits">
-<h2 class="titre-section">📦 Ajouter un produit</h2>
+<h2 class="titre-section">📦 Produits</h2>
 <input type="text" id="prodNom" class="champ" placeholder="Nom du produit">
 <input type="number" id="prodAchat" class="champ" placeholder="Prix d'achat">
 <input type="number" id="prodVente" class="champ" placeholder="Prix de vente">
 <input type="number" id="prodStock" class="champ" placeholder="Quantité en stock">
-<button class="btn-violet" onclick="enregistrerProduit()">✅ Enregistrer le produit</button>
+<button class="btn-violet" onclick="enregistrerProduit()">✅ Enregistrer</button>
 <h3 style="color:white; margin-top:25px;">Liste des produits</h3>
 <table class="tableau">
 <thead><tr><th>Produit</th><th>Achat</th><th>Vente</th><th>Stock</th></tr></thead>
@@ -235,9 +234,9 @@ Gestion Commerciale — Ventes, Stocks, Facturation & Crédits
 </table>
 </div>
 
-<!-- VENTES AVEC PANIER -->
+<!-- VENTES / PANIER -->
 <div class="module" id="mod-vente">
-<h2 class="titre-section">🛒 Nouvelle Vente — Panier</h2>
+<h2 class="titre-section">🛒 Nouvelle Vente</h2>
 <input type="text" id="venteClient" class="champ" placeholder="Nom du client">
 
 <div style="background:rgba(255,255,255,0.1); padding:15px; border-radius:10px; margin:15px 0;">
@@ -246,42 +245,42 @@ Gestion Commerciale — Ventes, Stocks, Facturation & Crédits
 <option value="">Choisir un produit</option>
 </select>
 <input type="number" id="panierQte" class="champ" placeholder="Quantité" min="1" value="1">
-<button class="btn-orange" onclick="ajouterAuPanier()">➕ Ajouter au panier</button>
+<button class="btn-orange" onclick="ajouterAuPanier()">➕ Ajouter</button>
 </div>
 
 <div class="cadre-panier">
 <div class="titre-panier">
-🛒 Votre panier
+🛒 Panier
 <span id="nbArticlesPanier" style="font-size:14px; color:#888;">0 article</span>
 </div>
 <div id="listePanier" style="min-height:60px; color:#888; text-align:center; padding:10px;">
-Aucun produit ajouté
+Aucun produit
 </div>
 <div class="total-panier">
 TOTAL : <span id="montantTotalPanier">0</span> GNF
 </div>
 </div>
 
-<input type="number" id="montantVerser" class="champ" placeholder="Montant versé par le client">
+<input type="number" id="montantVerser" class="champ" placeholder="Montant versé">
 <p style="color:white; font-size:14px; margin:5px 0;">
-Reste à payer : <span id="resteAPayer" style="font-weight:bold; color:#ff6f00;">0 GNF</span>
+Reste : <span id="resteAPayer" style="font-weight:bold; color:#ff6f00;">0 GNF</span>
 </p>
 
-<button class="btn-vert" onclick="validerPanier()">✅ Valider TOUTE la vente</button>
-<button class="btn-rouge" onclick="viderPanier()" style="margin-top:5px;">🗑️ Vider le panier</button>
+<button class="btn-vert" onclick="validerPanier()">✅ Valider la vente</button>
+<button class="btn-rouge btn-petit" onclick="viderPanier()" style="margin-top:8px;">🗑️ Vider le panier</button>
 
-<h3 style="color:white; margin-top:30px;">Historique des ventes</h3>
+<h3 style="color:white; margin-top:30px;">Historique</h3>
 <table class="tableau">
-<thead><tr><th>Date</th><th>Client</th><th>Produits</th><th>Total</th><th>Reste</th></tr></thead>
+<thead><tr><th>Date</th><th>Client</th><th>Produits</th><th>Total</th><th>Versé</th><th>Reste</th></tr></thead>
 <tbody id="listeVentes"></tbody>
 </table>
 </div>
 
-<!-- IMPAYÉS -->
+<!-- IMPAYÉS AVEC BOUTON PAIEMENT INTÉGRÉ -->
 <div class="module" id="mod-impayes">
-<h2 class="titre-section">📝 Crédits Impayés</h2>
+<h2 class="titre-section">📝 Crédits Impayés — Règlement</h2>
 <table class="tableau">
-<thead><tr><th>Client</th><th>Total dû</th><th>Versé</th><th>Reste</th></tr></thead>
+<thead><tr><th>Client</th><th>Total dû</th><th>Versé</th><th>Reste</th><th class="action-col">Action</th></tr></thead>
 <tbody id="listeImpayes"></tbody>
 </table>
 </div>
@@ -290,7 +289,7 @@ Reste à payer : <span id="resteAPayer" style="font-weight:bold; color:#ff6f00;"
 <div class="module" id="mod-factures">
 <h2 class="titre-section">🧾 Facturation</h2>
 <input type="text" id="factNom" class="champ" placeholder="Nom du client">
-<button class="btn-violet" onclick="genererFacture()">📄 Générer facture du jour</button>
+<button class="btn-violet" onclick="genererFacture()">📄 Générer facture</button>
 <div id="blocFacture" class="cacher" style="background:white; padding:20px; border-radius:10px; margin-top:20px;">
 <div id="enteteFacture"></div>
 <div id="contenuFacture"></div>
@@ -300,9 +299,9 @@ Reste à payer : <span id="resteAPayer" style="font-weight:bold; color:#ff6f00;"
 
 <!-- UTILISATEURS (Admin seul) -->
 <div class="module cacher" id="mod-utilisateurs">
-<h2 class="titre-section">👥 Gérer Utilisateurs</h2>
-<p style="color:#ffd700; margin-bottom:15px; font-size:13px;">⚠️ Un code = UN seul appareil à la fois</p>
-<input type="text" id="nouvCode" class="champ" placeholder="Code du nouvel utilisateur">
+<h2 class="titre-section">👥 Gérer les codes</h2>
+<p style="color:#ffd700; margin-bottom:15px; font-size:13px;">⚠️ 1 code = 1 seul appareil à la fois</p>
+<input type="text" id="nouvCode" class="champ" placeholder="Nouveau code">
 <button class="btn-violet" onclick="ajouterUtilisateur()">✅ Ajouter</button>
 <h3 style="color:white; margin-top:20px;">Codes actifs</h3>
 <div id="listeCodesActifs" style="background:rgba(255,255,255,0.1); padding:15px; border-radius:10px; margin-top:10px;"></div>
@@ -330,7 +329,7 @@ Reste à payer : <span id="resteAPayer" style="font-weight:bold; color:#ff6f00;"
 <span class="icone">🧾</span>Factures
 </button>
 <button class="nav-bouton" data-page="utilisateurs" id="btnNavUtil" style="display:none;">
-<span class="icone">👥</span>Utilisateurs
+<span class="icone">👥</span>Codes
 </button>
 </nav>
 </div>
@@ -356,7 +355,6 @@ function construireEnteteEntreprise() {
 const e = infosEntreprise;
 return `
 <div class="entete-facture">
-${e.logo ? `<img src="${e.logo}" class="logo-facture" alt="Logo">` : ''}
 <div class="nom-entreprise">${e.nom || 'Nom de l\'entreprise'}</div>
 ${e.slogan ? `<div class="slogan-entreprise">${e.slogan}</div>` : ''}
 <div class="info-entreprise">
@@ -369,26 +367,20 @@ ${e.rccm ? 'N° RCCM: ' + e.rccm : ''}
 }
 
 function sauvegarderEntreprise() {
-const lecteur = new FileReader();
-const champLogo = document.getElementById('entLogo');
-const mettreAJour = (logo='') => {
 infosEntreprise = {
 nom: document.getElementById('entNom').value.trim(),
 slogan: document.getElementById('entSlogan').value.trim(),
 adresse: document.getElementById('entAdresse').value.trim(),
 telephone: document.getElementById('entTelephone').value.trim(),
 rccm: document.getElementById('entRCCM').value.trim(),
-logo: logo || infosEntreprise.logo
+logo: infosEntreprise.logo
 };
 sauverEntreprise(infosEntreprise);
-if(infosEntreprise.nom) document.getElementById('titreApp').innerHTML = `${infosEntreprise.nom} <span class="badge-admin" id="badgeAdmin" style="display:none;">ADMIN</span>`;
+if(infosEntreprise.nom) {
+document.getElementById('titreApp').innerHTML = `${infosEntreprise.nom} <span class="badge-admin" id="badgeAdmin" style="display:none;">ADMIN</span>`;
+}
 document.getElementById('apercuEntete').innerHTML = construireEnteteEntreprise();
 alert("✅ Enregistré !");
-};
-if(champLogo.files && champLogo.files[0]) {
-lecteur.onload = e => mettreAJour(e.target.result);
-lecteur.readAsDataURL(champLogo.files[0]);
-} else mettreAJour();
 }
 
 // === NAVIGATION ===
@@ -425,17 +417,17 @@ if(page === 'impayes') afficherImpayes();
 if(page === 'utilisateurs') afficherCodesActifs();
 });
 
-// === CONNEXION SÉCURE : 1 code = 1 appareil ===
+// === CONNEXION SÉCURE ===
 function verifierPeriode() {
-if(localStorage.getItem('estAdmin') === 'oui') return { autorise:true, estAdmin:true };
+if(localStorage.getItem('estAdmin') === 'oui') return { autorise: true, estAdmin: true };
 let debut = localStorage.getItem('dateDebutEssai');
 if(!debut) {
 localStorage.setItem('dateDebutEssai', new Date().toISOString());
-return { autorise:true, joursRestants:DUREE_ESSAI_JOURS };
+return { autorise: true, joursRestants: DUREE_ESSAI_JOURS };
 }
 const ecoule = Math.floor((Date.now() - new Date(debut)) / (1000*60*60*24));
 const restant = DUREE_ESSAI_JOURS - ecoule;
-return restant <= 0 ? { autorise:false, joursRestants:0 } : { autorise:true, joursRestants:restant };
+return restant <= 0 ? { autorise: false, joursRestants: 0 } : { autorise: true, joursRestants: restant };
 }
 
 function afficherErreur(msg) {
@@ -451,7 +443,6 @@ document.getElementById('messageErreur').classList.add('cacher');
 if(!saisie) { afficherErreur("⚠️ Entrez un code !"); return; }
 if(!CODES_DISPONIBLES.includes(saisie)) { afficherErreur("❌ Code incorrect !"); return; }
 
-// Vérification : un seul appareil à la fois
 const controle = verifierSessionActive(saisie);
 if(!controle.autorise) { afficherErreur(controle.message); return; }
 
@@ -503,7 +494,7 @@ afficherImpayes();
 }
 
 function deconnecter() {
-if(confirm("Voulez-vous vraiment vous déconnecter ?\nCe code sera libéré pour un autre appareil.")) {
+if(confirm("Voulez-vous vous déconnecter ?\nLe code sera libéré pour un autre appareil.")) {
 if(codeActifUtilise) libererSession(codeActifUtilise);
 localStorage.removeItem('estAdmin');
 localStorage.removeItem('codeUtilise');
@@ -524,14 +515,14 @@ if(!nom || !achat || !vente) { alert("⚠️ Remplissez TOUS les champs !"); ret
 const liste = lireProduits();
 if(liste.find(p => p.nom === nom)) { alert("⚠️ Ce produit existe déjà !"); return; }
 
-liste.push({id:Date.now(), nom, achat, vente, stock});
+liste.push({id: Date.now(), nom, achat, vente, stock});
 sauverProduits(liste);
-alert("✅ Produit enregistré !");
+alert("✅ Enregistré !");
 
-document.getElementById('prodNom').value='';
-document.getElementById('prodAchat').value='';
-document.getElementById('prodVente').value='';
-document.getElementById('prodStock').value='';
+document.getElementById('prodNom').value = '';
+document.getElementById('prodAchat').value = '';
+document.getElementById('prodVente').value = '';
+document.getElementById('prodStock').value = '';
 
 afficherProduits();
 chargerProduitsSelect();
@@ -580,7 +571,7 @@ mettreAJourAffichagePanier();
 document.getElementById('panierQte').value = 1;
 }
 
-function supprimerDuPanier(idx) { panier.splice(idx,1); mettreAJourAffichagePanier(); }
+function supprimerDuPanier(idx) { panier.splice(idx, 1); mettreAJourAffichagePanier(); }
 function viderPanier() { if(panier.length && confirm("Vider le panier ?")) { panier = []; mettreAJourAffichagePanier(); } }
 
 function mettreAJourAffichagePanier() {
@@ -589,7 +580,7 @@ let total = 0;
 const conteneur = document.getElementById('listePanier');
 
 if(panier.length === 0) {
-conteneur.innerHTML = '<span style="color:#888;">Aucun produit ajouté</span>';
+conteneur.innerHTML = '<span style="color:#888;">Aucun produit</span>';
 document.getElementById('montantTotalPanier').textContent = '0';
 document.getElementById('nbArticlesPanier').textContent = '0 article';
 document.getElementById('resteAPayer').textContent = '0 GNF';
@@ -612,7 +603,7 @@ function validerPanier() {
 const nomClient = document.getElementById('venteClient').value.trim();
 const montantVerser = Number(document.getElementById('montantVerser').value) || 0;
 if(!nomClient) { alert("⚠️ Saisissez le nom du client !"); return; }
-if(panier.length === 0) { alert("⚠️ Ajoutez des produits au panier d'abord !"); return; }
+if(panier.length === 0) { alert("⚠️ Ajoutez des produits au panier !"); return; }
 
 const produits = lireProduits();
 const auj = new Date().toLocaleDateString('fr-FR');
@@ -629,9 +620,27 @@ if(erreur) return;
 sauverProduits(produits);
 const reste = totalGeneral - montantVerser;
 const ventes = lireVentes();
-ventes.push({date:auj, client:nomClient, produits:panier.map(a=>`${a.nom}×${a.qte}`).join(' + '), total:totalGeneral, verse:montantVerser, reste:reste});
-sauverVentes(ventes);
 
+// Regrouper par client pour cumuler les restes
+const existant = ventes.findIndex(v => v.client === nomClient && v.reste > 0);
+if(existant >= 0 && reste > 0) {
+// Cumuler : nouveau reste = ancien reste + nouveau reste
+ventes[existant].total += totalGeneral;
+ventes[existant].verse += montantVerser;
+ventes[existant].reste = ventes[existant].total - ventes[existant].verse;
+ventes[existant].produits += ' + ' + panier.map(a=>`${a.nom}×${a.qte}`).join(' + ');
+} else {
+ventes.push({
+date: auj,
+client: nomClient,
+produits: panier.map(a=>`${a.nom}×${a.qte}`).join(' + '),
+total: totalGeneral,
+verse: montantVerser,
+reste: reste
+});
+}
+
+sauverVentes(ventes);
 alert(`✅ Enregistré !\nClient: ${nomClient}\nTotal: ${totalGeneral.toLocaleString('fr-FR')} GNF\nVersé: ${montantVerser.toLocaleString('fr-FR')} GNF\nReste: ${reste.toLocaleString('fr-FR')} GNF`);
 
 panier = [];
@@ -666,22 +675,53 @@ document.getElementById('listeVentes').innerHTML = ventes.slice(-10).reverse().m
 <tr>
 <td>${v.date}</td>
 <td><strong>${v.client}</strong></td>
-<td style="font-size:13px;">${v.produits}</td>
+<td style="font-size:12px;">${v.produits}</td>
 <td>${v.total.toLocaleString('fr-FR')}</td>
+<td style="color:green;">${v.verse.toLocaleString('fr-FR')}</td>
 <td style="color:${v.reste>0?'red':'green'};">${v.reste.toLocaleString('fr-FR')}</td>
-</tr>`).join('') || '<tr><td colspan="5" style="text-align:center; color:#888;">Aucune vente</td></tr>';
+</tr>`).join('') || '<tr><td colspan="6" style="text-align:center; color:#888;">Aucune vente</td></tr>';
 }
 
-// === IMPAYÉS ===
+// === IMPAYÉS + BOUTON PAIEMENT ===
 function afficherImpayes() {
 const ventes = lireVentes().filter(v => v.reste > 0);
-document.getElementById('listeImpayes').innerHTML = ventes.length ? ventes.map(v => `
+document.getElementById('listeImpayes').innerHTML = ventes.length ? ventes.map((v, idx) => `
 <tr>
 <td><strong>${v.client}</strong></td>
 <td>${v.total.toLocaleString('fr-FR')}</td>
 <td>${v.verse.toLocaleString('fr-FR')}</td>
 <td style="color:red; font-weight:bold;">${v.reste.toLocaleString('fr-FR')}</td>
-</tr>`).join('') : '<tr><td colspan="4" style="text-align:center; color:green;">✅ Tout est réglé !</td></tr>';
+<td class="action-col">
+<button class="btn-vert btn-petit" onclick="ouvrirPaiementReste(${idx})">💳 Régler</button>
+</td>
+</tr>`).join('') : '<tr><td colspan="5" style="text-align:center; color:green;">✅ Tout est réglé !</td></tr>';
+}
+
+function ouvrirPaiementReste(indexFiltre) {
+const ventesBrutes = lireVentes();
+const impayes = ventesBrutes.filter(v => v.reste > 0);
+const vente = impayes[indexFiltre];
+if(!vente) return;
+
+const montantVerser = prompt(`Client : ${vente.client}\nReste à payer : ${vente.reste.toLocaleString('fr-FR')} GNF\n\nEntrez le montant versé :`);
+if(montantVerser === null) return;
+
+const somme = Number(montantVerser);
+if(isNaN(somme) || somme <= 0) { alert("⚠️ Montant invalide !"); return; }
+if(somme > vente.reste) { alert(`⚠️ Le montant dépasse le reste dû !\nReste dû : ${vente.reste.toLocaleString('fr-FR')} GNF`); return; }
+
+// Trouver et mettre à jour dans la liste complète
+const indexReel = ventesBrutes.findIndex(v => v.client === vente.client && v.reste === vente.reste && v.total === vente.total);
+if(indexReel >= 0) {
+ventesBrutes[indexReel].verse += somme;
+ventesBrutes[indexReel].reste -= somme;
+sauverVentes(ventesBrutes);
+
+alert(`✅ Paiement enregistré !\nClient : ${vente.client}\nVersé : ${somme.toLocaleString('fr-FR')} GNF\nNouveau reste : ${ventesBrutes[indexReel].reste.toLocaleString('fr-FR')} GNF`);
+
+actualiserDashboard();
+afficherImpayes();
+}
 }
 
 // === FACTURE ===
@@ -715,46 +755,59 @@ afficherCodesActifs();
 }
 
 function afficherCodesActifs() {
-const sessions = JSON.parse(localStorage.getItem('sessions_actives') || '{}');
+const sessions = JSON.parse(localStorage.getItem('sessions_verrouillees') || '{}');
 const bloc = document.getElementById('listeCodesActifs');
+
 if(Object.keys(sessions).length === 0) {
-bloc.innerHTML = '<p style="color:#888;">Aucun code connecté pour l\'instant</p>';
+bloc.innerHTML = '<p style="color:#888;">Aucun code connecté</p>';
 return;
-}
-bloc.innerHTML = Object.entries(sessions).map(([code, appareil]) => `
-<div style="padding:8px 0; border-bottom:1px solid #444;">
-<strong>Code :</strong> ${code}<br>
-<small>Appareil : ${appareil.substring(0,20)}…</small>
-</div>
-`).join('');
 }
 
-// === AU CHARGEMENT ===
-window.addEventListener('DOMContentLoaded', function() {
+bloc.innerHTML = Object.entries(sessions).map(([code, idApp]) => {
+const estAdmin = code === CODE_ADMIN;
+return `
+<div style="padding:10px; margin:5px 0; background:rgba(255,255,255,0.1); border-radius:6px;">
+<strong>${estAdmin ? '👑 ' : '🔑 '}${code}</strong>
+<br>
+<small style="color:#aaa;">Appareil: ${idApp.substring(0, 15)}...</small>
+<button class="btn-rouge btn-petit" style="margin-top:5px;" onclick="deconnecterCode('${code}')">🔓 Déconnecter</button>
+</div>
+`;
+}).join('');
+}
+
+function deconnecterCode(code) {
+if(confirm(`Déconnecter le code : ${code} ?\nCela libère l'accès pour un autre appareil.`)) {
+libererSession(code);
+afficherCodesActifs();
+alert(`✅ Code ${code} déconnecté !`);
+}
+}
+
+// Initialisation au chargement
+window.addEventListener('load', () => {
 const codeEnCours = localStorage.getItem('codeUtilise');
+const estAdminStock = localStorage.getItem('estAdmin') === 'oui';
+
 if(codeEnCours) {
-const estAdmin = localStorage.getItem('estAdmin') === 'oui';
+const controle = verifierSessionActive(codeEnCours);
+if(controle.autorise) {
+if(estAdminStock) {
+ouvrirSession(true);
+} else {
 const statut = verifierPeriode();
-if(!estAdmin && !statut.autorise) {
-cacherTout(); document.getElementById('pageEssaiExpire').classList.remove('cacher');
-return;
-}
-// Vérifier si ce code est bien sur le bon appareil
-const idAppareil = genererIdentifiantAppareil();
-const sessions = JSON.parse(localStorage.getItem('sessions_actives') || '{}');
-if(sessions[codeEnCours] && sessions[codeEnCours] !== idAppareil) {
-localStorage.removeItem('estAdmin');
-localStorage.removeItem('codeUtilise');
+if(statut.autorise) ouvrirSession(false, statut.joursRestants);
+else {
 cacherTout();
-document.getElementById('pageConnexion').classList.remove('cacher');
-afficherErreur("⚠️ Déconnecté : ce code est utilisé sur un autre appareil.");
-return;
+document.getElementById('pageEssaiExpire').classList.remove('cacher');
 }
-codeActifUtilise = codeEnCours;
-ouvrirSession(estAdmin, statut.joursRestants);
+}
+} else {
+localStorage.removeItem('codeUtilise');
+localStorage.removeItem('estAdmin');
+}
 }
 });
 </script>
-
 </body>
 </html>
