@@ -1015,8 +1015,9 @@ ${fact.articles.map(art => `
 Total : ${fact.total.toLocaleString('fr-FR')} GNF<br>
 Versé : ${fact.verse.toLocaleString('fr-FR')} GNF<br>
 ${fact.reste > 0 
-? `<span style="color:red;">Reste à payer : ${fact.reste.toLocaleString('fr-FR')} GNF</span>` 
-: `<span style="color:green;">✅ Payé en totalité</span>`}
+? `<span style="color:red; font-weight:bold;">Reste à payer : ${fact.reste.toLocaleString('fr-FR')} GNF</span>` 
+: `<span style="color:green; font-weight:bold; font-size:18px;">✅ PAYÉ — LIVRÉ</span>`}
+
 </div>
 
 <div style="margin-top:20px; display:flex; gap:10px; flex-wrap:wrap;">
@@ -1134,18 +1135,25 @@ return;
 }
 
 client.reste_total -= montant;
+
 client.historique.push({
 date: new Date().toLocaleString('fr-FR'),
-type: 'Paiement partiel',
 montant: montant,
 nouveau_reste: client.reste_total
 });
 
 sauvegarderDonnees();
+
+if (client.reste_total === 0) {
+alert("✅ Paiement terminé — PAYÉ — LIVRÉ !");
+} else {
 alert(`✅ Paiement enregistré !\nNouveau reste dû : ${client.reste_total.toLocaleString('fr-FR')} GNF`);
+}
+
 afficherImpayes();
 actualiserTableauBord();
 }
+
 
 // ═══════════════════════════════════════════════════════════
 // TABLEAU DE BORD & ALERTES STOCK
