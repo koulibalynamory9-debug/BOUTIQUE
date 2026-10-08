@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Gestion Commerciale — Complète</title>
+<title>Gestion Commerciale — Complète & Sécurisée</title>
 <style>
 *{margin:0; padding:0; box-sizing:border-box; font-family:'Segoe UI', Roboto, sans-serif;}
 :root{
@@ -16,10 +16,12 @@ body{background:linear-gradient(135deg, #6A0DAD 0%, #9932CC 100%); min-height:10
 .ecran-connexion{
 background:linear-gradient(rgba(106,13,173,0.9), rgba(75,0,130,0.95)),
 url('https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=900&q=80') center/cover no-repeat fixed;
+background-size:cover;
 }
 .ecran-verrouille{
 background:linear-gradient(rgba(30,0,50,0.92), rgba(60,0,100,0.95)),
 url('https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=900&q=80') center/cover no-repeat fixed;
+background-size:cover;
 }
 
 .carte{
@@ -49,7 +51,7 @@ box-shadow:0 15px 50px rgba(0,0,0,0.35); width:100%; max-width:420px; text-align
 .badge-essai{background:var(--alerte); color:#212529; padding:5px 12px; border-radius:20px; font-weight:bold; font-size:12px;}
 .btn-deco{background:rgba(255,255,255,0.2); color:white; border:none; padding:10px 18px; border-radius:10px; cursor:pointer; font-size:14px;}
 .mode-admin{background:linear-gradient(90deg, #FFD700, #FFC107); color:#212529; padding:12px; text-align:center; font-weight:bold; margin:10px; border-radius:10px;}
-.avertissement{background:#fff3cd; padding:10px; border-radius:8px; margin:10px 0; font-size:14px;}
+.avertissement{background:#fff3cd; padding:12px; border-radius:8px; margin:10px 0; font-size:14px; color:#856404;}
 
 .contenu{padding:15px; padding-bottom:90px; min-height:calc(100vh - 70px);}
 .onglet{display:none;}
@@ -83,7 +85,7 @@ th{background:#f5f5f5; color:var(--primaire);}
 .facture-total{font-size:18px; font-weight:bold; text-align:right; margin-top:10px;}
 
 .recherche{margin-bottom:15px; position:relative;}
-.resultats{position:absolute; top:100%; left:0; right:0; background:white; border:1px solid #ddd; border-top:none; max-height:200px; overflow-y:auto; z-index:50; box-shadow:0 5px 15px rgba(0,0,0,0.1);}
+.resultats{position:absolute; top:100%; left:0; right:0; background:white; border:1px solid #ddd; border-top:none; max-height:200px; overflow-y:auto; z-index:50; box-shadow:0 5px 15px rgba(0,0,0,0.1); border-radius:0 0 10px 10px;}
 .res-item{padding:10px; cursor:pointer; border-bottom:1px solid #eee;}
 .res-item:hover{background:#f0f0f0;}
 
@@ -95,6 +97,9 @@ th{background:#f5f5f5; color:var(--primaire);}
 .facture{box-shadow:none; padding:0;}
 body{background:white;}
 }
+
+.texte-rouge{color:var(--danger); font-weight:bold;}
+.texte-vert{color:var(--succes); font-weight:bold;}
 </style>
 </head>
 <body>
@@ -109,7 +114,7 @@ body{background:white;}
 <h3 style="margin-bottom:15px; color:#4B0082;">📝 Créer mon compte</h3>
 <input type="text" id="nomUtil" class="champ" placeholder="Nom & Prénom">
 <input type="tel" id="telUtil" class="champ" placeholder="Numéro WhatsApp">
-<button class="btn btn-primaire" onclick="creerCompte()">✅ S'inscrire (Essai gratuit 7 jours)</button>
+<button class="btn btn-primaire" onclick="creerCompte()">✅ S'inscrire — Essai gratuit 7 jours</button>
 <p style="margin-top:15px; font-size:14px;">
 Déjà un compte ? <a href="#" onclick="basculerFormulaire('connexion')" style="color:#6A0DAD; font-weight:bold;">Se connecter</a>
 </p>
@@ -124,7 +129,7 @@ Déjà un compte ? <a href="#" onclick="basculerFormulaire('connexion')" style="
 Nouveau ? <a href="#" onclick="basculerFormulaire('inscription')" style="color:#6A0DAD; font-weight:bold;">S'inscrire</a>
 </p>
 <p style="margin-top:10px; font-size:12px; color:#888;">
-Admin : saisissez votre code spécial
+Administrateur : saisissez votre code spécial
 </p>
 </div>
 </div>
@@ -143,16 +148,16 @@ Admin : saisissez votre code spécial
 
 <div style="display:flex; gap:8px; margin:15px 0;">
 <button class="btn btn-vert btn-ligne" onclick="afficherFormule(30)">
-30 Jours<br><strong>250 000 GNF</strong>
+✅ 30 Jours<br><strong>250 000 GNF</strong>
 </button>
 <button class="btn btn-orange btn-ligne" onclick="afficherFormule(7)">
-7 Jours<br><strong>50 000 GNF</strong>
+⚡ 7 Jours<br><strong>50 000 GNF</strong>
 </button>
 </div>
 
 <p id="formuleChoisie" style="font-weight:bold; margin:10px 0;"></p>
 
-<input type="password" id="codeSaisi" class="champ" placeholder="🔑 Saisissez le code reçu...">
+<input type="password" id="codeSaisi" class="champ" placeholder="🔑 Saisissez le code reçu après paiement...">
 <button class="btn btn-or" onclick="validerAbonnement()">✅ Activer mon accès</button>
 
 <p style="margin-top:15px; font-size:12px; color:#999;">
@@ -209,7 +214,7 @@ Un code = un seul téléphone
 <img id="apercuLogoImg" class="logo-apercu cacher" alt="Logo">
 </div>
 
-<button class="btn btn-primaire" onclick="sauvegarderEntreprise()">💾 Enregistrer</button>
+<button class="btn btn-primaire" onclick="sauvegarderEntreprise()">💾 Enregistrer mes informations</button>
 </div>
 </div>
 
@@ -218,8 +223,8 @@ Un code = un seul téléphone
 <h2 style="margin-bottom:15px; color:white;">📦 Produits & Stock</h2>
 <div class="bloc">
 <input type="text" id="nomProd" class="champ" placeholder="Nom du produit">
-<input type="number" id="prixAchat" class="champ" placeholder="Prix d'achat (GNF)">
-<input type="number" id="prixVente" class="champ" placeholder="Prix de vente (GNF)">
+<input type="number" id="prixAchat" class="champ" placeholder="Prix d'achat (GNF)" min="0">
+<input type="number" id="prixVente" class="champ" placeholder="Prix de vente (GNF)" min="1">
 <input type="number" id="stockActuel" class="champ" placeholder="Stock actuel" min="0">
 <input type="number" id="stockAlerte" class="champ" placeholder="Seuil d'alerte" min="0" value="5">
 <button class="btn btn-primaire" onclick="ajouterProduit()">➕ Ajouter Produit</button>
@@ -245,15 +250,15 @@ Un code = un seul téléphone
 <option value="">-- Sélectionner un produit --</option>
 </select>
 <input type="number" id="qteProduit" class="champ" placeholder="Quantité" min="1" value="1">
-<p style="margin:8px 0;">Prix unitaire : <span id="prixUnitaire">0</span> GNF | Stock : <span id="stockDispo">-</span></p>
+<p style="margin:8px 0;">Prix unitaire : <span id="prixUnitaire">0</span> GNF | Stock disponible : <span id="stockDispo">-</span></p>
 <button class="btn btn-primaire" onclick="ajouterAuPanier()">➕ Ajouter au panier</button>
 
-<h4 style="margin:20px 0 10px;">Panier</h4>
+<h4 style="margin:20px 0 10px;">🛒 Mon Panier</h4>
 <div id="listePanier"></div>
 <p style="font-size:19px; font-weight:bold; margin-top:15px;">Total : <span id="totalPanier">0</span> GNF</p>
 
 <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:10px;">
-<input type="number" id="montantPaye" class="champ" placeholder="Montant versé" min="0" value="0">
+<input type="number" id="montantPaye" class="champ" placeholder="Montant versé" min="0" value="0" oninput="majReste()">
 <p style="padding:14px; font-weight:bold;">Reste : <span id="resteAPayer">0</span> GNF</p>
 </div>
 
@@ -280,7 +285,7 @@ Un code = un seul téléphone
 
 <!-- Gestion Utilisateurs (Admin) -->
 <div id="ongletAdmin" class="onglet">
-<h2 style="margin-bottom:15px; color:white;">👥 Utilisateurs Connectés</h2>
+<h2 style="margin-bottom:15px; color:white;">👥 Tous les Utilisateurs</h2>
 <div id="listeUtilisateurs"></div>
 </div>
 </div>
@@ -299,7 +304,7 @@ Un code = un seul téléphone
 
 <script>
 // ═══════════════════════════════════════════════════════════
-// CONFIGURATION
+// CONFIGURATION — NE PAS MODIFIER SAUF POUR CHANGER LES MONTANTS
 // ═══════════════════════════════════════════════════════════
 const CODE_ADMIN = "ADMIN-ENSEB-2026";
 const NUMERO_PAIEMENT = "622149602";
@@ -365,11 +370,11 @@ function creerCompte(){
 const nom = document.getElementById('nomUtil').value.trim();
 const tel = document.getElementById('telUtil').value.trim().replace(/\s/g,'');
 
-if(!nom || !tel) return alert("Remplissez nom et téléphone !");
-if(!/^\d{8,12}$/.test(tel)) return alert("Numéro invalide !");
+if(!nom || !tel) return alert("⚠️ Remplissez nom et numéro de téléphone !");
+if(!/^\d{8,12}$/.test(tel)) return alert("⚠️ Numéro invalide ! 8 à 12 chiffres");
 
 const comptes = JSON.parse(localStorage.getItem('comptes_utilisateurs') || '{}');
-if(comptes[tel]) return alert("Ce numéro existe déjà ! Veuillez vous connecter.");
+if(comptes[tel]) return alert("⚠️ Ce numéro existe déjà ! Veuillez vous connecter.");
 
 const debutEssai = new Date().toISOString();
 comptes[tel] = {
@@ -404,12 +409,12 @@ ouvrirSession();
 return;
 }
 
-if(!tel) return alert("Saisissez votre numéro !");
+if(!tel) return alert("⚠️ Saisissez votre numéro de téléphone !");
 
 const comptes = JSON.parse(localStorage.getItem('comptes_utilisateurs') || '{}');
 const compte = comptes[tel];
 
-if(!compte) return alert("Aucun compte trouvé ! Veuillez d'abord vous inscrire.");
+if(!compte) return alert("⚠️ Aucun compte trouvé ! Veuillez d'abord vous inscrire.");
 
 if(compte.code_acces && compte.code_acces !== code) return alert("❌ Code d'accès incorrect !");
 
@@ -427,7 +432,7 @@ ouvrirSession();
 }
 
 // ═══════════════════════════════════════════════════════════
-// GESTION ABONNEMENT
+// GESTION ABONNEMENT — 7j gratuit → 250k/30j ou 50k/7j
 // ═══════════════════════════════════════════════════════════
 function verifierStatutAcces(){
 const cle = localStorage.getItem('utilisateur_connecte');
@@ -505,20 +510,20 @@ formuleSelectionnee = duree;
 const montant = duree === 30 ? MONTANT_ABONNEMENT_30J : MONTANT_ABONNEMENT_7J;
 document.getElementById('formuleChoisie').innerHTML = 
 `✅ ${duree} Jours — <strong>${montant.toLocaleString('fr-FR')} GNF</strong><br>
-Paiement sur : ${NUMERO_PAIEMENT}`;
+Paiement sur Orange Money : ${NUMERO_PAIEMENT}`;
 }
 
 function validerAbonnement(){
-if(!formuleSelectionnee) return alert("Choisissez d'abord une formule !");
+if(!formuleSelectionnee) return alert("⚠️ Choisissez d'abord une formule !");
 
 const codeSaisi = document.getElementById('codeSaisi').value.trim();
-if(!codeSaisi) return alert("Saisissez le code reçu après paiement !");
+if(!codeSaisi) return alert("⚠️ Saisissez le code reçu après paiement !");
 
 const comptes = JSON.parse(localStorage.getItem('comptes_utilisateurs') || '{}');
 const cleUtil = utilisateurActuel?.cle_connexion || Object.keys(comptes).pop();
 const compte = comptes[cleUtil];
 
-if(!compte) return alert("Erreur : compte introuvable. Veuillez vous inscrire d'abord.");
+if(!compte) return alert("⚠️ Erreur : compte introuvable. Veuillez vous inscrire d'abord.");
 
 if(compte.code_acces && compte.code_acces !== codeSaisi){
 return alert("❌ Code incorrect !");
@@ -563,7 +568,7 @@ let texteAbonnement = '';
 if(utilisateurActuel.statut === 'essai'){
 const debut = new Date(utilisateurActuel.debut_essai);
 const jours = Math.max(0, DUREE_ESSAI_JOURS - Math.floor((new Date() - debut) / (1000*60*60*24)));
-texteAbonnement = `⏳ Essai: ${jours}j`;
+texteAbonnement = `⏳ Essai: ${jours}j restant(s)`;
 } else if(utilisateurActuel.statut === 'abonne'){
 const exp = new Date(utilisateurActuel.abonnement_expire_le);
 const jours = Math.ceil((exp - new Date()) / (1000*60*60*24));
@@ -588,7 +593,7 @@ location.reload();
 }
 
 // ═══════════════════════════════════════════════════════════
-// ADMIN : VOIR & DÉCONNECTER UTILISATEURS
+// ADMIN : VOIR TOUS LES COMPTES & DÉCONNECTER/SUPPRIMER
 // ═══════════════════════════════════════════════════════════
 function afficherListeUtilisateurs(){
 if(!estAdmin){
@@ -614,11 +619,11 @@ bloc.innerHTML += `
 <div class="ligne-code">
 <strong>${compte.nom}</strong><br>
 📞 ${tel} | ${statutTexte}
-${compte.code_acces ? `<br>🔑 Code: ${compte.code_acces}` : ''}
-${exp !== '—' ? `<br>📅 Expire: ${exp}` : ''}
+${compte.code_acces ? `<br>🔑 Code d'accès: ${compte.code_acces}` : ''}
+${exp !== '—' ? `<br>📅 Expire le: ${exp}` : ''}
 <br><small style="color:#999;">Appareil: ${compte.appareil_id ? compte.appareil_id.substring(0,18)+'...' : 'Non connecté'}</small>
-<div style="margin-top:8px;">
-<button class="btn btn-rouge btn-petit" onclick="supprimerUtilisateur('${tel}')">🗑️ Supprimer</button>
+<div style="margin-top:10px; display:flex; gap:8px;">
+<button class="btn btn-rouge btn-petit" onclick="supprimerUtilisateur('${tel}')">🗑️ Supprimer / Déconnecter</button>
 </div>
 </div>`;
 }
@@ -626,11 +631,11 @@ ${exp !== '—' ? `<br>📅 Expire: ${exp}` : ''}
 
 function supprimerUtilisateur(tel){
 if(!estAdmin) return;
-if(confirm("Supprimer définitivement cet utilisateur ?")){
+if(confirm("⚠️ Supprimer/déconnecter définitivement cet utilisateur ?")){
 const comptes = JSON.parse(localStorage.getItem('comptes_utilisateurs') || '{}');
 delete comptes[tel];
 localStorage.setItem('comptes_utilisateurs', JSON.stringify(comptes));
-alert("✅ Utilisateur supprimé !");
+alert("✅ Utilisateur déconnecté et supprimé !");
 afficherListeUtilisateurs();
 }
 }
@@ -653,7 +658,7 @@ impayes = JSON.parse(localStorage.getItem(prefixe+'impayes') || '{}');
 }
 
 // ═══════════════════════════════════════════════════════════
-// ENTREPRISE & LOGO
+// ENTREPRISE & LOGO — CHAQUE UTILISATEUR PEUT AJOUTER LES SIENS
 // ═══════════════════════════════════════════════════════════
 function apercuLogo(input){
 if(input.files && input.files[0]){
@@ -685,7 +690,7 @@ document.getElementById('apercuLogoImg').classList.remove('cacher');
 function sauvegarderEntreprise(){
 const logoImg = document.getElementById('apercuLogoImg').src || infosEntreprise.logo;
 infosEntreprise = {
-nom: document.getElementById('nomEntreprise').value.trim() || 'Gestion Commerciale',
+nom: document.getElementById('nomEntreprise').value.trim() || 'GESTION COMMERCIALE',
 adresse: document.getElementById('adresseEntreprise').value.trim(),
 telephone: document.getElementById('telEntreprise').value.trim(),
 rccm: document.getElementById('rccmEntreprise').value.trim(),
@@ -693,12 +698,11 @@ infos: document.getElementById('infosEntreprise').value.trim(),
 logo: logoImg
 };
 localStorage.setItem('infosEntreprise_' + (utilisateurActuel?.cle_connexion || 'defaut'), JSON.stringify(infosEntreprise));
-chargerInfosEntreprise();
-alert("✅ Informations enregistrées !");
+alert("✅ Informations de l'entreprise enregistrées !");
 }
 
 // ═══════════════════════════════════════════════════════════
-// PRODUITS & STOCK
+// PRODUITS : NOM, PRIX ACHAT, PRIX VENTE, STOCK, ALERTE
 // ═══════════════════════════════════════════════════════════
 function ajouterProduit(){
 const nom = document.getElementById('nomProd').value.trim();
@@ -707,7 +711,7 @@ const vente = parseFloat(document.getElementById('prixVente').value) || 0;
 const stock = parseInt(document.getElementById('stockActuel').value) || 0;
 const seuil = parseInt(document.getElementById('stockAlerte').value) || 5;
 
-if(!nom || !vente) return alert("Remplissez nom et prix de vente !");
+if(!nom || !vente) return alert("⚠️ Remplissez nom et prix de vente !");
 if(produits.some(p => p.nom === nom)) return alert("❌ Produit déjà existant !");
 
 produits.push({id:Date.now(), nom, achat, vente, stockActuel:stock, stockAlerte:seuil});
@@ -738,9 +742,9 @@ return `
 <strong>${p.nom}</strong>
 ${alerte ? '<span style="color:#ffc107; float:right; font-weight:bold;">⚠️ STOCK BAS</span>' : ''}<br>
 Achat: ${p.achat.toLocaleString('fr-FR')} GNF | Vente: ${p.vente.toLocaleString('fr-FR')} GNF<br>
-Stock: ${p.stockActuel} (seuil: ${p.stockAlerte})
+Stock: ${p.stockActuel} (seuil d'alerte: ${p.stockAlerte})
 <div style="margin-top:10px;">
-<button class="btn btn-primaire btn-petit" onclick="modifierStock(${p.id})">📦 Ajuster</button>
+<button class="btn btn-primaire btn-petit" onclick="modifierStock(${p.id})">📦 Ajuster Stock</button>
 <button class="btn btn-rouge btn-petit" style="float:right;" onclick="supprimerProduit(${p.id})">🗑️ Supprimer</button>
 </div>
 </div>`;
@@ -759,7 +763,7 @@ verifierAlertesStock();
 }
 
 function supprimerProduit(id){
-if(confirm("Supprimer ce produit ?")){
+if(confirm("⚠️ Supprimer ce produit ?")){
 produits = produits.filter(p => p.id !== id);
 sauvegarderDonnees();
 afficherListeProduits();
@@ -790,15 +794,15 @@ document.getElementById('stockDispo').textContent = '-';
 }
 
 // ═══════════════════════════════════════════════════════════
-// PANIER & VENTE
+// PANIER : AJOUTER / RETIRER / TOTAL / RESTE
 // ═══════════════════════════════════════════════════════════
 function ajouterAuPanier(){
 const id = parseInt(document.getElementById('choixProduit').value);
 const qte = parseInt(document.getElementById('qteProduit').value) || 1;
 const prod = produits.find(p => p.id === id);
 
-if(!prod) return alert("Sélectionnez un produit !");
-if(qte > prod.stockActuel) return alert(`Stock insuffisant ! Disponible : ${prod.stockActuel}`);
+if(!prod) return alert("⚠️ Sélectionnez un produit !");
+if(qte > prod.stockActuel) return alert(`⚠️ Stock insuffisant ! Disponible : ${prod.stockActuel}`);
 
 panier.push({
 id: prod.id,
@@ -824,38 +828,41 @@ verifierAlertesStock();
 function majAffichagePanier(){
 const bloc = document.getElementById('listePanier');
 if(panier.length === 0){
-bloc.innerHTML = '<p style="color:#999;">Panier vide</p>';
+bloc.innerHTML = '<p style="color:#999; text-align:center; padding:10px;">Panier vide</p>';
 document.getElementById('totalPanier').textContent = '0';
 majReste();
 return;
 }
 
-bloc.innerHTML = panier.map((item, idx) => `
+bloc.innerHTML = panier.map((item, index) => `
 <div style="display:flex; justify-content:space-between; align-items:center; padding:8px 0; border-bottom:1px solid #eee;">
 <div>
-<strong>${item.nom}</strong> × ${item.quantite}<br>
-${item.prix.toLocaleString('fr-FR')} × ${item.quantite} = ${item.total.toLocaleString('fr-FR')} GNF
+<strong>${item.nom}</strong><br>
+${item.quantite} × ${item.prix.toLocaleString('fr-FR')} = <strong>${item.total.toLocaleString('fr-FR')} GNF</strong>
 </div>
-<button class="btn btn-rouge btn-petit" onclick="retirerDuPanier(${idx})">✕</button>
+<button class="btn btn-rouge btn-petit" onclick="retirerDuPanier(${index})">✖</button>
 </div>
 `).join('');
-const total = panier.reduce((s, i) => s + i.total, 0);
+
+const total = panier.reduce((somme, article) => somme + article.total, 0);
 document.getElementById('totalPanier').textContent = total.toLocaleString('fr-FR');
 majReste();
 }
 
 function retirerDuPanier(index){
 const item = panier[index];
-const prod = produits.find(p => p.id === item.id);
-if(prod) prod.stockActuel += item.quantite;
+const produit = produits.find(p => p.id === item.id);
+if(produit) produit.stockActuel += item.quantite;
+
 panier.splice(index, 1);
 sauvegarderDonnees();
 majAffichagePanier();
 mettreAJourSelectProduits();
+verifierAlertesStock();
 }
 
 function majReste(){
-const total = panier.reduce((s, i) => s + i.total, 0);
+const total = panier.reduce((somme, article) => somme + article.total, 0);
 const verse = parseFloat(document.getElementById('montantPaye').value) || 0;
 const reste = Math.max(0, total - verse);
 document.getElementById('resteAPayer').textContent = reste.toLocaleString('fr-FR');
@@ -871,27 +878,27 @@ zone.classList.add('cacher');
 return;
 }
 
-const correspondants = Object.entries(impayes).filter(([key, data]) => 
-key.toLowerCase().includes(valeur.toLowerCase()) ||
-(data.telephone && data.telephone.includes(valeur))
+const correspondants = Object.entries(impayes).filter(([cle, donnees]) => 
+cle.toLowerCase().includes(valeur.toLowerCase()) ||
+(donnees.telephone && donnees.telephone.includes(valeur))
 );
 
+zone.classList.remove('cacher');
 if(correspondants.length === 0){
 zone.innerHTML = '<div class="res-item" style="color:#999;">Aucun client trouvé</div>';
 } else {
-zone.innerHTML = correspondants.map(([nom, data]) => `
-<div class="res-item" onclick="chargerClient('${nom.split(' | ')[0]}', '${data.telephone || ''}')">
-<strong>${nom.split(' | ')[0]}</strong><br>
-<small>${data.telephone || 'Sans téléphone'}</small>
+zone.innerHTML = correspondants.map(([cle, donnees]) => `
+<div class="res-item" onclick="chargerClient('${donnees.nom}', '${donnees.telephone || ''}')">
+<strong>${donnees.nom}</strong><br>
+<small>${donnees.telephone || 'Sans téléphone'}</small>
 </div>
 `).join('');
 }
-zone.classList.remove('cacher');
 }
 
-function chargerClient(nom, tel){
+function chargerClient(nom, telephone){
 document.getElementById('nomClient').value = nom;
-document.getElementById('telClient').value = tel;
+document.getElementById('telClient').value = telephone;
 document.getElementById('resultatsRecherche').classList.add('cacher');
 }
 
@@ -902,26 +909,27 @@ function genererFacture(){
 const nomClient = document.getElementById('nomClient').value.trim();
 const telClient = document.getElementById('telClient').value.trim();
 const montantPaye = parseFloat(document.getElementById('montantPaye').value) || 0;
-const total = panier.reduce((s, i) => s + i.total, 0);
+const total = panier.reduce((somme, article) => somme + article.total, 0);
 const reste = Math.max(0, total - montantPaye);
 
-if(!nomClient) return alert("Indiquez le nom du client !");
-if(panier.length === 0) return alert("Ajoutez des produits au panier !");
+if(!nomClient) return alert("⚠️ Indiquez le nom du client !");
+if(panier.length === 0) return alert("⚠️ Ajoutez des produits au panier !");
 
-const numFacture = 'FACT-' + Date.now();
+const numeroFacture = 'FACT-' + Date.now();
 const date = new Date().toLocaleString('fr-FR');
 
 factureCourante = {
-numero: numFacture,
+numero: numeroFacture,
 date: date,
-nomClient,
+nomClient: nomClient,
 telephone: telClient,
 articles: [...panier],
-total,
+total: total,
 verse: montantPaye,
-reste,
+reste: reste,
 dateFacture: new Date().toISOString()
 };
+
 factures.unshift(factureCourante);
 
 const cleClient = nomClient + (telClient ? ` | ${telClient}` : '');
@@ -936,7 +944,7 @@ historique: []
 impayes[cleClient].reste_total += reste;
 impayes[cleClient].historique.push({
 date: date,
-facture: numFacture,
+facture: numeroFacture,
 montant: total,
 verse: montantPaye,
 reste: reste
@@ -958,7 +966,7 @@ actualiserTableauBord();
 alert("✅ Facture générée !");
 }
 
-function genererHTMLFacture(f){
+function genererHTMLFacture(fact){
 const entreprise = infosEntreprise.nom || 'GESTION COMMERCIALE';
 const adresse = infosEntreprise.adresse || '';
 const telEnt = infosEntreprise.telephone || '';
@@ -974,13 +982,13 @@ ${logo ? `<img src="${logo}" alt="Logo" style="max-width:140px; max-height:70px;
 <p class="facture-info">Tél: ${telEnt}</p>
 <p class="facture-info">${rccm}</p>
 <h3 style="margin-top:10px; color:#4B0082;">FACTURE</h3>
-<p class="facture-info"><strong>N°</strong> ${f.numero}</p>
-<p class="facture-info"><strong>Date :</strong> ${f.date}</p>
+<p class="facture-info"><strong>N°</strong> ${fact.numero}</p>
+<p class="facture-info"><strong>Date :</strong> ${fact.date}</p>
 </div>
 
 <div style="margin-bottom:15px;">
-<p><strong>Client :</strong> ${f.nomClient}</p>
-<p><strong>Téléphone :</strong> ${f.telephone || 'Non renseigné'}</p>
+<p><strong>Client :</strong> ${fact.nomClient}</p>
+<p><strong>Téléphone :</strong> ${fact.telephone || 'Non renseigné'}</p>
 </div>
 
 <table class="facture-table">
@@ -993,32 +1001,34 @@ ${logo ? `<img src="${logo}" alt="Logo" style="max-width:140px; max-height:70px;
 </tr>
 </thead>
 <tbody>
-${f.articles.map(a => `
+${fact.articles.map(art => `
 <tr>
-<td>${a.nom}</td>
-<td style="text-align:center;">${a.quantite}</td>
-<td style="text-align:right;">${a.prix.toLocaleString('fr-FR')}</td>
-<td style="text-align:right;">${a.total.toLocaleString('fr-FR')}</td>
+<td>${art.nom}</td>
+<td style="text-align:center;">${art.quantite}</td>
+<td style="text-align:right;">${art.prix.toLocaleString('fr-FR')}</td>
+<td style="text-align:right;">${art.total.toLocaleString('fr-FR')}</td>
 </tr>`).join('')}
 </tbody>
 </table>
 
 <div class="facture-total">
-Total : ${f.total.toLocaleString('fr-FR')} GNF<br>
-Versé : ${f.verse.toLocaleString('fr-FR')} GNF<br>
-${f.reste > 0 ? `<span style="color:red;">Reste à payer : ${f.reste.toLocaleString('fr-FR')} GNF</span>` : `<span style="color:green;">✅ Payé en totalité</span>`}
+Total : ${fact.total.toLocaleString('fr-FR')} GNF<br>
+Versé : ${fact.verse.toLocaleString('fr-FR')} GNF<br>
+${fact.reste > 0 
+? `<span style="color:red;">Reste à payer : ${fact.reste.toLocaleString('fr-FR')} GNF</span>` 
+: `<span style="color:green;">✅ Payé en totalité</span>`}
 </div>
 
 <div style="margin-top:20px; display:flex; gap:10px; flex-wrap:wrap;">
 <button class="btn btn-primaire btn-petit cache-impression" onclick="window.print()">🖨️ Imprimer</button>
-<button class="btn btn-whatsapp btn-petit cache-impression" onclick="partagerSurWhatsapp('${f.numero}')">📲 Partager WhatsApp</button>
+<button class="btn btn-whatsapp btn-petit cache-impression" onclick="partagerSurWhatsapp('${fact.numero}')">📲 Partager WhatsApp</button>
 <button class="btn btn-vert btn-petit cache-impression" onclick="document.getElementById('zoneFacture').classList.add('cacher')">↩ Retour</button>
 </div>
 </div>`;
 }
 
-function partagerSurWhatsapp(numFacture){
-const fact = factures.find(x => x.numero === numFacture);
+function partagerSurWhatsapp(numeroFacture){
+const fact = factures.find(f => f.numero === numeroFacture);
 if(!fact) return;
 
 const texte = `
@@ -1028,7 +1038,7 @@ const texte = `
 📞 Tél: ${fact.telephone || 'Non renseigné'}
 
 --- Articles ---
-${fact.articles.map(a => `• ${a.nom} ×${a.quantite} = ${a.total.toLocaleString('fr-FR')} GNF`).join('\n')}
+${fact.articles.map(art => `• ${art.nom} ×${art.quantite} = ${art.total.toLocaleString('fr-FR')} GNF`).join('\n')}
 
 💰 Total: ${fact.total.toLocaleString('fr-FR')} GNF
 💵 Versé: ${fact.verse.toLocaleString('fr-FR')} GNF
@@ -1037,8 +1047,8 @@ ${fact.reste > 0 ? `⚠️ Reste: ${fact.reste.toLocaleString('fr-FR')} GNF` : '
 — ${infosEntreprise.nom || 'Gestion Commerciale'} —
 `.trim();
 
-const url = `https://wa.me/${fact.telephone || ''}?text=${encodeURIComponent(texte)}`;
-window.open(url, '_blank');
+const lien = `https://wa.me/${fact.telephone || ''}?text=${encodeURIComponent(texte)}`;
+window.open(lien, '_blank');
 }
 
 function afficherHistorique(){
@@ -1054,30 +1064,31 @@ bloc.innerHTML = factures.map(f => `
 <div class="ligne-facture" onclick="voirFacture('${f.numero}')" style="cursor:pointer;">
 <strong>${f.numero}</strong> — ${f.nomClient}<br>
 ${f.date} | Total: ${f.total.toLocaleString('fr-FR')} GNF
-${f.reste > 0 ? `<span style="color:red;">🔴 Impayé: ${f.reste.toLocaleString('fr-FR')}</span>` : `<span style="color:green;">✅ Réglé</span>`}
+${f.reste > 0 
+? `<span style="color:red;">🔴 Impayé: ${f.reste.toLocaleString('fr-FR')}</span>` 
+: `<span style="color:green;">✅ Réglé</span>`}
 </div>
 `).join('');
 }
 
 function voirFacture(numero){
-const f = factures.find(x => x.numero === numero);
-if(f){
+const fact = factures.find(f => f.numero === numero);
+if(fact){
 document.getElementById('zoneFacture').classList.remove('cacher');
-document.getElementById('zoneFacture').innerHTML = genererHTMLFacture(f);
+document.getElementById('zoneFacture').innerHTML = genererHTMLFacture(fact);
 document.getElementById('listeFactures').innerHTML = '';
 }
 }
 
 function filtrerFactures(valeur){
-if(!valeur.trim()){
-afficherHistorique();
-return;
-}
+if(!valeur.trim()) return afficherHistorique();
+
 const resultats = factures.filter(f => 
 f.numero.toLowerCase().includes(valeur.toLowerCase()) ||
 f.nomClient.toLowerCase().includes(valeur.toLowerCase()) ||
 (f.telephone && f.telephone.includes(valeur))
 );
+
 const bloc = document.getElementById('listeFactures');
 bloc.innerHTML = resultats.length === 0 
 ? '<p style="color:#ccc; padding:15px;">Aucune facture trouvée</p>'
@@ -1090,42 +1101,42 @@ ${f.date} | Total: ${f.total.toLocaleString('fr-FR')} GNF
 }
 
 // ═══════════════════════════════════════════════════════════
-// IMPAYÉS & PAIEMENT RESTE
+// IMPAYÉS & PAIEMENT DU RESTE
 // ═══════════════════════════════════════════════════════════
 function afficherImpayes(){
 const bloc = document.getElementById('listeImpayes');
-const entries = Object.entries(impayes).filter(([_, d]) => d.reste_total > 0);
+const clientsImpayes = Object.entries(impayes).filter(([_, donnees]) => donnees.reste_total > 0);
 
-if(entries.length === 0){
-bloc.innerHTML = '<p style="color:#ccc; text-align:center; padding:20px;">✅ Aucun impayé — Tous comptes réglés</p>';
+if(clientsImpayes.length === 0){
+bloc.innerHTML = '<p style="color:#90EE90; text-align:center; padding:20px;">✅ Aucun impayé — Tous comptes réglés</p>';
 return;
 }
 
-bloc.innerHTML = entries.map(([cle, data]) => `
+bloc.innerHTML = clientsImpayes.map(([cle, donnees]) => `
 <div class="ligne-impaye">
-<strong>${data.nom}</strong> — ${data.telephone || 'Sans téléphone'}<br>
-<span style="color:red; font-weight:bold;">💳 Reste dû : ${data.reste_total.toLocaleString('fr-FR')} GNF</span>
+<strong>${donnees.nom}</strong> — ${donnees.telephone || 'Sans téléphone'}<br>
+<span style="color:red; font-weight:bold;">💳 Reste dû : ${donnees.reste_total.toLocaleString('fr-FR')} GNF</span>
 <button class="btn btn-vert btn-petit" style="margin-top:8px;" onclick="payerReste('${cle}')">💰 Enregistrer un paiement</button>
 </div>
 `).join('');
 }
 
 function payerReste(cleClient){
-const montant = parseFloat(prompt("Montant versé :"));
+const montant = parseFloat(prompt("Montant versé par le client :"));
 if(!montant || montant <= 0) return;
 
 const client = impayes[cleClient];
 if(!client) return;
 
 if(montant > client.reste_total){
-alert(`Le montant dépasse le reste dû !\nReste dû : ${client.reste_total.toLocaleString('fr-FR')} GNF`);
+alert(`⚠️ Le montant dépasse le reste dû !\nReste dû : ${client.reste_total.toLocaleString('fr-FR')} GNF`);
 return;
 }
 
 client.reste_total -= montant;
 client.historique.push({
 date: new Date().toLocaleString('fr-FR'),
-type: 'paiement partiel',
+type: 'Paiement partiel',
 montant: montant,
 nouveau_reste: client.reste_total
 });
@@ -1137,7 +1148,7 @@ actualiserTableauBord();
 }
 
 // ═══════════════════════════════════════════════════════════
-// TABLEAU DE BORD & ALERTES
+// TABLEAU DE BORD & ALERTES STOCK
 // ═══════════════════════════════════════════════════════════
 function actualiserTableauBord(){
 document.getElementById('nbProduits').textContent = produits.length;
@@ -1146,10 +1157,10 @@ document.getElementById('nbVentes').textContent = factures.length;
 const aujourdHui = new Date().toDateString();
 const caJour = factures
 .filter(f => new Date(f.dateFacture).toDateString() === aujourdHui)
-.reduce((s, f) => s + f.total, 0);
+.reduce((somme, f) => somme + f.total, 0);
 document.getElementById('caJour').textContent = caJour.toLocaleString('fr-FR');
 
-const totalImp = Object.values(impayes).reduce((s, c) => s + (c.reste_total || 0), 0);
+const totalImp = Object.values(impayes).reduce((somme, c) => somme + (c.reste_total || 0), 0);
 document.getElementById('totalImpayes').textContent = totalImp.toLocaleString('fr-FR');
 }
 
@@ -1164,7 +1175,7 @@ return;
 
 bloc.innerHTML = alertes.map(p => `
 <div style="background:#fff3cd; padding:10px; border-radius:8px; margin:5px 0;">
-⚠️ <strong>${p.nom}</strong> — Stock : ${p.stockActuel} (seuil : ${p.stockAlerte})
+⚠️ <strong>${p.nom}</strong> — Stock : ${p.stockActuel} (seuil d'alerte : ${p.stockAlerte})
 </div>
 `).join('');
 }
@@ -1172,3 +1183,4 @@ bloc.innerHTML = alertes.map(p => `
 </script>
 </body>
 </html>
+
