@@ -49,6 +49,7 @@ cursor:pointer; transition:.2s; width:100%; margin:6px 0;
 }
 .btn-primaire{background:linear-gradient(90deg, var(--primaire-fonce), var(--primaire)); color:#fff;}
 .btn-primaire:hover{transform:translateY(-2px); box-shadow:0 6px 20px rgba(126,34,206,.35);}
+.btn-primaire:disabled{opacity:.6; cursor:not-allowed; transform:none;}
 .btn-succes{background:var(--succes); color:#fff;}
 .btn-succes:hover{background:#15803d; transform:translateY(-2px);}
 .btn-danger{background:var(--danger); color:#fff;}
@@ -159,7 +160,7 @@ body{background:white; padding:0;}
 <h3 style="text-align:center; color:var(--primaire-fonce); margin-bottom:20px;">📝 Créer mon compte</h3>
 <input type="text" id="nomUtilisateur" placeholder="Nom et Prénom" required>
 <input type="tel" id="telUtilisateur" placeholder="Numéro WhatsApp (ex: 620...)" required>
-<button class="btn btn-primaire" onclick="creerCompte()">✅ S'inscrire — Essai gratuit 7 jours</button>
+<button id="btnInscrire" class="btn btn-primaire" onclick="creerCompte()">✅ S'inscrire — Essai gratuit 7 jours</button>
 <p style="text-align:center; margin-top:18px;">Déjà un compte ? 
 <button class="btn-lien" onclick="basculerConnexion()">Se connecter</button>
 </p>
@@ -351,45 +352,51 @@ function entreprise(){ return charger(CLE_ENTREPRISE, {}); }
 function codesAcces(){ return charger(CLE_CODES, {}); }
 function sauverCodes(c){ sauver(CLE_CODES, c); }
 
-// === Création compte — 7 jours gratuits POUR TOUS ===
+// === Création compte — 7 jours gratuits POUR TOUS — CORRIGÉ ===
 function creerCompte(){
 const nom = document.getElementById('nomUtilisateur').value.trim();
 const tel = document.getElementById('telUtilisateur').value.trim();
-if(!nom || !tel) return alert('Remplissez tous les champs !');
+
+if(!nom || !tel){
+alert('⚠️ Remplissez tous les champs !');
+return;
+}
 
 utilisateurActuel = {
-nom, telephone: tel,
+nom: nom,
+telephone: tel,
 debutEssai: Date.now(),
 finEssai: Date.now() + DUREE_ESSAI,
 appareil: ID_APPAREIL,
 estAdmin: tel === ADMIN_TEL,
 valide: false
 };
+
 sauver(CLE_USER, utilisateurActuel);
-alert('Koolby224 vous souhaite la bienvenue ! 🎉\nVotre essai gratuit de 7 jours démarre maintenant.');
+alert('🎉 Koolby224 vous souhaite la bienvenue !\nVotre essai gratuit de 7 jours démarre maintenant.');
 ouvrirApplication();
 }
 
-// === Connexion ===
+// === Connexion — CORRIGÉ ===
 function seConnecter(){
 const tel = document.getElementById('telConnexion').value.trim();
-const sauvegarde = charger(CLE_USER);
+const sauvegarde = charger(CLE_USER, null);
 
-// Vérifier que c'est le même appareil et même numéro
 if(sauvegarde && sauvegarde.telephone === tel && sauvegarde.appareil === ID_APPAREIL){
 utilisateurActuel = sauvegarde;
-return verifierAcces();
+verifierAcces();
+return;
 }
-alert('Aucun compte trouvé — Créez-en un gratuitement');
+
+alert('❌ Aucun compte trouvé — Veuillez créer un compte gratuitement');
 basculerInscription();
 }
 
-// === Vérification accès CORRIGÉE ===
+// === Vérification accès — CORRIGÉE ===
 function verifierAcces(){
 if(!utilisateurActuel) return;
 
 const maintenant = Date.now();
-const joursRestants = Math.ceil((utilisateurActuel.finEssai - maintenant) / (24*60*60*1000));
 
 // Si code valide → accès illimité
 if(utilisateurActuel.valide){
@@ -399,6 +406,7 @@ return;
 
 // Si dans la période d'essai → accès autorisé
 if(maintenant < utilisateurActuel.finEssai){
+const joursRestants = Math.ceil((utilisateurActuel.finEssai - maintenant) / (24*60*60*1000));
 alert(`✅ Bienvenue ! Il vous reste ${joursRestants} jour(s) d'essai gratuit`);
 ouvrirApplication();
 return;
@@ -413,14 +421,22 @@ document.getElementById('formVerrouille').style.display = 'block';
 // === Code d'accès : 6 caractères — UN seul appareil ===
 function validerCodeAcces(){
 const code = document.getElementById('saisieCodeAcces').value.trim().toUpperCase();
-if(!code || code.length !== 6) return alert('Entrez un code de 6 caractères');
+
+if(!code || code.length !== 6){
+alert('⚠️ Saisissez un code de 6 caractères exactement');
+return;
+}
 
 const codes = codesAcces();
-if(!codes[code]) return alert('❌ Code invalide — Vérifiez la saisie');
+if(!codes[code]){
+alert('❌ Code invalide — Vérifiez la saisie');
+return;
+}
 
 const infos = codes[code];
 if(infos.utilise && infos.appareil !== ID_APPAREIL){
-return alert('❌ Ce code a déjà été utilisé sur un autre appareil');
+alert('❌ Ce code a déjà été utilisé sur un autre appareil');
+return;
 }
 
 infos.utilise = true;
@@ -432,16 +448,21 @@ if(utilisateurActuel){
 utilisateurActuel.valide = true;
 sauver(CLE_USER, utilisateurActuel);
 }
+
 alert('✅ Accès illimité activé !');
 ouvrirApplication();
 }
 
 function genererCodeAcces(){
-if(!utilisateurActuel?.estAdmin) return alert('Réservé à l\'Administrateur');
-// Code aléatoire 6 caractères majuscules + chiffres (sans ambiguïté)
+if(!utilisateurActuel?.estAdmin){
+alert('⚠️ Réservé à l\'Administrateur');
+return;
+}
+
+// Code aléatoire 6 caractères (lettres majuscules sans ambiguïté + chiffres)
 const caracteres = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
 let code = '';
-for(let i=0; i<6; i++){
+for(let i = 0; i < 6; i++){
 code += caracteres.charAt(Math.floor(Math.random() * caracteres.length));
 }
 
@@ -583,18 +604,25 @@ const achat = parseFloat(document.getElementById('prixAchat').value) || 0;
 const vente = parseFloat(document.getElementById('prixVente').value) || 0;
 const stock = parseInt(document.getElementById('stockActuel').value) || 0;
 const seuil = parseInt(document.getElementById('seuilAlerte').value) || 5;
-if(!nom || !vente) return alert('Nom et Prix de vente obligatoires');
+
+if(!nom || !vente){
+alert('⚠️ Nom et Prix de vente sont obligatoires');
+return;
+}
 
 const liste = produits();
 const existant = liste.findIndex(p => p.nom.toLowerCase() === nom.toLowerCase());
 const p = {id:Date.now(), nom, prixAchat:achat, prixVente:vente, stockActuel:stock, seuilAlerte:seuil};
-existant >=0 ? liste[existant]=p : liste.push(p);
+
+existant >= 0 ? liste[existant] = p : liste.push(p);
 sauverProduits(liste);
+
 alert('✅ Produit enregistré');
 document.getElementById('nomProduit').value = '';
 document.getElementById('prixAchat').value = '';
 document.getElementById('prixVente').value = '';
 document.getElementById('stockActuel').value = '';
+
 afficherListeProduits();
 preparerSelectProduits();
 actualiserTableauBord();
@@ -621,67 +649,84 @@ produits().map(p => `<option value="${p.id}" data-prix="${p.prixVente}">${p.nom}
 }
 function majPrixLigne(){
 const opt = document.getElementById('choixProduit').selectedOptions[0];
-document.getElementById('prixUnitaire').textContent = (parseFloat(opt?.dataset.prix)||0).toLocaleString('fr-FR');
+document.getElementById('prixUnitaire').textContent = (parseFloat(opt?.dataset.prix) || 0).toLocaleString('fr-FR');
 calculerSousTotal();
 }
 function calculerSousTotal(){
 const opt = document.getElementById('choixProduit').selectedOptions[0];
-const prix = parseFloat(opt?.dataset.prix)||0;
-const qte = parseInt(document.getElementById('qteVente').value)||0;
-document.getElementById('sousTotal').textContent = (prix*qte).toLocaleString('fr-FR');
+const prix = parseFloat(opt?.dataset.prix) || 0;
+const qte = parseInt(document.getElementById('qteVente').value) || 0;
+document.getElementById('sousTotal').textContent = (prix * qte).toLocaleString('fr-FR');
 }
 
 // === PANIER ===
 function ajouterPanier(){
 const opt = document.getElementById('choixProduit').selectedOptions[0];
-if(!opt) return alert('Choisissez un produit');
+if(!opt){
+alert('⚠️ Choisissez un produit');
+return;
+}
+
 const id = parseInt(opt.value);
 const nom = opt.textContent.split(' — ')[0];
 const prix = parseFloat(opt.dataset.prix);
-const qte = parseInt(document.getElementById('qteVente').value)||0;
-if(qte<=0) return alert('Quantité invalide');
+const qte = parseInt(document.getElementById('qteVente').value) || 0;
+
+if(qte <= 0){
+alert('⚠️ Quantité invalide');
+return;
+}
 
 const prod = produits().find(p => p.id === id);
-if(prod && prod.stockActuel < qte) return alert(`Stock insuffisant : ${prod.stockActuel} disponible(s)`);
+if(prod && prod.stockActuel < qte){
+alert(`⚠️ Stock insuffisant : ${prod.stockActuel} disponible(s)`);
+return;
+}
 
-panier.push({id, nom, prix, qte, total:prix*qte});
+panier.push({id, nom, prix, qte, total: prix * qte});
 majAffichagePanier();
+
 document.getElementById('choixProduit').value = '';
 document.getElementById('qteVente').value = '';
 document.getElementById('sousTotal').textContent = '0';
 }
 function majAffichagePanier(){
-document.getElementById('panier').innerHTML = panier.map((a,i) => `
+document.getElementById('panier').innerHTML = panier.map((a, i) => `
 <div class="panier-item">
 <span>${a.nom} × ${a.qte} = ${a.total.toLocaleString('fr-FR')} GNF</span>
 <button class="supprimer-item" onclick="panier.splice(${i},1); majAffichagePanier(); majReste();">✕</button>
 </div>
 `).join('') || '<p style="color:#666;">Panier vide</p>';
-const total = panier.reduce((s,a)=>s+a.total,0);
+
+const total = panier.reduce((s, a) => s + a.total, 0);
 document.getElementById('totalPanier').textContent = total.toLocaleString('fr-FR');
 majReste();
 }
 function majReste(){
-const total = panier.reduce((s,a)=>s+a.total,0);
-const verse = parseFloat(document.getElementById('montantVerser').value)||0;
+const total = panier.reduce((s, a) => s + a.total, 0);
+const verse = parseFloat(document.getElementById('montantVerser').value) || 0;
 const reste = Math.max(0, total - verse);
 const span = document.getElementById('resteAPayer');
 span.textContent = reste.toLocaleString('fr-FR') + ' GNF';
-span.className = reste>0 ? 'texte-rouge' : 'texte-vert';
+span.className = reste > 0 ? 'texte-rouge' : 'texte-vert';
 }
 
 // === VALIDER VENTE & FACTURE ===
 function validerVente(){
-if(!panier.length) return alert('Panier vide');
+if(!panier.length){
+alert('⚠️ Panier vide');
+return;
+}
+
 const nom = document.getElementById('nomClientVente').value.trim() || 'Client';
 const tel = document.getElementById('telClientVente').value.trim() || '';
-const total = panier.reduce((s,a)=>s+a.total,0);
-const verse = parseFloat(document.getElementById('montantVerser').value)||0;
+const total = panier.reduce((s, a) => s + a.total, 0);
+const verse = parseFloat(document.getElementById('montantVerser').value) || 0;
 const reste = total - verse;
 
 // Déduire stock
 const listeP = produits();
-panier.forEach(a => { const p = listeP.find(x=>x.id===a.id); if(p) p.stockActuel -= a.qte; });
+panier.forEach(a => { const p = listeP.find(x => x.id === a.id); if(p) p.stockActuel -= a.qte; });
 sauverProduits(listeP);
 
 const facture = {
@@ -715,7 +760,7 @@ if(logoBase64) entete += `<img src="${logoBase64}" style="max-height:70px; margi
 entete += `<strong style="font-size:22px; color:var(--primaire-fonce);">${e.nom || 'KOOLBY224'}</strong><br>`;
 if(e.slogan) entete += `<em>${e.slogan}</em><br>`;
 if(e.adresse) entete += `${e.adresse}<br>`;
-const tels = [e.tel1, e.tel2].filter(t=>t).join(' — ');
+const tels = [e.tel1, e.tel2].filter(t => t).join(' — ');
 if(tels) entete += `Tél : ${tels}<br>`;
 if(e.rccm) entete += `N° RCCM : ${e.rccm}`;
 
@@ -780,7 +825,8 @@ ${f.reste > 0 ? `RESTE : ${f.reste.toLocaleString('fr-FR')} GNF` : '✅ PAYÉ �
 
 Merci pour votre confiance !`
 );
-window.open(`https://wa.me/${f.telClient?.replace(/\D/g,'') || ''}?text=${msg}`, '_blank');
+const num = f.telClient?.replace(/\D/g, '') || '';
+window.open(`https://wa.me/${num}?text=${msg}`, '_blank');
 }
 
 // === IMPAYÉS & PAIEMENT PROGRESSIF ===
@@ -792,7 +838,7 @@ if(!groupes[cle]) groupes[cle] = {nom:f.nomClient, tel:f.telClient, reste:0, fac
 groupes[cle].reste += f.reste;
 groupes[cle].factures.push(f);
 });
-return Object.entries(groupes).filter(([_,c]) => c.reste > 0);
+return Object.entries(groupes).filter(([_, c]) => c.reste > 0);
 }
 function afficherImpayes(){
 const liste = regrouperImpayes();
@@ -806,40 +852,83 @@ document.getElementById('listeImpayes').innerHTML = liste.length === 0
 <div style="margin:10px 0; padding:10px; background:#fff; border-radius:8px;">
 ${c.factures.map(f => `
 <div style="padding:6px 0; border-bottom:1px solid #eee;">
-${f.numero} — Reste : <span class="texte-rouge">${f.reste.toLocaleString('fr-FR')}</span>
-<button class="btn btn-succes btn-petit" onclick="verserSurFacture('${f.numero}')">Payer</button>
+${f.numero} — Reste : <spandocument.getElementById('listeImpayes').innerHTML = liste.length === 0
+? '<p class="alerte alerte-vert">✅ Aucun impayé — Tous les comptes sont à jour</p>'
+: liste.map(([cle, c]) => `
+<div class="carte carte-alerte">
+<h4 style="font-size:17px; margin-bottom:8px;">👤 ${c.nom}</h4>
+<p style="margin:4px 0;">📞 Téléphone : ${c.tel || 'Non renseigné'}</p>
+<p style="font-size:19px; font-weight:bold; color:var(--danger); margin:10px 0;">
+💰 Dû total : ${c.reste.toLocaleString('fr-FR')} GNF
+</p>
+
+<div style="margin:12px 0; padding:12px; background:#fff; border-radius:10px; border:1px solid #fecaca;">
+<p style="font-weight:bold; margin-bottom:8px;">📋 Détail des factures impayées :</p>
+${c.factures.map(f => `
+<div style="padding:8px 0; border-bottom:1px solid #fee2e2; font-size:14px;">
+<strong>${f.numero}</strong> — ${f.date}<br>
+Total : ${f.total.toLocaleString('fr-FR')} | Versé : ${f.verse.toLocaleString('fr-FR')}<br>
+<span class="texte-rouge">Reste : ${f.reste.toLocaleString('fr-FR')} GNF</span>
+<button class="btn btn-succes btn-petit" style="margin-left:8px;" 
+onclick="payerSurFacture('${f.numero}', ${f.reste})">
+💳 Payer ce reste
+</button>
 </div>
 `).join('')}
 </div>
-<input type="number" id="versementGlobal_${cle}" placeholder="Montant versé">
-<button class="btn btn-succes" onclick="repartirVersement('${cle}')">✅ Répartir le paiement</button>
+
+<div style="margin-top:12px; padding:12px; background:#f0fdf4; border-radius:10px;">
+<p style="font-weight:bold; margin-bottom:8px;">💳 Versement global sur ce client :</p>
+<input type="number" id="versementGlobal_${cle}" placeholder="Montant à verser" min="1"
+style="margin:4px 0; padding:10px;">
+<button class="btn btn-succes" style="margin-top:6px;" 
+onclick="versementGlobalClient('${cle}')">
+✅ Enregistrer le versement
+</button>
 </div>
-`).
+</div>
 `).join('');
 }
 
-function verserSurFacture(numeroFacture){
-const montant = parseFloat(prompt('Montant versé pour cette facture :'));
-if(isNaN(montant) || montant <= 0) return alert('Saisissez un montant valide');
+// === Paiement sur une facture précise ===
+function payerSurFacture(numeroFacture, resteActuel){
+const montant = parseFloat(prompt(`Montant versé pour cette facture :\n(Reste dû : ${resteActuel.toLocaleString('fr-FR')} GNF)`));
+
+if(isNaN(montant) || montant <= 0){
+alert('⚠️ Saisissez un montant valide supérieur à 0');
+return;
+}
+if(montant > resteActuel){
+alert(`⚠️ Le montant dépasse le reste dû : ${resteActuel.toLocaleString('fr-FR')} GNF`);
+return;
+}
 
 const liste = factures();
 const facture = liste.find(f => f.numero === numeroFacture);
-if(!facture) return alert('Facture introuvable');
+if(!facture){
+alert('❌ Facture introuvable');
+return;
+}
 
-const nouveauReste = Math.max(0, facture.reste - montant);
 facture.verse += montant;
-facture.reste = nouveauReste;
+facture.reste = Math.max(0, facture.reste - montant);
 
 sauverFactures(liste);
-alert(`✅ Paiement enregistré !\nNouveau reste : ${nouveauReste.toLocaleString('fr-FR')} GNF`);
+alert(`✅ Paiement enregistré !\nNouveau reste : ${facture.reste.toLocaleString('fr-FR')} GNF`);
+
 afficherImpayes();
 actualiserTableauBord();
 }
 
-function repartirVersement(cleClient){
+// === Versement global réparti sur toutes les factures impayées d'un client ===
+function versementGlobalClient(cleClient){
 const champ = document.getElementById(`versementGlobal_${cleClient}`);
 const montant = parseFloat(champ.value);
-if(isNaN(montant) || montant <= 0) return alert('Saisissez un montant valide');
+
+if(isNaN(montant) || montant <= 0){
+alert('⚠️ Saisissez un montant valide');
+return;
+}
 
 const liste = factures();
 const facturesClient = liste.filter(f => 
@@ -847,22 +936,23 @@ const facturesClient = liste.filter(f =>
 );
 
 let resteARepartir = montant;
-for(const f of facturesClient){
-if(resteARepartir <= 0) break;
+facturesClient.forEach(f => {
+if(resteARepartir <= 0) return;
 const verserIci = Math.min(resteARepartir, f.reste);
 f.verse += verserIci;
 f.reste -= verserIci;
 resteARepartir -= verserIci;
-}
+});
 
 sauverFactures(liste);
 alert(`✅ Versement de ${montant.toLocaleString('fr-FR')} GNF réparti !`);
+
 champ.value = '';
 afficherImpayes();
 actualiserTableauBord();
 }
 
-// === FACTURES & RECHERCHE ===
+// === FACTURES — Recherche & Liste ===
 function afficherListeFactures(filtre=''){
 let liste = factures();
 if(filtre){
@@ -871,38 +961,48 @@ f.nomClient.toLowerCase().includes(filtre.toLowerCase()) ||
 (f.telClient && f.telClient.includes(filtre))
 );
 }
+
 document.getElementById('listeFactures').innerHTML = liste.length === 0
 ? '<p class="alerte">Aucune facture trouvée</p>'
 : liste.map(f => `
 <div class="carte" style="cursor:pointer;" onclick="afficherFacture(parcourirFacture('${f.numero}'))">
-<strong>${f.numero}</strong> — ${f.date}<br>
-Client : ${f.nomClient} | Tél : ${f.telClient || '-'}<br>
-Total : ${f.total.toLocaleString('fr-FR')} GNF —
-${f.reste > 0
+<div style="display:flex; justify-content:space-between; align-items:flex-start;">
+<div>
+<strong>${f.numero}</strong><br>
+${f.date}<br>
+👤 ${f.nomClient} — ${f.telClient || 'Sans téléphone'}
+</div>
+<div style="text-align:right;">
+<strong>${f.total.toLocaleString('fr-FR')} GNF</strong><br>
+${f.reste > 0 
 ? `<span class="texte-rouge">Impayé : ${f.reste.toLocaleString('fr-FR')}</span>`
 : `<span class="texte-vert">✅ Payée</span>`
 }
 </div>
+</div>
+</div>
 `).join('');
 }
+
 function parcourirFacture(numero){
 return factures().find(f => f.numero === numero);
 }
+
 function filtrerFactures(){
 afficherListeFactures(document.getElementById('rechercheFacture').value.trim());
 }
 
-// === TABLEAU DE BORD ===
+// === TABLEAU DE BORD — Mise à jour complète ===
 function actualiserTableauBord(){
 const liste = factures();
 const maintenant = Date.now();
 const debutJour = new Date();
-debutJour.setHours(0,0,0,0);
+debutJour.setHours(0, 0, 0, 0);
 const tsJour = debutJour.getTime();
 
-const caJour = liste.filter(f => f.horodatage >= tsJour).reduce((s,f) => s+f.total, 0);
-const caTotal = liste.reduce((s,f) => s+f.total, 0);
-const totalImpayes = liste.reduce((s,f) => s+f.reste, 0);
+const caJour = liste.filter(f => f.horodatage >= tsJour).reduce((s, f) => s + f.total, 0);
+const caTotal = liste.reduce((s, f) => s + f.total, 0);
+const totalImpayes = liste.reduce((s, f) => s + f.reste, 0);
 const nbProd = produits().length;
 
 document.getElementById('caJour').textContent = caJour.toLocaleString('fr-FR') + ' GNF';
@@ -916,63 +1016,69 @@ document.getElementById('alertesStock').innerHTML = alertes.length === 0
 ? '<p class="alerte alerte-vert">✅ Tous les stocks sont suffisants</p>'
 : alertes.map(p => `
 <div class="alerte alerte-rouge">
-⚠️ <strong>${p.nom}</strong> — Stock : ${p.stockActuel} (seuil : ${p.seuilAlerte})
+⚠️ <strong>${p.nom}</strong> — Stock actuel : ${p.stockActuel} (seuil : ${p.seuilAlerte})
 </div>
 `).join('');
 }
 
-// === ESPACE ADMINISTRATEUR ===
+// === ESPACE ADMINISTRATEUR COMPLET ===
 function afficherEspaceAdmin(){
 if(!utilisateurActuel?.estAdmin){
-document.getElementById('vue-admin').innerHTML = '<p class="alerte alerte-rouge">Accès réservé à l\'Administrateur</p>';
+document.getElementById('vue-admin').innerHTML = '<p class="alerte alerte-rouge">🔒 Accès réservé à l\'Administrateur</p>';
 return;
 }
 
-// Activités par utilisateur
-const stats = {};
+// Regrouper ventes par utilisateur
+const statsUtilisateurs = {};
 factures().forEach(f => {
 const nom = f.utilisateur || 'Anonyme';
-if(!stats[nom]) stats[nom] = { nom, ventes:0, ca:0, impayes:0 };
-stats[nom].ventes++;
-stats[nom].ca += f.total;
-stats[nom].impayes += f.reste;
+if(!statsUtilisateurs[nom]){
+statsUtilisateurs[nom] = { nom, ventes:0, ca:0, impayes:0 };
+}
+statsUtilisateurs[nom].ventes++;
+statsUtilisateurs[nom].ca += f.total;
+statsUtilisateurs[nom].impayes += f.reste;
 });
 
-document.getElementById('listeUtilisateursAdmin').innerHTML = Object.keys(stats).length === 0
-? '<p>Aucune activité</p>'
-: Object.values(stats).map(u => `
+document.getElementById('listeUtilisateursAdmin').innerHTML = 
+Object.keys(statsUtilisateurs).length === 0
+? '<p>Aucune activité enregistrée</p>'
+: Object.values(statsUtilisateurs).map(u => `
 <div class="carte">
-👤 <strong>${u.nom}</strong><br>
-Ventes : ${u.ventes} | CA : ${u.ca.toLocaleString('fr-FR')} GNF<br>
-Impayés : <span class="texte-rouge">${u.impayes.toLocaleString('fr-FR')} GNF</span>
-<button class="btn btn-danger btn-petit" onclick="alerterDeconnexionUtil('${u.nom}')">🚪 Déconnecter</button>
+<h4>👤 ${u.nom}</h4>
+<p>📊 Ventes : ${u.ventes} | CA : ${u.ca.toLocaleString('fr-FR')} GNF</p>
+<p class="texte-rouge">💳 Impayés : ${u.impayes.toLocaleString('fr-FR')} GNF</p>
+<button class="btn btn-danger btn-petit" onclick="alerterDeconnexionUtilisateur('${u.nom}')">
+🚪 Déconnecter à distance
+</button>
 </div>
 `).join('');
 
 afficherListeCodes();
 }
 
-function alerterDeconnexionUtil(nom){
-if(confirm(`Envoyer une demande de déconnexion à "${nom}" ?\nIls devront saisir un nouveau code d'accès.`)){
-alert(`✅ Demande envoyée — ${nom} devra utiliser un nouveau code pour se reconnecter.`);
+function alerterDeconnexionUtilisateur(nomUtilisateur){
+if(confirm(`Envoyer une demande de déconnexion à "${nomUtilisateur}" ?\nIls devront utiliser un nouveau code d'accès pour se reconnecter.`)){
+alert(`✅ Demande envoyée !\n${nomUtilisateur} devra obtenir un nouveau code d'accès auprès de vous.`);
 }
 }
 
 function toutSupprimer(){
-if(!confirm('⚠️ Êtes-vous SÛR de vouloir TOUT supprimer ?\nProduits, ventes, factures, codes — tout sera effacé définitivement !')) return;
-if(!confirm('CONFIRMEZ la suppression complète des données ?')) return;
+if(!confirm('⚠️ Êtes-vous SÛR de vouloir TOUT supprimer ?\nProduits, ventes, factures, codes, entreprise — TOUT sera effacé définitivement !')) return;
+if(!confirm('🔐 Confirmez une dernière fois la suppression complète des données ?')) return;
 
 localStorage.removeItem(CLE_PRODUITS);
 localStorage.removeItem(CLE_FACTURES);
 localStorage.removeItem(CLE_ENTREPRISE);
 localStorage.removeItem(CLE_CODES);
+
 alert('✅ Toutes les données ont été réinitialisées.');
 location.reload();
 }
 
-// === AU CHARGEMENT DE LA PAGE ===
+// === AU CHARGEMENT DE LA PAGE — INITIALISATION ===
 window.onload = function(){
-const sauvegarde = charger(CLE_USER);
+const sauvegarde = charger(CLE_USER, null);
 if(sauvegarde){
 utilisateurActuel = sauvegarde;
 verifierAcces();
@@ -981,3 +1087,7 @@ verifierAcces();
 </script>
 </body>
 </html>
+
+
+
+Le jeu. 8 oct. 2026 à 11:37, Namory Koulibaly <koulibalynamory9@gmail.com> a écrit :
