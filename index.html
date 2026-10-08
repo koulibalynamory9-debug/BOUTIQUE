@@ -1010,13 +1010,12 @@ ${fact.articles.map(art => `
 </tr>`).join('')}
 </tbody>
 </table>
-
 <div class="facture-total">
+Total : ${fact.total.toLocaleString('fr-FR')} GNF<br>
+Versé : ${fact.verse.toLocaleString('fr-FR')} GNF<br>
 ${fact.reste > 0
 ? `<span style="color:red; font-weight:bold; font-size:18px;">Reste à payer : ${fact.reste.toLocaleString('fr-FR')} GNF</span>`
 : `<span style="color:green; font-weight:bold; font-size:18px;">✅ PAYÉ — LIVRÉ</span>`}
-
-
 </div>
 
 <div style="margin-top:20px; display:flex; gap:10px; flex-wrap:wrap;">
