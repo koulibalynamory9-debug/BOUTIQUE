@@ -94,7 +94,6 @@ th{background:#f5f5f5; color:var(--primaire);}
 .cache-impression{display:none;}
 @media print{
 .barre-navigation, .entete, .btn-deco, .cache-impression{display:none !important;}
-  button { display: none !important; } 
 .facture{box-shadow:none; padding:0;}
 body{background:white;}
 }
@@ -1010,17 +1009,18 @@ ${fact.articles.map(art => `
 </tr>`).join('')}
 </tbody>
 </table>
+
 <div class="facture-total">
 Total : ${fact.total.toLocaleString('fr-FR')} GNF<br>
 Versé : ${fact.verse.toLocaleString('fr-FR')} GNF<br>
-${fact.reste > 0
-? `<span style="color:red; font-weight:bold; font-size:18px;">Reste à payer : ${fact.reste.toLocaleString('fr-FR')} GNF</span>`
-: `<span style="color:green; font-weight:bold; font-size:18px;">✅ PAYÉ — LIVRÉ</span>`}
+${fact.reste > 0 
+? `<span style="color:red;">Reste à payer : ${fact.reste.toLocaleString('fr-FR')} GNF</span>` 
+: `<span style="color:green;">✅ Payé en totalité</span>`}
 </div>
 
 <div style="margin-top:20px; display:flex; gap:10px; flex-wrap:wrap;">
-<button class="btn btn-primaire btn-petit " onclick="window.print()">🖨️ Imprimer</button>
-<button class="btn btn-whatsapp btn-petit " onclick="partagerSurWhatsapp('${fact.numero}')">📲 Partager WhatsApp</button>
+<button class="btn btn-primaire btn-petit cache-impression" onclick="window.print()">🖨️ Imprimer</button>
+<button class="btn btn-whatsapp btn-petit cache-impression" onclick="partagerSurWhatsapp('${fact.numero}')">📲 Partager WhatsApp</button>
 <button class="btn btn-vert btn-petit cache-impression" onclick="document.getElementById('zoneFacture').classList.add('cacher')">↩ Retour</button>
 </div>
 </div>`;
@@ -1133,29 +1133,18 @@ return;
 }
 
 client.reste_total -= montant;
-
 client.historique.push({
-  const factures = JSON.parse(localStorage.getItem('factures') || '[]');
-factures.forEach(f => {
-if (f.nomClient === client.nom || f.telClient === cleClient) {
-f.reste = client.reste_total;
-}
+date: new Date().toLocaleString('fr-FR'),
+type: 'Paiement partiel',
+montant: montant,
+nouveau_reste: client.reste_total
 });
-localStorage.setItem('factures', JSON.stringify(factures));
-
 
 sauvegarderDonnees();
-
-if (client.reste_total === 0) {
-alert("✅ Paiement terminé — PAYÉ — LIVRÉ !");
-} else {
 alert(`✅ Paiement enregistré !\nNouveau reste dû : ${client.reste_total.toLocaleString('fr-FR')} GNF`);
-}
-
 afficherImpayes();
 actualiserTableauBord();
 }
-
 
 // ═══════════════════════════════════════════════════════════
 // TABLEAU DE BORD & ALERTES STOCK
@@ -1178,7 +1167,7 @@ function verifierAlertesStock(){
 const bloc = document.getElementById('alertesStock');
 const alertes = produits.filter(p => p.stockActuel <= p.stockAlerte);
 
- if(alertes.length === 0){
+if(alertes.length === 0){
 bloc.innerHTML = '<p style="color:#90EE90; padding:10px;">✅ Tous les stocks sont suffisants</p>';
 return;
 }
