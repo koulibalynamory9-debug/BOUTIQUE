@@ -13,7 +13,7 @@
 *{box-sizing:border-box; font-family:'Segoe UI', Roboto, sans-serif; margin:0; padding:0;}
 body{background:#f5f3ff; min-height:100vh; padding-bottom:80px; color:var(--texte-noir);}
 
-/* === ÉCRAN DE CONNEXION — IMAGE DE FOND === */
+/* === Écran Connexion — Image de fond === */
 .ecran-connexion{
 position:fixed; top:0; left:0; width:100%; height:100vh; z-index:999;
 display:flex; align-items:center; justify-content:center; padding:20px;
@@ -30,7 +30,11 @@ animation: monter .5s ease;
 text-align:center; color:var(--primaire); margin-bottom:5px; font-size:26px; font-weight:900;
 }
 .carte-or .slogan{
-text-align:center; color:var(--or); font-weight:bold; margin-bottom:25px; font-size:15px;
+text-align:center; color:var(--or); font-weight:bold; margin-bottom:10px; font-size:15px;
+}
+.bienvenue{
+text-align:center; color:var(--succes); font-weight:bold; font-size:17px;
+margin-bottom:20px; line-height:1.5;
 }
 .carte-or input{
 width:100%; padding:15px 16px; margin:8px 0; border:2px solid #e5e7eb; border-radius:14px;
@@ -49,18 +53,18 @@ cursor:pointer; transition:.2s; width:100%; margin:6px 0;
 .btn-succes:hover{background:#15803d; transform:translateY(-2px);}
 .btn-danger{background:var(--danger); color:#fff;}
 .btn-whatsapp{background:#25d366; color:#fff;}
-.btn-lien{background:transparent; color:var(--primaire); text-decoration:underline; font-weight:bold;}
+.btn-lien{background:transparent; color:var(--primaire); text-decoration:underline; font-weight:bold; border:none;}
 .btn-petit{padding:9px 14px; font-size:14px; width:auto; display:inline-block; margin:4px; border-radius:10px;}
-.alerte{padding:15px; border-radius:12px; margin:12px 0; font-weight:bold; text-align:center; line-height:1.5;}
+.alerte{padding:15px; border-radius:12px; margin:12px 0; font-weight:bold; text-align:center; line-height:1.6;}
 .alerte-rouge{background:#fee2e2; color:#b91c1c; border-left:4px solid var(--danger);}
 .alerte-vert{background:#dcfce7; color:#166534; border-left:4px solid var(--succes);}
 
-/* === AFFICHAGE DES ÉCRANS === */
+/* === Affichage écrans === */
 .ecran{display:none; animation:apparaitre .3s ease;}
 .ecran.actif{display:block;}
 @keyframes apparaitre{from{opacity:0; transform:translateY(10px);}}
 
-/* === TABLEAU DE BORD EN HAUT === */
+/* === Tableau de bord en haut === */
 .contenu-principal{padding:15px;}
 h2{color:var(--primaire-fonce); margin-bottom:15px; font-size:20px;}
 .grid{display:grid; grid-template-columns:repeat(2, 1fr); gap:12px; margin:15px 0;}
@@ -91,7 +95,7 @@ table{width:100%; border-collapse:collapse; margin:15px 0; font-size:14px;}
 th, td{padding:10px 8px; text-align:left; border-bottom:1px solid #eee;}
 th{background:#f3e8ff; color:var(--primaire-fonce); font-weight:bold;}
 
-/* === ONGLETS EN BAS DE L'ÉCRAN === */
+/* === Onglets en bas === */
 .barre-navigation-bas{
 position:fixed; bottom:0; left:0; width:100%; background:#fff;
 box-shadow:0 -3px 15px rgba(0,0,0,.1); display:flex; justify-content:space-around;
@@ -105,7 +109,7 @@ transition:.2s; max-width:20%;
 .onglet-bas.actif{background:#f3e8ff; color:var(--primaire-fonce); font-weight:bold;}
 .onglet-bas span:first-child{font-size:20px; margin-bottom:2px;}
 
-/* === FACTURE & MODAL === */
+/* === Facture & Impression === */
 .modal{
 display:none; position:fixed; top:0; left:0; width:100%; height:100%;
 background:rgba(0,0,0,.6); z-index:1000; overflow:auto; padding:20px;
@@ -149,28 +153,36 @@ body{background:white; padding:0;}
 <h1>🛒 Koolby224</h1>
 <p class="slogan">Gestion Commerciale — Ventes • Stock • Facturation</p>
 
+<!-- Formulaire Inscription -->
 <div id="formInscription">
+<p class="bienvenue">« Koolby224 vous souhaite la bienvenue ! »</p>
 <h3 style="text-align:center; color:var(--primaire-fonce); margin-bottom:20px;">📝 Créer mon compte</h3>
 <input type="text" id="nomUtilisateur" placeholder="Nom et Prénom" required>
 <input type="tel" id="telUtilisateur" placeholder="Numéro WhatsApp (ex: 620...)" required>
 <button class="btn btn-primaire" onclick="creerCompte()">✅ S'inscrire — Essai gratuit 7 jours</button>
-<p style="text-align:center; margin-top:18px;">Déjà un compte ? <a href="#" onclick="basculerConnexion()" class="btn-lien">Se connecter</a></p>
+<p style="text-align:center; margin-top:18px;">Déjà un compte ? 
+<button class="btn-lien" onclick="basculerConnexion()">Se connecter</button>
+</p>
 </div>
 
+<!-- Formulaire Connexion -->
 <div id="formConnexion" style="display:none;">
 <h3 style="text-align:center; color:var(--primaire-fonce); margin-bottom:20px;">🔐 Se connecter</h3>
 <input type="tel" id="telConnexion" placeholder="Numéro WhatsApp">
 <button class="btn btn-primaire" onclick="seConnecter()">🔑 Accéder à mon espace</button>
-<p style="text-align:center; margin-top:18px;">Nouveau ? <a href="#" onclick="basculerInscription()" class="btn-lien">Créer un compte</a></p>
+<p style="text-align:center; margin-top:18px;">Nouveau ? 
+<button class="btn-lien" onclick="basculerInscription()">Créer un compte</button>
+</p>
 </div>
 
+<!-- Écran Verrouillé — Code 6 caractères -->
 <div id="formVerrouille" style="display:none;">
 <h3 style="text-align:center; color:var(--danger); margin-bottom:15px;">🔒 Essai terminé</h3>
 <div class="alerte alerte-rouge">
 ⏰ Votre période d'essai de 7 jours est terminée.<br><br>
 Veuillez appeler le <strong>621657979</strong> afin d'obtenir votre code d'accès illimité.
 </div>
-<input type="text" id="saisieCodeAcces" placeholder="Code alphanumérique (ex: KOL-XXXX-XXXX)">
+<input type="text" id="saisieCodeAcces" placeholder="Code alphanumérique (6 caractères)" maxlength="6">
 <button class="btn btn-succes" onclick="validerCodeAcces()">✅ Valider mon code</button>
 </div>
 </div>
@@ -178,9 +190,8 @@ Veuillez appeler le <strong>621657979</strong> afin d'obtenir votre code d'accè
 
 <!-- === Écran Principal === -->
 <div id="ecranPrincipal" class="ecran">
-<!-- CONTENU PRINCIPAL -->
 <div class="contenu-principal" id="zoneContenu">
-<!-- === ONGLET ACCUEIL / TABLEAU DE BORD EN HAUT === -->
+<!-- 🏠 Accueil / Tableau de bord -->
 <div class="vue-onglet actif" id="vue-accueil">
 <h2>🏠 Tableau de bord</h2>
 <div class="grid">
@@ -195,7 +206,7 @@ Veuillez appeler le <strong>621657979</strong> afin d'obtenir votre code d'accè
 <div id="alertesStock"></div>
 </div>
 
-<!-- === ONGLET ENTREPRISE === -->
+<!-- 🏢 Entreprise -->
 <div class="vue-onglet" id="vue-entreprise">
 <h2>🏢 Informations Entreprise</h2>
 <input type="text" id="nomEntreprise" placeholder="Nom de l'entreprise">
@@ -212,7 +223,7 @@ Veuillez appeler le <strong>621657979</strong> afin d'obtenir votre code d'accè
 </div>
 </div>
 
-<!-- === ONGLET PRODUITS === -->
+<!-- 📦 Produits -->
 <div class="vue-onglet" id="vue-produits">
 <h2>📦 Gestion des Produits</h2>
 <input type="text" id="nomProduit" placeholder="Nom du produit" required>
@@ -225,7 +236,7 @@ Veuillez appeler le <strong>621657979</strong> afin d'obtenir votre code d'accè
 <div id="listeProduits"></div>
 </div>
 
-<!-- === ONGLET VENTE === -->
+<!-- 💰 Vente -->
 <div class="vue-onglet" id="vue-vente">
 <h2>💰 Nouvelle Vente</h2>
 <input type="text" id="nomClientVente" placeholder="Nom du client">
@@ -249,29 +260,29 @@ Reste : <span id="resteAPayer" class="texte-rouge">0</span> GNF
 <button class="btn btn-primaire" onclick="validerVente()">✅ Valider & Facturer</button>
 </div>
 
-<!-- === ONGLET IMPAYÉS === -->
+<!-- 💳 Impayés -->
 <div class="vue-onglet" id="vue-impayes">
 <h2>💳 Crédits Impayés</h2>
 <div id="listeImpayes"></div>
 </div>
 
-<!-- === ONGLET FACTURES === -->
+<!-- 🧾 Factures -->
 <div class="vue-onglet" id="vue-factures">
 <h2>🧾 Historique des Factures</h2>
 <input type="text" class="barre-recherche" id="rechercheFacture" placeholder="🔍 Rechercher par nom ou téléphone..." oninput="filtrerFactures()">
 <div id="listeFactures"></div>
 </div>
 
-<!-- === ONGLET ADMINISTRATEUR === -->
+<!-- ⚙️ Administrateur -->
 <div class="vue-onglet" id="vue-admin">
 <h2>⚙️ Espace Administrateur</h2>
 <div class="alerte alerte-vert">✅ Connecté en tant qu'Administrateur</div>
 
-<h3 style="margin:20px 0 10px; color:var(--primaire-fonce);">👥 Utilisateurs & Activités</h3>
+<h3 style="margin:20px 0 10px; color:var(--primaire-fonce);">👥 Utilisateurs connectés & Activités</h3>
 <div id="listeUtilisateursAdmin"></div>
 
-<h3 style="margin:25px 0 10px; color:var(--primaire-fonce);">🔑 Générer un code d'accès</h3>
-<button class="btn btn-succes" onclick="genererCodeAcces()">🔑 Nouveau code alphanumérique</button>
+<h3 style="margin:25px 0 10px; color:var(--primaire-fonce);">🔑 Générer un code d'accès (6 caractères)</h3>
+<button class="btn btn-succes" onclick="genererCodeAcces()">🔑 Nouveau code</button>
 <div id="zoneCodeGenere" style="margin-top:15px; padding:15px; background:#dcfce7; border-radius:10px; display:none;"></div>
 
 <h3 style="margin:25px 0 10px; color:var(--primaire-fonce);">📋 Tous les codes générés</h3>
@@ -282,7 +293,7 @@ Reste : <span id="resteAPayer" class="texte-rouge">0</span> GNF
 </div>
 </div>
 
-<!-- ONGLETS EN BAS DE L'ÉCRAN -->
+<!-- Onglets en bas -->
 <nav class="barre-navigation-bas">
 <button class="onglet-bas actif" data-cible="accueil"><span>🏠</span><span>Accueil</span></button>
 <button class="onglet-bas" data-cible="entreprise"><span>🏢</span><span>Entreprise</span></button>
@@ -294,7 +305,7 @@ Reste : <span id="resteAPayer" class="texte-rouge">0</span> GNF
 </nav>
 </div>
 
-<!-- === MODAL FACTURE === -->
+<!-- Modal Facture -->
 <div id="modalFacture" class="modal">
 <button class="fermer cache-impression" onclick="fermerFacture()">×</button>
 <div class="facture" id="contenuFacture"></div>
@@ -314,21 +325,22 @@ const CLE_ENTREPRISE = 'koolby224_Entreprise';
 const CLE_CODES = 'koolby224_CodesAcces';
 const CLE_APPAREIL = 'koolby224_AppareilID';
 const ADMIN_TEL = '621657979';
+const DUREE_ESSAI = 7 * 24 * 60 * 60 * 1000; // 7 jours
 
 let utilisateurActuel = null;
 let panier = [];
 let factureActuelle = null;
 let logoBase64 = '';
 
-// === ID APPAREIL UNIQUE ===
+// === ID unique par appareil ===
 function idAppareil(){
 let id = localStorage.getItem(CLE_APPAREIL);
-if(!id){ id = 'APP-' + Math.random().toString(36).substr(2,10).toUpperCase(); localStorage.setItem(CLE_APPAREIL, id); }
+if(!id){ id = 'APP-' + Math.random().toString(36).substr(2,8).toUpperCase(); localStorage.setItem(CLE_APPAREIL, id); }
 return id;
 }
 const ID_APPAREIL = idAppareil();
 
-// === SAUVEGARDE / CHARGEMENT ===
+// === Sauvegarde / Chargement ===
 function sauver(k, v){ localStorage.setItem(k, JSON.stringify(v)); }
 function charger(k, def=[]){ const d=localStorage.getItem(k); return d?JSON.parse(d):def; }
 function produits(){ return charger(CLE_PRODUITS, []); }
@@ -339,7 +351,7 @@ function entreprise(){ return charger(CLE_ENTREPRISE, {}); }
 function codesAcces(){ return charger(CLE_CODES, {}); }
 function sauverCodes(c){ sauver(CLE_CODES, c); }
 
-// === INSCRIPTION ===
+// === Création compte ===
 function creerCompte(){
 const nom = document.getElementById('nomUtilisateur').value.trim();
 const tel = document.getElementById('telUtilisateur').value.trim();
@@ -348,7 +360,7 @@ if(!nom || !tel) return alert('Remplissez tous les champs !');
 utilisateurActuel = {
 nom, telephone: tel,
 debutEssai: Date.now(),
-finEssai: Date.now() + 7*24*60*60*1000,
+finEssai: Date.now() + DUREE_ESSAI,
 appareil: ID_APPAREIL,
 estAdmin: tel === ADMIN_TEL,
 valide: false
@@ -358,7 +370,7 @@ alert('Koolby224 vous souhaite la bienvenue ! 🎉\nVotre essai de 7 jours déma
 ouvrirApplication();
 }
 
-// === CONNEXION ===
+// === Connexion ===
 function seConnecter(){
 const tel = document.getElementById('telConnexion').value.trim();
 const sauvegarde = charger(CLE_USER);
@@ -366,7 +378,7 @@ if(sauvegarde && sauvegarde.telephone === tel && sauvegarde.appareil === ID_APPA
 utilisateurActuel = sauvegarde;
 return verifierAcces();
 }
-alert('Aucun compte — Créez-en un');
+alert('Aucun compte — Créez-en un gratuitement');
 basculerInscription();
 }
 
@@ -381,16 +393,15 @@ document.getElementById('formVerrouille').style.display = 'block';
 }
 }
 
-// === CODE D'ACCÈS ALPHANUMÉRIQUE — UN SEUL APPAREIL ===
+// === Code d'accès : 6 caractères — UN seul appareil ===
 function validerCodeAcces(){
-const code = document.getElementById('saisieCodeAcces').value.trim().toUpperCase().replace(/\s|-/g,'');
-if(!code) return alert('Entrez un code');
+const code = document.getElementById('saisieCodeAcces').value.trim().toUpperCase();
+if(!code || code.length !== 6) return alert('Entrez un code de 6 caractères');
 
 const codes = codesAcces();
-const trouve = Object.entries(codes).find(([k]) => k.replace(/-/g,'') === code);
-if(!trouve) return alert('❌ Code invalide');
+if(!codes[code]) return alert('❌ Code invalide — Vérifiez la saisie');
 
-const [codeOriginal, infos] = trouve;
+const infos = codes[code];
 if(infos.utilise && infos.appareil !== ID_APPAREIL){
 return alert('❌ Ce code a déjà été utilisé sur un autre appareil');
 }
@@ -404,16 +415,18 @@ if(utilisateurActuel){
 utilisateurActuel.valide = true;
 sauver(CLE_USER, utilisateurActuel);
 }
-alert('✅ Accès illimité activé sur cet appareil !');
+alert('✅ Accès illimité activé !');
 ouvrirApplication();
 }
 
 function genererCodeAcces(){
-if(!utilisateurActuel?.estAdmin) return alert('Réservé à l\'Admin');
-const c1 = Math.random().toString(36).substr(2,4).toUpperCase();
-const c2 = Math.random().toString(36).substr(2,4).toUpperCase();
-const c3 = Math.random().toString(36).substr(2,4).toUpperCase();
-const code = `KOL-${c1}-${c2}-${c3}`;
+if(!utilisateurActuel?.estAdmin) return alert('Réservé à l\'Administrateur');
+// Code aléatoire 6 caractères majuscules + chiffres
+const caracteres = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+let code = '';
+for(let i=0; i<6; i++){
+code += caracteres.charAt(Math.floor(Math.random() * caracteres.length));
+}
 
 const codes = codesAcces();
 codes[code] = {
@@ -428,8 +441,8 @@ const zone = document.getElementById('zoneCodeGenere');
 zone.style.display = 'block';
 zone.innerHTML = `
 <strong>✅ Code généré :</strong><br>
-<span style="font-size:20px; font-weight:bold; color:var(--primaire-fonce);">${code}</span><br>
-<small>🔒 Valable sur UN seul appareil</small>
+<span style="font-size:22px; font-weight:bold; color:var(--primaire-fonce); letter-spacing:4px;">${code}</span><br>
+<small>🔒 Valable sur UN seul appareil — 6 caractères</small>
 `;
 afficherListeCodes();
 }
@@ -440,8 +453,11 @@ document.getElementById('listeTousCodes').innerHTML = Object.keys(liste).length 
 ? '<p style="color:#666;">Aucun code généré</p>'
 : Object.entries(liste).map(([k, v]) => `
 <div class="carte" style="padding:10px; margin:5px 0; background:${v.utilise ? '#fee2e2' : '#dcfce7'};">
-<code style="font-weight:bold;">${k}</code> — 
-${v.utilise ? `<span class="texte-rouge">Utilisé sur ${v.appareil}</span>` : '<span class="texte-vert">✅ Disponible</span>'}
+<code style="font-weight:bold; font-size:16px;">${k}</code> — 
+${v.utilise 
+? `<span class="texte-rouge">Utilisé sur ${v.appareil.substr(0,8)}...</span>` 
+: '<span class="texte-vert">✅ Disponible</span>'
+}
 </div>
 `).join('');
 }
@@ -456,6 +472,8 @@ document.getElementById('formInscription').style.display = 'block';
 document.getElementById('formConnexion').style.display = 'none';
 document.getElementById('formVerrouille').style.display = 'none';
 }
+
+// === Déconnexion ===
 function deconnecter(){
 if(!confirm('Se déconnecter ?')) return;
 utilisateurActuel = null;
@@ -465,15 +483,17 @@ document.getElementById('ecranConnexion').classList.add('actif');
 basculerInscription();
 }
 
-// === NAVIGATION ONGLETS EN BAS ===
+// === Navigation onglets en bas ===
 function ouvrirApplication(){
 document.getElementById('ecranConnexion').classList.remove('actif');
 document.getElementById('ecranPrincipal').classList.add('actif');
 
+// Afficher onglet Admin si c'est le bon numéro
 if(utilisateurActuel?.estAdmin){
 document.getElementById('ongletAdminBas').style.display = 'flex';
 }
 
+// Lier les boutons d'onglets
 document.querySelectorAll('.onglet-bas').forEach(btn => {
 btn.onclick = () => {
 document.querySelectorAll('.onglet-bas').forEach(b => b.classList.remove('actif'));
@@ -567,20 +587,20 @@ document.getElementById('listeProduits').innerHTML = produits().map(p => `
 <div class="carte${p.stockActuel <= p.seuilAlerte ? ' carte-alerte' : ''}">
 <strong>${p.nom}</strong><br>
 Achat : ${p.prixAchat.toLocaleString('fr-FR')} | Vente : ${p.prixVente.toLocaleString('fr-FR')}<br>
-Stock : ${p.stockActuel} / Seuil : ${p.seuilAlerte}
+Stock : ${p.stockActuel} / Seuil d'alerte : ${p.seuilAlerte}
 <button class="btn btn-danger btn-petit" onclick="supprProduit(${p.id})">🗑️</button>
 </div>
 `).join('') || '<p>Aucun produit</p>';
 }
 function supprProduit(id){
-if(confirm('Supprimer ?')){
+if(confirm('Supprimer ce produit ?')){
 sauverProduits(produits().filter(p => p.id !== id));
 afficherListeProduits(); preparerSelectProduits(); actualiserTableauBord();
 }
 }
 function preparerSelectProduits(){
-document.getElementById('choixProduit').innerHTML = '<option value="">-- Choisir --</option>' +
-produits().map(p => `<option value="${p.id}" data-prix="${p.prixVente}">${p.nom} — ${p.prixVente.toLocaleString('fr-FR')}</option>`).join('');
+document.getElementById('choixProduit').innerHTML = '<option value="">-- Choisir un produit --</option>' +
+produits().map(p => `<option value="${p.id}" data-prix="${p.prixVente}">${p.nom} — ${p.prixVente.toLocaleString('fr-FR')} GNF</option>`).join('');
 }
 function majPrixLigne(){
 const opt = document.getElementById('choixProduit').selectedOptions[0];
@@ -605,7 +625,7 @@ const qte = parseInt(document.getElementById('qteVente').value)||0;
 if(qte<=0) return alert('Quantité invalide');
 
 const prod = produits().find(p => p.id === id);
-if(prod && prod.stockActuel < qte) return alert(`Stock insuffisant : ${prod.stockActuel}`);
+if(prod && prod.stockActuel < qte) return alert(`Stock insuffisant : ${prod.stockActuel} disponible(s)`);
 
 panier.push({id, nom, prix, qte, total:prix*qte});
 majAffichagePanier();
@@ -775,7 +795,7 @@ ${f.numero} — Reste : <span class="texte-rouge">${f.reste.toLocaleString('fr-F
 `).join('')}
 </div>
 <input type="number" id="versementGlobal_${cle}" placeholder="Montant versé">
-<button class="btn btn-succes" onclick="repartirVersement('${cle}')">✅ Répartir</button>
+<button class="btn btn-succes" onclick="repartirVersement('${cle}')">✅ Répartir le paiement</button>
 </div>
 `).join('');
 }
@@ -787,81 +807,76 @@ if(isNaN(montant) || montant <= 0) return alert('Montant invalide');
 
 const liste = factures();
 const f = liste.find(x => x.numero === num);
-if(!f || montant > f.reste) return alert('Montant invalide');
+if(!f || montant > f.reste) return alert('Montant supérieur au reste dû');
 
 f.verse += montant;
 f.reste -= montant;
 sauverFactures(liste);
-alert(`✅ Reste : ${f.reste.toLocaleString('fr-FR')} GNF`);
+alert(`✅ Nouveau reste : ${f.reste.toLocaleString('fr-FR')} GNF`);
 afficherImpayes(); actualiserTableauBord();
 }
 function repartirVersement(cle){
 const champ = document.getElementById(`versementGlobal_${cle}`);
 const montant = parseFloat(champ.value);
-if(isNaN(montant) || montant <= 0) return alert('Montant invalide');
+if(isNaN(montant) || montant <= 0) return alert('Saisissez un montant valide');
 
 const liste = factures();
-const cibles = liste.filter(f => (f.telClient || f.nomClient) === cle && f.reste > 0);
-let resteReparti = montant;
+const facturesClient = liste.filter(f => (f.telClient || f.nomClient) === cle && f.reste > 0);
+let resteARepartir = montant;
 
-for (const facture of cibles) {
-if (resteReparti <= 0) break;
-const verserIci = Math.min(resteReparti, facture.reste);
-facture.verse += verserIci;
-facture.reste -= verserIci;
-resteReparti -= verserIci;
+for(const f of facturesClient){
+if(resteARepartir <= 0) break;
+const verserIci = Math.min(resteARepartir, f.reste);
+f.verse += verserIci;
+f.reste -= verserIci;
+resteARepartir -= verserIci;
 }
 
 sauverFactures(liste);
 alert(`✅ Versement de ${montant.toLocaleString('fr-FR')} GNF réparti !`);
+champ.value = '';
 afficherImpayes();
 actualiserTableauBord();
 }
 
 // === RECHERCHE & LISTE FACTURES ===
-function afficherListeFactures(terme = '') {
-const conteneur = document.getElementById('listeFactures');
-let liste = factures();
+function afficherListeFactures(filtre=''){
+const liste = filtre 
+? factures().filter(f => 
+f.nomClient.toLowerCase().includes(filtre.toLowerCase()) ||
+(f.telClient && f.telClient.includes(filtre))
+)
+: factures();
 
-if (terme) {
-const t = terme.toLowerCase();
-liste = liste.filter(f =>
-f.nomClient.toLowerCase().includes(t) ||
-(f.telClient && f.telClient.includes(t)) ||
-f.numero.toLowerCase().includes(t)
-);
-}
-
-conteneur.innerHTML = liste.length === 0
+document.getElementById('listeFactures').innerHTML = liste.length === 0
 ? '<p style="text-align:center; padding:20px; color:#666;">Aucune facture trouvée</p>'
 : liste.map(f => `
-<div class="carte" style="cursor:pointer;" onclick="afficherFacture(f)">
+<div class="carte" style="cursor:pointer;" onclick="afficherFacture(parcourirFacture('${f.numero}'))">
 <strong>${f.numero}</strong> — ${f.date}<br>
-Client : ${f.nomClient} — ${f.telClient || 'Sans téléphone'}<br>
-Total : ${f.total.toLocaleString('fr-FR')} GNF — 
+Client : ${f.nomClient} | Tél : ${f.telClient || '-'}<br>
+Total : ${f.total.toLocaleString('fr-FR')} GNF —
 ${f.reste > 0 
 ? `<span class="texte-rouge">Reste : ${f.reste.toLocaleString('fr-FR')} GNF</span>`
-: `<span class="texte-vert">✅ PAYÉ</span>`
+: `<span class="texte-vert">✅ Payée</span>`
 }
 </div>
 `).join('');
 }
-
-function filtrerFactures() {
+function parcourirFacture(num){
+return factures().find(f => f.numero === num);
+}
+function filtrerFactures(){
 afficherListeFactures(document.getElementById('rechercheFacture').value.trim());
 }
 
 // === TABLEAU DE BORD ===
-function actualiserTableauBord() {
+function actualiserTableauBord(){
 const liste = factures();
-const debutJour = new Date().setHours(0, 0, 0, 0);
+const debutJour = new Date().setHours(0,0,0,0);
 
-const caJour = liste
-.filter(f => f.horodatage >= debutJour)
-.reduce((s, f) => s + f.total, 0);
-
-const caTotal = liste.reduce((s, f) => s + f.total, 0);
-const totalImpayes = liste.reduce((s, f) => s + f.reste, 0);
+const caJour = liste.filter(f => f.horodatage >= debutJour).reduce((s,f)=>s+f.total,0);
+const caTotal = liste.reduce((s,f)=>s+f.total,0);
+const totalImpayes = liste.reduce((s,f)=>s+f.reste,0);
 const nbProduits = produits().length;
 
 document.getElementById('caJour').textContent = caJour.toLocaleString('fr-FR') + ' GNF';
@@ -870,60 +885,53 @@ document.getElementById('totalImpayes').textContent = totalImpayes.toLocaleStrin
 document.getElementById('nbProduits').textContent = nbProduits;
 
 // Alertes stock
-const listeP = produits();
-const alertes = listeP.filter(p => p.stockActuel <= p.seuilAlerte);
+const alertes = produits().filter(p => p.stockActuel <= p.seuilAlerte);
 document.getElementById('alertesStock').innerHTML = alertes.length === 0
 ? '<p class="alerte alerte-vert">✅ Tous les stocks sont suffisants</p>'
 : alertes.map(p => `
-<div class="carte carte-alerte">
-⚠️ <strong>${p.nom}</strong><br>
-Stock : ${p.stockActuel} — Seuil d'alerte : ${p.seuilAlerte}
+<div class="alerte alerte-rouge">
+⚠️ <strong>${p.nom}</strong> — Stock : ${p.stockActuel} (seuil : ${p.seuilAlerte})
 </div>
 `).join('');
 }
 
 // === ESPACE ADMINISTRATEUR ===
-function afficherEspaceAdmin() {
-if (!utilisateurActuel?.estAdmin) {
-document.getElementById('listeUtilisateursAdmin').innerHTML =
-'<p class="alerte alerte-rouge">🔒 Accès réservé à l\'Administrateur</p>';
-return;
-}
+function afficherEspaceAdmin(){
+if(!utilisateurActuel?.estAdmin) return;
 
-// Liste des utilisateurs et leurs activités
-const liste = factures();
+// Activités par utilisateur
 const stats = {};
-liste.forEach(f => {
+factures().forEach(f => {
 const nom = f.utilisateur || 'Anonyme';
-if (!stats[nom]) stats[nom] = { nom, ventes: 0, ca: 0, impayes: 0 };
+if(!stats[nom]) stats[nom] = { nom, ventes:0, ca:0, impayes:0 };
 stats[nom].ventes++;
 stats[nom].ca += f.total;
 stats[nom].impayes += f.reste;
 });
 
-document.getElementById('listeUtilisateursAdmin').innerHTML = Object.values(stats).length === 0
+document.getElementById('listeUtilisateursAdmin').innerHTML = Object.keys(stats).length === 0
 ? '<p>Aucune activité enregistrée</p>'
 : Object.values(stats).map(u => `
 <div class="carte">
 👤 <strong>${u.nom}</strong><br>
-Ventes : ${u.ventes} — CA : ${u.ca.toLocaleString('fr-FR')} GNF<br>
+Ventes : ${u.ventes} | CA : ${u.ca.toLocaleString('fr-FR')} GNF<br>
 Impayés : <span class="texte-rouge">${u.impayes.toLocaleString('fr-FR')} GNF</span>
-<button class="btn btn-danger btn-petit" onclick="demanderDeconnexion('${u.nom}')">🚪 Déconnecter à distance</button>
+<button class="btn btn-danger btn-petit" onclick="demanderDeconnexionUtil('${u.nom}')">🚪 Déconnecter</button>
 </div>
 `).join('');
 
 afficherListeCodes();
 }
 
-function demanderDeconnexion(nomUtilisateur) {
-if (!confirm(`Déconnecter "${nomUtilisateur}" à distance ?\n\nCet utilisateur devra saisir un nouveau code d'accès pour reprendre.`)) return;
-alert(`✅ Demande envoyée — ${nomUtilisateur} devra se reconnecter avec un code valide.`);
+function demanderDeconnexionUtil(nom){
+if(confirm(`Déconnecter "${nom}" à distance ?\nCet utilisateur devra saisir un nouveau code d'accès.`)){
+alert(`✅ Demande envoyée — ${nom} devra utiliser un nouveau code pour se reconnecter.`);
+}
 }
 
-function toutSupprimer() {
-if (!utilisateurActuel?.estAdmin) return alert('Action réservée à l\'Administrateur');
-if (!confirm('⚠️ Êtes-vous SÛR de vouloir TOUT SUPPRIMER ?\nProduits, factures, infos entreprise — TOUT sera effacé !')) return;
-if (!confirm('CONFIRMEZ la suppression complète des données ?')) return;
+function toutSupprimer(){
+if(!confirm('⚠️ Êtes-vous SÛR de vouloir TOUT supprimer ?\nProduits, factures, codes, tout sera effacé définitivement !')) return;
+if(!confirm('CONFIRMEZ la suppression complète des données ?')) return;
 
 localStorage.removeItem(CLE_PRODUITS);
 localStorage.removeItem(CLE_FACTURES);
@@ -933,10 +941,10 @@ alert('✅ Toutes les données ont été réinitialisées.');
 location.reload();
 }
 
-// Initialisation
-window.onload = function() {
+// === INITIALISATION AU CHARGEMENT ===
+window.onload = function(){
 const sauvegarde = charger(CLE_USER);
-if (sauvegarde) {
+if(sauvegarde){
 utilisateurActuel = sauvegarde;
 verifierAcces();
 }
