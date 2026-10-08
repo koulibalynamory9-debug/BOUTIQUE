@@ -153,22 +153,34 @@ let id = localStorage.getItem('idApp');
 if(!id){ id = 'APP-'+Math.random().toString(36).substr(2,8).toUpperCase(); localStorage.setItem('idApp',id); }
 return id;
 }
-
 function creerCompte(){
 const nom = document.getElementById('nomUtilisateur').value.trim();
 const tel = document.getElementById('telUtilisateur').value.trim();
-if(!nom || !tel) return alert('Remplissez tous les champs');
 
+if(!nom || !tel) {
+alert('Veuillez remplir tous les champs !');
+return;
+}
+
+// Création de l'utilisateur
 utilisateur = {
-nom, tel,
+nom: nom,
+tel: tel,
 debutEssai: Date.now(),
-finEssai: Date.now() + 7*24*60*60*1000,
+finEssai: Date.now() + (7 * 24 * 60 * 60 * 1000), // 7 jours
 estAdmin: tel === ADMIN_TEL
 };
+
+// Sauvegarde
 localStorage.setItem(CLE_USER, JSON.stringify(utilisateur));
+
+// Message de bienvenue
 alert(`Bienvenue ${nom} !\nVotre essai de 7 jours commence.`);
+
+// PASSAGE À L'ÉCRAN PRINCIPAL — CETTE LIGNE ÉTAIT MANQUANTE !
 ouvrirApplication();
 }
+
 
 function seConnecter(){
 const tel = document.getElementById('telConnexion').value.trim();
