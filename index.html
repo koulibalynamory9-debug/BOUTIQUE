@@ -29,6 +29,7 @@ select.champ option { color: #333; background: white; }
 .btn-gris { background: #6c757d; color: white; }
 .btn-panier { background: #ff8f00; color: white; padding: 12px 16px; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; white-space: nowrap; touch-action: manipulation; }
 .btn-panier:active { transform: scale(0.97); }
+.btn-modifier { background: #1976d2; color: white; border: none; padding: 6px 10px; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 13px; }
 .lien { text-align: center; margin-top: 15px; font-size: 14px; color: #2c5f2d; cursor: pointer; text-decoration: underline; }
 .mention { margin-top: 20px; font-size: 11px; color: #888; text-align: center; }
 
@@ -79,15 +80,17 @@ body { background: white; color: #333; }
 <body>
 
 <script>
+// === CODES D'ACCÈS — AJOUTEZ VOS NOUVEAUX CODES ICI ===
 const CODE_ADMIN = "4321";
 const DUREE_ESSAI_JOURS = 7;
 const CODES_CLIENTS = ["4322", "4323", "4324", "4325"];
 const CODES_DISPONIBLES = [CODE_ADMIN, ...CODES_CLIENTS];
 let panier = [];
 let clientEnCoursPaiement = null;
+let produitEnCoursModif = null;
 </script>
 
-<!-- PAGE CONNEXION -->
+<!-- PAGE CONNEXION — CONSERVÉE -->
 <div class="cadre-centre" id="pageConnexion">
 <div class="carte">
 <h1>🛒 Espace Commercial</h1>
@@ -101,7 +104,7 @@ let clientEnCoursPaiement = null;
 </div>
 </div>
 
-<!-- PAGE DEMANDE DE CODE -->
+<!-- PAGE DEMANDE DE CODE — CONSERVÉE -->
 <div class="cadre-centre cacher" id="pageDemandeCode">
 <div class="carte" style="max-width: 450px;">
 <h1>📥 Demande de code</h1>
@@ -144,7 +147,7 @@ Après paiement, envoyez un message sur WhatsApp au propriétaire pour recevoir 
 </div>
 </div>
 
-<!-- MODAL SAISIE MONTANT DE PAIEMENT -->
+<!-- MODAL PAIEMENT -->
 <div id="modalPaiement" class="modal cacher">
 <div class="modal-contenu">
 <h3>💰 Enregistrer un paiement</h3>
@@ -154,6 +157,21 @@ Après paiement, envoyez un message sur WhatsApp au propriétaire pour recevoir 
 <div class="modal-boutons">
 <button style="background:#6c757d; color:white;" onclick="fermerModalPaiement()">Annuler</button>
 <button style="background:#2e7d32; color:white;" onclick="validerPaiement()">✅ Enregistrer</button>
+</div>
+</div>
+</div>
+
+<!-- MODAL MODIFIER PRODUIT -->
+<div id="modalModifierProduit" class="modal cacher">
+<div class="modal-contenu">
+<h3>✏️ Modifier le produit</h3>
+<input type="text" id="modifNom" class="champ" placeholder="Nom du produit">
+<input type="number" id="modifAchat" class="champ" placeholder="Prix d'achat">
+<input type="number" id="modifVente" class="champ" placeholder="Prix de vente">
+<input type="number" id="modifStock" class="champ" placeholder="Quantité en stock">
+<div class="modal-boutons">
+<button style="background:#6c757d; color:white;" onclick="fermerModifProduit()">Annuler</button>
+<button style="background:#1976d2; color:white;" onclick="enregistrerModifProduit()">💾 Enregistrer</button>
 </div>
 </div>
 </div>
@@ -212,7 +230,7 @@ Après paiement, envoyez un message sur WhatsApp au propriétaire pour recevoir 
 </div>
 </div>
 
-<!-- PRODUITS -->
+<!-- PRODUITS — AVEC BOUTON MODIFIER -->
 <div class="contenu cacher" id="module-produits">
 <span class="retour" onclick="retourAccueil()">← Retour</span>
 <h2 class="titre-section">📦 Gestion des Produits</h2>
@@ -224,7 +242,7 @@ Après paiement, envoyez un message sur WhatsApp au propriétaire pour recevoir 
 
 <h3 style="margin-top:25px; color:white;">Liste des produits disponibles</h3>
 <table class="tableau">
-<thead><tr><th>Nom du produit</th><th>Prix d'achat</th><th>Prix de vente</th><th>Stock</th><th>Bénéfice</th><th>Action</th></tr></thead>
+<thead><tr><th>Nom du produit</th><th>Prix d'achat</th><th>Prix de vente</th><th>Stock</th><th>Bénéfice</th><th>Actions</th></tr></thead>
 <tbody id="listeProduits"></tbody>
 </table>
 </div>
@@ -290,7 +308,7 @@ Aucun produit dans le panier.
 </div>
 </div>
 
-<!-- CRÉDITS IMPAYÉS — BOUTON PAYER FONCTIONNEL -->
+<!-- CRÉDITS IMPAYÉS -->
 <div class="contenu cacher" id="module-credits">
 <span class="retour" onclick="retourAccueil()">← Retour</span>
 <h2 class="titre-section">📝 Crédits Impayés</h2>
@@ -321,13 +339,14 @@ Aucun produit dans le panier.
 </div>
 </div>
 
-<!-- GESTION UTILISATEURS -->
+<!-- GESTION UTILISATEURS AMÉLIORÉE -->
 <div class="contenu cacher" id="module-utilisateurs">
 <span class="retour" onclick="retourAccueil()">← Retour</span>
 <h2 class="titre-section">👥 Gestion des Utilisateurs</h2>
 <p style="color:white; margin-bottom:15px;">Espace réservé à l'administrateur</p>
 <input type="text" id="nouvCodeUser" class="champ" placeholder="Code du nouvel utilisateur">
-<button class="btn-vert" onclick="alert('✅ Utilisateur ajouté !')">✅ Ajouter</button>
+<button class="btn-vert" onclick="ajouterUtilisateur()">✅ Ajouter</button>
+<p style="color:#ffd700; margin-top:10px; font-size:13px;">⚠️ N'oubliez pas d'ajouter ce code dans la liste CODES_CLIENTS en haut du code pour qu'il soit définitif.</p>
 </div>
 
 <!-- VUE GLOBALE -->
@@ -342,7 +361,7 @@ Aucun produit dans le panier.
 </div>
 
 <script>
-// === STOCKAGE DES DONNÉES ===
+// === STOCKAGE ===
 function lireProduits() { return JSON.parse(localStorage.getItem('prod') || '[]'); }
 function sauverProduits(p) { localStorage.setItem('prod', JSON.stringify(p)); }
 function lireVentes() { return JSON.parse(localStorage.getItem('vent') || '[]'); }
@@ -382,7 +401,7 @@ location.href = location.pathname;
 }
 }
 
-// === GESTION DE LA PÉRIODE D'ESSAI ===
+// === PÉRIODE D'ESSAI ===
 function verifierPeriodeEssai() {
 if(localStorage.getItem('estAdmin')==='oui') return { autorise:true, estAdmin:true };
 let debut = localStorage.getItem('dateDebutEssai');
@@ -435,7 +454,24 @@ document.getElementById('menuAdminGlobal').classList.remove('visible');
 }
 }
 
-// === GESTION DES PRODUITS ===
+// === AJOUTER UTILISATEUR ===
+function ajouterUtilisateur() {
+const nouveauCode = document.getElementById('nouvCodeUser').value.trim();
+if(!nouveauCode) { alert("⚠️ Saisissez un code !"); return; }
+
+if(CODES_DISPONIBLES.includes(nouveauCode)) {
+alert("⚠️ Ce code existe déjà !");
+return;
+}
+
+CODES_CLIENTS.push(nouveauCode);
+CODES_DISPONIBLES.push(nouveauCode);
+
+alert(`✅ Utilisateur ajouté !\nCode : ${nouveauCode}\n\n⚠️ N'oubliez pas d'ajouter "${nouveauCode}" dans la liste CODES_CLIENTS en haut du code pour qu'il reste actif.`);
+document.getElementById('nouvCodeUser').value = '';
+}
+
+// === PRODUITS — AVEC MODIFICATION ===
 function enregistrerProduit() {
 const nom = document.getElementById('prodNom').value.trim();
 const achat = Number(document.getElementById('prodAchat').value);
@@ -448,7 +484,7 @@ if(liste.find(p => p.nom.toLowerCase() === nom.toLowerCase())) { alert("⚠️ C
 
 liste.push({id:Date.now(), nom, achat, vente, stock});
 sauverProduits(liste);
-alert("✅ Produit enregistré avec succès !");
+alert("✅ Produit enregistré !");
 document.getElementById('prodNom').value='';
 document.getElementById('prodAchat').value='';
 document.getElementById('prodVente').value='';
@@ -465,17 +501,62 @@ document.getElementById('listeProduits').innerHTML = liste.map(p => `
 <td>${p.vente.toLocaleString('fr-FR')}</td>
 <td>${p.stock}</td>
 <td style="color:green; font-weight:bold;">${(p.vente - p.achat).toLocaleString('fr-FR')}</td>
-<td><button class="panier-suppr" onclick="supprimerProduit(${p.id})">🗑️ Supprimer</button></td>
-</tr>`).join('') || '<tr><td colspan="6" style="text-align:center; color:#666;">Aucun produit enregistré</td></tr>';
+<td>
+<button class="btn-modifier" onclick="ouvrirModifProduit(${p.id})">✏️ Modifier</button>
+<button class="panier-suppr" onclick="supprimerProduit(${p.id})">🗑️ Supprimer</button>
+</td>
+</tr>`).join('') || '<tr><td colspan="6" style="text-align:center; color:#666;">Aucun produit</td></tr>';
+}
+
+function ouvrirModifProduit(id) {
+const prod = lireProduits().find(p => p.id === id);
+if(!prod) return;
+produitEnCoursModif = prod;
+
+document.getElementById('modifNom').value = prod.nom;
+document.getElementById('modifAchat').value = prod.achat;
+document.getElementById('modifVente').value = prod.vente;
+document.getElementById('modifStock').value = prod.stock;
+document.getElementById('modalModifierProduit').classList.remove('cacher');
+}
+
+function fermerModifProduit() {
+document.getElementById('modalModifierProduit').classList.add('cacher');
+produitEnCoursModif = null;
+}
+
+function enregistrerModifProduit() {
+if(!produitEnCoursModif) return;
+
+const nom = document.getElementById('modifNom').value.trim();
+const achat = Number(document.getElementById('modifAchat').value);
+const vente = Number(document.getElementById('modifVente').value);
+const stock = Number(document.getElementById('modifStock').value) || 0;
+
+if(!nom || !achat || !vente) { alert("⚠️ Remplissez tous les champs !"); return; }
+
+const liste = lireProduits();
+const doublon = liste.find(p => p.nom.toLowerCase() === nom.toLowerCase() && p.id !== produitEnCoursModif.id);
+if(doublon) { alert("⚠️ Ce nom est déjà utilisé par un autre produit !"); return; }
+
+const index = liste.findIndex(p => p.id === produitEnCoursModif.id);
+liste[index] = { id: produitEnCoursModif.id, nom, achat, vente, stock };
+
+sauverProduits(liste);
+alert("✅ Produit modifié avec succès !");
+fermerModifProduit();
+afficherListeProduits();
+chargerListeProduitsDansSelect();
 }
 
 function supprimerProduit(id) {
 if(!confirm("Supprimer ce produit ?")) return;
 sauverProduits(lireProduits().filter(p => p.id !== id));
 afficherListeProduits();
+chargerListeProduitsDansSelect();
 }
 
-// === CHARGER PRODUITS DANS LA LISTE DÉROULANTE ===
+// === PANIER & VENTES ===
 function chargerListeProduitsDansSelect() {
 const sel = document.getElementById('venteProduit');
 const produits = lireProduits();
@@ -483,94 +564,70 @@ sel.innerHTML = '<option value="">Choisir un produit *</option>' +
 produits.map(p => `<option value="${p.nom}" data-prix="${p.vente}" data-stock="${p.stock}">${p.nom} — ${p.vente.toLocaleString('fr-FR')} GNF (Stock: ${p.stock})</option>`).join('');
 }
 
-// === CALCUL INSTANTANÉ PAR LIGNE ===
 function calculerTotalInstant() {
-const select = document.getElementById('venteProduit');
-const opt = select.selectedOptions[0];
+const opt = document.getElementById('venteProduit').selectedOptions[0];
 const qte = Number(document.getElementById('venteQte').value) || 0;
-
 if(!opt || !opt.value || qte <= 0) {
 document.getElementById('totalAffichage').textContent = '0';
 return;
 }
-const prix = Number(opt.dataset.prix);
-document.getElementById('totalAffichage').textContent = (prix * qte).toLocaleString('fr-FR');
+document.getElementById('totalAffichage').textContent = (Number(opt.dataset.prix) * qte).toLocaleString('fr-FR');
 }
 
-// === GESTION DU PANIER ===
 function ajouterAuPanier() {
-const nomProd = document.getElementById('venteProduit').value;
+const nom = document.getElementById('venteProduit').value;
 const qte = Number(document.getElementById('venteQte').value) || 0;
+if(!nom || qte <= 0) { alert("⚠️ Choisissez produit et quantité !"); return; }
 
-if(!nomProd || qte <= 0) { alert("⚠️ Choisissez un produit et saisissez la quantité !"); return; }
-
-const prod = lireProduits().find(p => p.nom === nomProd);
+const prod = lireProduits().find(p => p.nom === nom);
 if(!prod) { alert("❌ Produit introuvable !"); return; }
-if(prod.stock < qte) { alert(`⚠️ Stock insuffisant !\nDisponible : ${prod.stock}`); return; }
 
-const existant = panier.find(a => a.nom === nomProd);
+const existant = panier.find(a => a.nom === nom);
 if(existant) {
-if(prod.stock < existant.qte + qte) { alert(`⚠️ Stock insuffisant !\nDéjà ${existant.qte} dans le panier.`); return; }
+if(prod.stock < existant.qte + qte) { alert(`⚠️ Stock insuffisant !`); return; }
 existant.qte += qte;
 } else {
-panier.push({ nom: nomProd, prix: prod.vente, qte: qte });
+if(prod.stock < qte) { alert(`⚠️ Stock insuffisant ! Disponible: ${prod.stock}`); return; }
+panier.push({ nom, prix: prod.vente, qte });
 }
 
 document.getElementById('venteProduit').value = '';
 document.getElementById('venteQte').value = '';
 document.getElementById('totalAffichage').textContent = '0';
-
 mettreAJourPanier();
 }
 
 function mettreAJourPanier() {
-const nbArticles = document.getElementById('nbArticles');
-const totalPanier = document.getElementById('totalPanier');
-const listePanierVide = document.getElementById('listePanierVide');
-const listePanier = document.getElementById('listePanier');
-
-nbArticles.textContent = panier.length;
+document.getElementById('nbArticles').textContent = panier.length;
+const total = panier.reduce((s,a) => s + a.prix * a.qte, 0);
+document.getElementById('totalPanier').textContent = total.toLocaleString('fr-FR');
 
 if(panier.length === 0) {
-listePanierVide.style.display = 'block';
-listePanier.innerHTML = '';
-totalPanier.textContent = '0';
+document.getElementById('listePanierVide').style.display = 'block';
+document.getElementById('listePanier').innerHTML = '';
 return;
 }
-
-listePanierVide.style.display = 'none';
-const total = panier.reduce((somme, art) => somme + art.prix * art.qte, 0);
-totalPanier.textContent = total.toLocaleString('fr-FR');
-
-listePanier.innerHTML = panier.map((art, idx) => `
+document.getElementById('listePanierVide').style.display = 'none';
+document.getElementById('listePanier').innerHTML = panier.map((a,i) => `
 <div class="panier-item">
-<span><strong>${art.nom}</strong> × ${art.qte}</span>
-<span>${(art.prix * art.qte).toLocaleString('fr-FR')} GNF</span>
-<button class="panier-suppr" onclick="retirerDuPanier(${idx})">✕ Retirer</button>
+<span><strong>${a.nom}</strong> × ${a.qte}</span>
+<span>${(a.prix*a.qte).toLocaleString('fr-FR')} GNF</span>
+<button class="panier-suppr" onclick="retirerDuPanier(${i})">✕</button>
 </div>`).join('');
 }
 
-function retirerDuPanier(index) {
-panier.splice(index, 1);
-mettreAJourPanier();
-}
+function retirerDuPanier(i) { panier.splice(i,1); mettreAJourPanier(); }
+function viderPanier() { if(panier.length && !confirm("Vider le panier ?")) return; panier=[]; mettreAJourPanier(); }
 
-function viderPanier() {
-if(panier.length > 0 && !confirm("Vider tout le panier ?")) return;
-panier = [];
-mettreAJourPanier();
-}
-
-// === ENREGISTRER LA VENTE ===
 function validerPanier() {
 const nomCli = document.getElementById('venteClient').value.trim();
 const telCli = document.getElementById('venteTel').value.trim();
 const verse = Number(document.getElementById('montantVerse').value) || 0;
 
-if(!nomCli) { alert("⚠️ Le nom du client est obligatoire !"); return; }
-if(panier.length === 0) { alert("⚠️ Ajoutez des produits au panier d'abord !"); return; }
+if(!nomCli) { alert("⚠️ Nom du client obligatoire !"); return; }
+if(panier.length === 0) { alert("⚠️ Ajoutez des produits !"); return; }
 
-const total = panier.reduce((s, a) => s + a.prix * a.qte, 0);
+const total = panier.reduce((s,a) => s + a.prix * a.qte, 0);
 const reste = total - verse;
 
 const ventes = lireVentes();
@@ -580,26 +637,16 @@ date: new Date().toLocaleDateString('fr-FR'),
 client: nomCli,
 tel: telCli,
 articles: panier.map(a => ({...a})),
-total: total,
-verse: verse,
-reste: reste
+total, verse, reste
 });
 sauverVentes(ventes);
 
-// Mise à jour du stock
 const produits = lireProduits();
-panier.forEach(art => {
-const p = produits.find(prod => prod.nom === art.nom);
-if(p) p.stock -= art.qte;
-});
+panier.forEach(a => { const p = produits.find(x => x.nom === a.nom); if(p) p.stock -= a.qte; });
 sauverProduits(produits);
 
-alert(`✅ Vente enregistrée !\n
-Total : ${total.toLocaleString('fr-FR')} GNF
-Versé : ${verse.toLocaleString('fr-FR')} GNF
-Reste : ${reste.toLocaleString('fr-FR')} GNF`);
+alert(`✅ Enregistré !\nTotal: ${total.toLocaleString('fr-FR')}\nVersé: ${verse.toLocaleString('fr-FR')}\nReste: ${reste.toLocaleString('fr-FR')}`);
 
-// Réinitialisation des champs
 document.getElementById('venteClient').value = '';
 document.getElementById('venteTel').value = '';
 document.getElementById('montantVerse').value = '';
@@ -610,58 +657,49 @@ afficherListeVentes();
 }
 
 function afficherListeVentes() {
-const ventes = lireVentes().reverse();
-document.getElementById('listeVentes').innerHTML = ventes.map(v => `
+const v = lireVentes().reverse();
+document.getElementById('listeVentes').innerHTML = v.map(x => `
 <tr>
-<td>${v.date}</td>
-<td>${v.client}</td>
-<td>${v.articles.map(a => `${a.nom}×${a.qte}`).join(', ')}</td>
-<td><strong>${v.total.toLocaleString('fr-FR')}</strong></td>
-<td style="color:green;">${v.verse.toLocaleString('fr-FR')}</td>
-<td style="color:${v.reste>0?'red':'green'}; font-weight:bold;">${v.reste.toLocaleString('fr-FR')}</td>
-</tr>`).join('') || '<tr><td colspan="6" style="text-align:center; color:#666;">Aucune vente enregistrée</td></tr>';
+<td>${x.date}</td>
+<td>${x.client}</td>
+<td>${x.articles.map(a=>a.nom+'×'+a.qte).join(', ')}</td>
+<td><strong>${x.total.toLocaleString('fr-FR')}</strong></td>
+<td style="color:green;">${x.verse.toLocaleString('fr-FR')}</td>
+<td style="color:${x.reste>0?'red':'green'}; font-weight:bold;">${x.reste.toLocaleString('fr-FR')}</td>
+</tr>`).join('') || '<tr><td colspan="6" style="text-align:center; color:#666;">Aucune vente</td></tr>';
 }
 
 // === FACTURATION ===
 function genererFacture() {
-const nomCli = document.getElementById('factNomClient').value.trim();
-const telCli = document.getElementById('factTelClient').value.trim();
-if(!nomCli) { alert("⚠️ Indiquez le nom du client !"); return; }
+const nom = document.getElementById('factNomClient').value.trim();
+const tel = document.getElementById('factTelClient').value.trim();
+if(!nom) { alert("⚠️ Nom du client !"); return; }
 
 const auj = new Date().toLocaleDateString('fr-FR');
-const ventes = lireVentes().filter(v => v.client === nomCli && v.date === auj);
-if(ventes.length === 0) { alert("❌ Aucune vente trouvée aujourd'hui pour ce client !"); return; }
+const ventes = lireVentes().filter(v => v.client === nom && v.date === auj);
+if(!ventes.length) { alert("❌ Aucune vente aujourd'hui pour ce client !"); return; }
 
-let toutArticles = [];
-let totalGlobal = 0, verseGlobal = 0;
-ventes.forEach(v => {
-toutArticles = toutArticles.concat(v.articles);
-totalGlobal += v.total;
-verseGlobal += v.verse;
-});
-const resteGlobal = totalGlobal - verseGlobal;
+let total=0, verse=0, articles=[];
+ventes.forEach(v => { total+=v.total; verse+=v.verse; articles=articles.concat(v.articles); });
+const reste = total - verse;
 
 document.getElementById('contenuFacture').innerHTML = `
 <h2>🧾 FACTURE</h2>
-<p><strong>N° Facture :</strong> FACT-${Date.now()}</p>
+<p><strong>N° :</strong> FACT-${Date.now()}</p>
 <p><strong>Date :</strong> ${auj}</p>
-<p><strong>Client :</strong> ${nomCli}</p>
-<p><strong>Téléphone :</strong> ${telCli || 'Non renseigné'}</p>
+<p><strong>Client :</strong> ${nom}</p>
+<p><strong>Téléphone :</strong> ${tel||'—'}</p>
 <hr style="margin:12px 0; border:none; border-top:1px solid #ddd;">
-${toutArticles.map(a => `<div class="ligne"><span>${a.nom} × ${a.qte}</span><span>${(a.prix * a.qte).toLocaleString('fr-FR')} GNF</span></div>`).join('')}
-<div class="ligne total"><strong>TOTAL</strong><strong>${totalGlobal.toLocaleString('fr-FR')} GNF</strong></div>
-<div class="ligne verse"><strong>Montant versé</strong><strong>${verseGlobal.toLocaleString('fr-FR')} GNF</strong></div>
-<div class="ligne reste"><strong>RESTE À PAYER</strong><strong>${resteGlobal.toLocaleString('fr-FR')} GNF</strong></div>
-<p style="margin-top:25px; text-align:center; font-style:italic; color:#666;">Merci pour votre confiance !</p>`;
-
+${articles.map(a=>`<div class="ligne"><span>${a.nom} × ${a.qte}</span><span>${(a.prix*a.qte).toLocaleString('fr-FR')} GNF</span></div>`).join('')}
+<div class="ligne total"><strong>TOTAL</strong><strong>${total.toLocaleString('fr-FR')} GNF</strong></div>
+<div class="ligne verse"><strong>Versé</strong><strong>${verse.toLocaleString('fr-FR')} GNF</strong></div>
+<div class="ligne reste"><strong>RESTE À PAYER</strong><strong>${reste.toLocaleString('fr-FR')} GNF</strong></div>
+<p style="margin-top:25px; text-align:center; color:#666;">Merci pour votre confiance !</p>`;
 document.getElementById('blocFacture').classList.remove('cacher');
 }
+function partagerFacture() { alert("✅ Copiez le texte et envoyez sur WhatsApp !"); }
 
-function partagerFacture() {
-alert("✅ La facture est prête !\nCopiez le texte et envoyez-le sur WhatsApp.");
-}
-
-// === ✅ CRÉDITS IMPAYÉS — BOUTON PAYER FONCTIONNEL ===
+// === CRÉDITS & PAIEMENT ===
 function afficherCredits() {
 const ventes = lireVentes();
 const parClient = {};
@@ -682,7 +720,7 @@ reste: c.du - c.verse
 document.getElementById('listeCredits').innerHTML = liste.map(c => `
 <tr>
 <td><strong>${c.nom}</strong></td>
-<td>${c.tel}</td>
+<td>${c.tel || 'Non renseigné'}</td>
 <td>${c.du.toLocaleString('fr-FR')}</td>
 <td>${c.verse.toLocaleString('fr-FR')}</td>
 <td style="color:${c.reste>0?'red':'green'}; font-weight:bold;">${c.reste.toLocaleString('fr-FR')}</td>
@@ -723,20 +761,19 @@ if(!montant || montant <= 0) { alert("⚠️ Saisissez un montant valide !"); re
 
 const ventes = lireVentes();
 const nomCli = clientEnCoursPaiement;
-let montantRestant = montant;
+let restant = montant;
 
-// Répartir le paiement sur les ventes en attente, de la plus ancienne à la plus récente
 ventes.forEach(v => {
-if(v.client === nomCli && v.reste > 0 && montantRestant > 0) {
-const affecter = Math.min(v.reste, montantRestant);
+if(v.client === nomCli && v.reste > 0 && restant > 0) {
+const affecter = Math.min(v.reste, restant);
 v.verse += affecter;
 v.reste -= affecter;
-montantRestant -= affecter;
+restant -= affecter;
 }
 });
 
 sauverVentes(ventes);
-alert(`✅ Paiement de ${montant.toLocaleString('fr-FR')} GNF enregistré pour ${nomCli} !`);
+alert(`✅ Paiement enregistré !\nMontant : ${montant.toLocaleString('fr-FR')} GNF`);
 
 fermerModalPaiement();
 afficherCredits();
@@ -754,7 +791,7 @@ ${p.stock<5?'⚠️ Stock bas — Réapprovisionner !':'✅ Stock suffisant'}
 </tr>`).join('') || '<tr><td colspan="3" style="text-align:center; color:#666;">Aucun produit enregistré</td></tr>';
 }
 
-// === RAPPORTS & CHIFFRES D'AFFAIRES ===
+// === RAPPORTS & CA ===
 function afficherRapports() {
 const auj = new Date().toLocaleDateString('fr-FR');
 const ventes = lireVentes();
@@ -768,7 +805,7 @@ document.getElementById('caGlobal').textContent = caGlobal.toLocaleString('fr-FR
 document.getElementById('totalImpaye').textContent = totalImpaye.toLocaleString('fr-FR');
 }
 
-// === VUE GLOBALE (Administrateur) ===
+// === VUE GLOBALE ===
 function chargerVueGlobale() {
 const ventes = lireVentes();
 const totalVentes = ventes.reduce((s, v) => s + v.total, 0);
@@ -778,17 +815,18 @@ document.getElementById('globalTotal').textContent = totalVentes.toLocaleString(
 document.getElementById('globalImpaye').textContent = totalImpaye.toLocaleString('fr-FR') + ' GNF';
 }
 
-// === EXÉCUTION AU CHARGEMENT DE LA PAGE ===
+// === AU CHARGEMENT DE LA PAGE ===
 window.addEventListener('DOMContentLoaded', function() {
-// Vérifier si déjà connecté
 const codeEnCours = localStorage.getItem('codeUtilise');
 if(codeEnCours) {
 const estAdmin = localStorage.getItem('estAdmin') === 'oui';
 const statut = verifierPeriodeEssai();
 if(!estAdmin && !statut.autorise) {
+cacherTout();
 afficherPaiementRequis();
 return;
 }
+cacherTout();
 ouvrirSession(estAdmin, statut.joursRestants);
 }
 });
