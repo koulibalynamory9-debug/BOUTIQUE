@@ -11,7 +11,7 @@
 --clair:#faf5ff; --sombre:#1e1b4b; --texte-noir:#1f2937;
 }
 *{box-sizing:border-box; font-family:'Segoe UI', Roboto, sans-serif; margin:0; padding:0;}
-body{background:#f5f3ff; min-height:100vh; padding-bottom:80px; color:var(--texte-noir);}
+body{background:#f5f3ff; min-height:100vh; padding-bottom:85px; color:var(--texte-noir);}
 
 /* === Écran Connexion — Image de fond === */
 .ecran-connexion{
@@ -103,8 +103,8 @@ padding:8px 5px; z-index:900; border-radius:16px 16px 0 0;
 }
 .onglet-bas{
 display:flex; flex-direction:column; align-items:center; border:none; background:transparent;
-padding:6px 8px; color:#9ca3af; font-size:11px; cursor:pointer; border-radius:10px;
-transition:.2s; max-width:20%;
+padding:6px 4px; color:#9ca3af; font-size:10px; cursor:pointer; border-radius:10px;
+transition:.2s; max-width:14%;
 }
 .onglet-bas.actif{background:#f3e8ff; color:var(--primaire-fonce); font-weight:bold;}
 .onglet-bas span:first-child{font-size:20px; margin-bottom:2px;}
@@ -278,7 +278,7 @@ Reste : <span id="resteAPayer" class="texte-rouge">0</span> GNF
 <h2>⚙️ Espace Administrateur</h2>
 <div class="alerte alerte-vert">✅ Connecté en tant qu'Administrateur</div>
 
-<h3 style="margin:20px 0 10px; color:var(--primaire-fonce);">👥 Utilisateurs connectés & Activités</h3>
+<h3 style="margin:20px 0 10px; color:var(--primaire-fonce);">👥 Utilisateurs & Activités</h3>
 <div id="listeUtilisateursAdmin"></div>
 
 <h3 style="margin:25px 0 10px; color:var(--primaire-fonce);">🔑 Générer un code d'accès (6 caractères)</h3>
@@ -325,7 +325,7 @@ const CLE_ENTREPRISE = 'koolby224_Entreprise';
 const CLE_CODES = 'koolby224_CodesAcces';
 const CLE_APPAREIL = 'koolby224_AppareilID';
 const ADMIN_TEL = '621657979';
-const DUREE_ESSAI = 7 * 24 * 60 * 60 * 1000; // 7 jours
+const DUREE_ESSAI = 7 * 24 * 60 * 60 * 1000; // 7 jours exactement
 
 let utilisateurActuel = null;
 let panier = [];
@@ -351,7 +351,7 @@ function entreprise(){ return charger(CLE_ENTREPRISE, {}); }
 function codesAcces(){ return charger(CLE_CODES, {}); }
 function sauverCodes(c){ sauver(CLE_CODES, c); }
 
-// === Création compte ===
+// === Création compte — 7 jours gratuits POUR TOUS ===
 function creerCompte(){
 const nom = document.getElementById('nomUtilisateur').value.trim();
 const tel = document.getElementById('telUtilisateur').value.trim();
@@ -366,7 +366,7 @@ estAdmin: tel === ADMIN_TEL,
 valide: false
 };
 sauver(CLE_USER, utilisateurActuel);
-alert('Koolby224 vous souhaite la bienvenue ! 🎉\nVotre essai de 7 jours démarre maintenant.');
+alert('Koolby224 vous souhaite la bienvenue ! 🎉\nVotre essai gratuit de 7 jours démarre maintenant.');
 ouvrirApplication();
 }
 
@@ -374,23 +374,40 @@ ouvrirApplication();
 function seConnecter(){
 const tel = document.getElementById('telConnexion').value.trim();
 const sauvegarde = charger(CLE_USER);
+
+// Vérifier que c'est le même appareil et même numéro
 if(sauvegarde && sauvegarde.telephone === tel && sauvegarde.appareil === ID_APPAREIL){
 utilisateurActuel = sauvegarde;
 return verifierAcces();
 }
-alert('Aucun compte — Créez-en un gratuitement');
+alert('Aucun compte trouvé — Créez-en un gratuitement');
 basculerInscription();
 }
 
+// === Vérification accès CORRIGÉE ===
 function verifierAcces(){
 if(!utilisateurActuel) return;
-if(utilisateurActuel.valide || Date.now() < utilisateurActuel.finEssai){
+
+const maintenant = Date.now();
+const joursRestants = Math.ceil((utilisateurActuel.finEssai - maintenant) / (24*60*60*1000));
+
+// Si code valide → accès illimité
+if(utilisateurActuel.valide){
 ouvrirApplication();
-} else {
+return;
+}
+
+// Si dans la période d'essai → accès autorisé
+if(maintenant < utilisateurActuel.finEssai){
+alert(`✅ Bienvenue ! Il vous reste ${joursRestants} jour(s) d'essai gratuit`);
+ouvrirApplication();
+return;
+}
+
+// Essai terminé → verrouillage
 document.getElementById('formInscription').style.display = 'none';
 document.getElementById('formConnexion').style.display = 'none';
 document.getElementById('formVerrouille').style.display = 'block';
-}
 }
 
 // === Code d'accès : 6 caractères — UN seul appareil ===
@@ -421,7 +438,7 @@ ouvrirApplication();
 
 function genererCodeAcces(){
 if(!utilisateurActuel?.estAdmin) return alert('Réservé à l\'Administrateur');
-// Code aléatoire 6 caractères majuscules + chiffres
+// Code aléatoire 6 caractères majuscules + chiffres (sans ambiguïté)
 const caracteres = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
 let code = '';
 for(let i=0; i<6; i++){
@@ -797,33 +814,39 @@ ${f.numero} — Reste : <span class="texte-rouge">${f.reste.toLocaleString('fr-F
 <input type="number" id="versementGlobal_${cle}" placeholder="Montant versé">
 <button class="btn btn-succes" onclick="repartirVersement('${cle}')">✅ Répartir le paiement</button>
 </div>
+`).
 `).join('');
 }
-function verserSurFacture(num){
-const m = prompt('Montant versé :');
-if(!m) return;
-const montant = parseFloat(m);
-if(isNaN(montant) || montant <= 0) return alert('Montant invalide');
+
+function verserSurFacture(numeroFacture){
+const montant = parseFloat(prompt('Montant versé pour cette facture :'));
+if(isNaN(montant) || montant <= 0) return alert('Saisissez un montant valide');
 
 const liste = factures();
-const f = liste.find(x => x.numero === num);
-if(!f || montant > f.reste) return alert('Montant supérieur au reste dû');
+const facture = liste.find(f => f.numero === numeroFacture);
+if(!facture) return alert('Facture introuvable');
 
-f.verse += montant;
-f.reste -= montant;
+const nouveauReste = Math.max(0, facture.reste - montant);
+facture.verse += montant;
+facture.reste = nouveauReste;
+
 sauverFactures(liste);
-alert(`✅ Nouveau reste : ${f.reste.toLocaleString('fr-FR')} GNF`);
-afficherImpayes(); actualiserTableauBord();
+alert(`✅ Paiement enregistré !\nNouveau reste : ${nouveauReste.toLocaleString('fr-FR')} GNF`);
+afficherImpayes();
+actualiserTableauBord();
 }
-function repartirVersement(cle){
-const champ = document.getElementById(`versementGlobal_${cle}`);
+
+function repartirVersement(cleClient){
+const champ = document.getElementById(`versementGlobal_${cleClient}`);
 const montant = parseFloat(champ.value);
 if(isNaN(montant) || montant <= 0) return alert('Saisissez un montant valide');
 
 const liste = factures();
-const facturesClient = liste.filter(f => (f.telClient || f.nomClient) === cle && f.reste > 0);
-let resteARepartir = montant;
+const facturesClient = liste.filter(f => 
+(f.telClient || f.nomClient) === cleClient && f.reste > 0
+);
 
+let resteARepartir = montant;
 for(const f of facturesClient){
 if(resteARepartir <= 0) break;
 const verserIci = Math.min(resteARepartir, f.reste);
@@ -839,31 +862,31 @@ afficherImpayes();
 actualiserTableauBord();
 }
 
-// === RECHERCHE & LISTE FACTURES ===
+// === FACTURES & RECHERCHE ===
 function afficherListeFactures(filtre=''){
-const liste = filtre 
-? factures().filter(f => 
+let liste = factures();
+if(filtre){
+liste = liste.filter(f =>
 f.nomClient.toLowerCase().includes(filtre.toLowerCase()) ||
 (f.telClient && f.telClient.includes(filtre))
-)
-: factures();
-
+);
+}
 document.getElementById('listeFactures').innerHTML = liste.length === 0
-? '<p style="text-align:center; padding:20px; color:#666;">Aucune facture trouvée</p>'
+? '<p class="alerte">Aucune facture trouvée</p>'
 : liste.map(f => `
 <div class="carte" style="cursor:pointer;" onclick="afficherFacture(parcourirFacture('${f.numero}'))">
 <strong>${f.numero}</strong> — ${f.date}<br>
 Client : ${f.nomClient} | Tél : ${f.telClient || '-'}<br>
 Total : ${f.total.toLocaleString('fr-FR')} GNF —
-${f.reste > 0 
-? `<span class="texte-rouge">Reste : ${f.reste.toLocaleString('fr-FR')} GNF</span>`
+${f.reste > 0
+? `<span class="texte-rouge">Impayé : ${f.reste.toLocaleString('fr-FR')}</span>`
 : `<span class="texte-vert">✅ Payée</span>`
 }
 </div>
 `).join('');
 }
-function parcourirFacture(num){
-return factures().find(f => f.numero === num);
+function parcourirFacture(numero){
+return factures().find(f => f.numero === numero);
 }
 function filtrerFactures(){
 afficherListeFactures(document.getElementById('rechercheFacture').value.trim());
@@ -872,17 +895,20 @@ afficherListeFactures(document.getElementById('rechercheFacture').value.trim());
 // === TABLEAU DE BORD ===
 function actualiserTableauBord(){
 const liste = factures();
-const debutJour = new Date().setHours(0,0,0,0);
+const maintenant = Date.now();
+const debutJour = new Date();
+debutJour.setHours(0,0,0,0);
+const tsJour = debutJour.getTime();
 
-const caJour = liste.filter(f => f.horodatage >= debutJour).reduce((s,f)=>s+f.total,0);
-const caTotal = liste.reduce((s,f)=>s+f.total,0);
-const totalImpayes = liste.reduce((s,f)=>s+f.reste,0);
-const nbProduits = produits().length;
+const caJour = liste.filter(f => f.horodatage >= tsJour).reduce((s,f) => s+f.total, 0);
+const caTotal = liste.reduce((s,f) => s+f.total, 0);
+const totalImpayes = liste.reduce((s,f) => s+f.reste, 0);
+const nbProd = produits().length;
 
 document.getElementById('caJour').textContent = caJour.toLocaleString('fr-FR') + ' GNF';
 document.getElementById('caTotal').textContent = caTotal.toLocaleString('fr-FR') + ' GNF';
 document.getElementById('totalImpayes').textContent = totalImpayes.toLocaleString('fr-FR') + ' GNF';
-document.getElementById('nbProduits').textContent = nbProduits;
+document.getElementById('nbProduits').textContent = nbProd;
 
 // Alertes stock
 const alertes = produits().filter(p => p.stockActuel <= p.seuilAlerte);
@@ -897,7 +923,10 @@ document.getElementById('alertesStock').innerHTML = alertes.length === 0
 
 // === ESPACE ADMINISTRATEUR ===
 function afficherEspaceAdmin(){
-if(!utilisateurActuel?.estAdmin) return;
+if(!utilisateurActuel?.estAdmin){
+document.getElementById('vue-admin').innerHTML = '<p class="alerte alerte-rouge">Accès réservé à l\'Administrateur</p>';
+return;
+}
 
 // Activités par utilisateur
 const stats = {};
@@ -910,27 +939,27 @@ stats[nom].impayes += f.reste;
 });
 
 document.getElementById('listeUtilisateursAdmin').innerHTML = Object.keys(stats).length === 0
-? '<p>Aucune activité enregistrée</p>'
+? '<p>Aucune activité</p>'
 : Object.values(stats).map(u => `
 <div class="carte">
 👤 <strong>${u.nom}</strong><br>
 Ventes : ${u.ventes} | CA : ${u.ca.toLocaleString('fr-FR')} GNF<br>
 Impayés : <span class="texte-rouge">${u.impayes.toLocaleString('fr-FR')} GNF</span>
-<button class="btn btn-danger btn-petit" onclick="demanderDeconnexionUtil('${u.nom}')">🚪 Déconnecter</button>
+<button class="btn btn-danger btn-petit" onclick="alerterDeconnexionUtil('${u.nom}')">🚪 Déconnecter</button>
 </div>
 `).join('');
 
 afficherListeCodes();
 }
 
-function demanderDeconnexionUtil(nom){
-if(confirm(`Déconnecter "${nom}" à distance ?\nCet utilisateur devra saisir un nouveau code d'accès.`)){
+function alerterDeconnexionUtil(nom){
+if(confirm(`Envoyer une demande de déconnexion à "${nom}" ?\nIls devront saisir un nouveau code d'accès.`)){
 alert(`✅ Demande envoyée — ${nom} devra utiliser un nouveau code pour se reconnecter.`);
 }
 }
 
 function toutSupprimer(){
-if(!confirm('⚠️ Êtes-vous SÛR de vouloir TOUT supprimer ?\nProduits, factures, codes, tout sera effacé définitivement !')) return;
+if(!confirm('⚠️ Êtes-vous SÛR de vouloir TOUT supprimer ?\nProduits, ventes, factures, codes — tout sera effacé définitivement !')) return;
 if(!confirm('CONFIRMEZ la suppression complète des données ?')) return;
 
 localStorage.removeItem(CLE_PRODUITS);
@@ -941,7 +970,7 @@ alert('✅ Toutes les données ont été réinitialisées.');
 location.reload();
 }
 
-// === INITIALISATION AU CHARGEMENT ===
+// === AU CHARGEMENT DE LA PAGE ===
 window.onload = function(){
 const sauvegarde = charger(CLE_USER);
 if(sauvegarde){
