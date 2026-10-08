@@ -1183,7 +1183,7 @@ function verifierAlertesStock(){
 const bloc = document.getElementById('alertesStock');
 const alertes = produits.filter(p => p.stockActuel <= p.stockAlerte);
 
-if(alertes.length === 0){
+ if(alertes.length === 0){
 bloc.innerHTML = '<p style="color:#90EE90; padding:10px;">✅ Tous les stocks sont suffisants</p>';
 return;
 }
