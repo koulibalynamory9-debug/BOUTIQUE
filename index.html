@@ -5,348 +5,1170 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Gestion Commerciale — Complète</title>
 <style>
-:root{--primaire:#7e22ce; --succes:#16a34a; --danger:#dc2626; --info:#0891b2; --clair:#faf5ff; --sombre:#1e1b4b;}
-*{box-sizing:border-box; font-family:'Segoe UI', Roboto, sans-serif; margin:0; padding:0;}
-body{background:linear-gradient(135deg, #7e22ce, #a855f7); min-height:100vh; padding:10px;}
-.ecran{display:none; animation:apparaitre .3s ease;}
-.ecran.actif{display:block;}
-@keyframes apparaitre{from{opacity:0; transform:translateY(10px);}to{opacity:1; transform:none;}}
+*{margin:0; padding:0; box-sizing:border-box; font-family:'Segoe UI', Roboto, sans-serif;}
+:root{
+--primaire:#6A0DAD; --primaire-fonce:#4B0082; --or:#FFD700;
+--succes:#28a745; --danger:#dc3545; --alerte:#ffc107; --clair:#f8f9fa; --texte:#212529;
+}
+body{background:linear-gradient(135deg, #6A0DAD 0%, #9932CC 100%); min-height:100vh;}
 
-.ecran-connexion{background:linear-gradient(135deg, #4c1d95, #7e22ce); min-height:100vh; display:flex; align-items:center; justify-content:center; padding:20px;}
-.carte-or{background:#fff; border-radius:20px; padding:30px; max-width:420px; width:100%; box-shadow:0 10px 40px rgba(0,0,0,.3); border:4px solid #f59e0b;}
-.carte-or h1{text-align:center; color:var(--primaire); margin-bottom:10px; font-size:24px;}
-.carte-or p.sous-titre{text-align:center; color:#6b7280; margin-bottom:25px;}
-.carte-or input{width:100%; padding:14px; margin:8px 0; border:2px solid #e5e7eb; border-radius:12px; font-size:16px;}
-.carte-or input:focus{outline:none; border-color:var(--primaire); box-shadow:0 0 0 3px rgba(126,34,206,.2);}
-.btn{padding:14px 20px; border:none; border-radius:12px; font-size:16px; font-weight:bold; cursor:pointer; transition:.2s; width:100%; margin:6px 0;}
-.btn-primaire{background:var(--primaire); color:#fff;}
-.btn-primaire:hover{background:#6b21a8;}
-.btn-succes{background:var(--succes); color:#fff;}
-.btn-lien{background:transparent; color:var(--primaire); text-decoration:underline;}
-.alerte{padding:12px; border-radius:10px; margin:12px 0; font-weight:bold; text-align:center;}
-.alerte-rouge{background:#fee2e2; color:#b91c1c;}
-.barre-navigation{background:#fff; border-radius:16px; padding:10px; margin-bottom:15px; display:flex; flex-wrap:wrap; gap:6px; justify-content:center;}
-.onglet{padding:10px 14px; border:none; border-radius:10px; background:#f3e8ff; color:var(--primaire); font-weight:bold; cursor:pointer;}
-.onglet.actif{background:var(--primaire); color:#fff;}
-.contenu{background:#fff; border-radius:16px; padding:20px; display:none;}
-.contenu.actif{display:block;}
-.carte{background:var(--clair); border-radius:12px; padding:16px; margin:10px 0; border-left:4px solid var(--primaire);}
-.carte-alerte{border-left-color:var(--danger); background:#fef2f2;}
-.grid{display:grid; grid-template-columns:repeat(auto-fit, minmax(240px,1fr)); gap:12px; margin:15px 0;}
-.carte-valeur{background:linear-gradient(135deg, #7e22ce, #a855f7); color:#fff; padding:20px; border-radius:12px; text-align:center; font-weight:bold; font-size:18px;}
-.carte-valeur.succes{background:linear-gradient(135deg, #16a34a, #22c55e);}
-.carte-valeur.danger{background:linear-gradient(135deg, #dc2626, #ef4444);}
-input, select{width:100%; padding:12px; margin:6px 0; border:2px solid #e5e7eb; border-radius:10px; font-size:15px;}
-table{width:100%; border-collapse:collapse; margin:15px 0; font-size:14px;}
-th, td{padding:10px; text-align:left; border-bottom:1px solid #e5e7eb;}
-th{background:#f3e8ff; color:var(--primaire); font-weight:bold;}
-.btn-petit{padding:8px 12px; font-size:14px; width:auto; display:inline-block; margin:3px;}
-.btn-danger{background:var(--danger); color:#fff;}
-.btn-whatsapp{background:#25d366; color:#fff;}
+.ecran{min-height:100vh; display:flex; align-items:center; justify-content:center; padding:20px;}
+.ecran-connexion{
+background:linear-gradient(rgba(106,13,173,0.9), rgba(75,0,130,0.95)),
+url('https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=900&q=80') center/cover no-repeat fixed;
+}
+.ecran-verrouille{
+background:linear-gradient(rgba(30,0,50,0.92), rgba(60,0,100,0.95)),
+url('https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=900&q=80') center/cover no-repeat fixed;
+}
+
+.carte{
+background:white; color:var(--texte); padding:30px 25px; border-radius:20px;
+box-shadow:0 15px 50px rgba(0,0,0,0.35); width:100%; max-width:420px; text-align:center;
+}
+.carte-or{border:3px solid var(--or);}
+.carte-verrou{border:3px solid var(--danger);}
+
+.champ{width:100%; padding:14px 18px; margin:10px 0; border:2px solid #e9e9e9; border-radius:12px; font-size:16px;}
+.champ:focus{outline:none; border-color:var(--primaire); box-shadow:0 0 0 3px rgba(106,13,173,0.2);}
+
+.btn{width:100%; padding:14px; border:none; border-radius:12px; font-size:17px; font-weight:bold; cursor:pointer; transition:0.2s; margin:5px 0;}
+.btn:hover{transform:translateY(-1px);}
+.btn-primaire{background:linear-gradient(90deg, #6A0DAD, #9932CC); color:white;}
+.btn-vert{background:var(--succes); color:white;}
+.btn-rouge{background:var(--danger); color:white;}
+.btn-orange{background:var(--alerte); color:#212529;}
+.btn-or{background:linear-gradient(90deg, #FFD700, #FFC107); color:#212529;}
+.btn-petit{width:auto; padding:8px 15px; font-size:14px;}
+.btn-whatsapp{background:#25D366; color:white;}
+.btn-ligne{display:inline-block; width:48%; margin:1%;}
+
+.entete{background:linear-gradient(90deg, var(--primaire-fonce), var(--primaire)); padding:15px 20px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;}
+.nom-app{font-size:18px; font-weight:bold; color:white;}
+.badge-admin{background:var(--or); color:#212529; padding:5px 12px; border-radius:20px; font-weight:bold; font-size:12px;}
+.badge-essai{background:var(--alerte); color:#212529; padding:5px 12px; border-radius:20px; font-weight:bold; font-size:12px;}
+.btn-deco{background:rgba(255,255,255,0.2); color:white; border:none; padding:10px 18px; border-radius:10px; cursor:pointer; font-size:14px;}
+.mode-admin{background:linear-gradient(90deg, #FFD700, #FFC107); color:#212529; padding:12px; text-align:center; font-weight:bold; margin:10px; border-radius:10px;}
+.avertissement{background:#fff3cd; padding:10px; border-radius:8px; margin:10px 0; font-size:14px;}
+
+.contenu{padding:15px; padding-bottom:90px; min-height:calc(100vh - 70px);}
+.onglet{display:none;}
+.onglet.actif{display:block;}
+.cacher{display:none !important;}
+
+.barre-navigation{
+position:fixed; bottom:0; left:0; right:0; background:white; display:flex; justify-content:space-around;
+padding:10px 0; box-shadow:0 -3px 15px rgba(0,0,0,0.1); z-index:100;
+}
+.nav-item{display:flex; flex-direction:column; align-items:center; color:#666; font-size:11px; cursor:pointer;}
+.nav-item.actif{color:var(--primaire); font-weight:bold;}
+
+.bloc{background:white; color:#333; padding:20px; border-radius:15px; margin-bottom:15px; box-shadow:0 3px 10px rgba(0,0,0,0.08);}
+.grille{display:grid; grid-template-columns:repeat(2, 1fr); gap:12px;}
+.stat{background:linear-gradient(135deg, #6A0DAD, #9932CC); color:white; padding:20px; border-radius:12px; text-align:center;}
+.stat .valeur{font-size:24px; font-weight:bold;}
+
+table{width:100%; border-collapse:collapse; margin-top:10px;}
+th,td{padding:10px; text-align:left; border-bottom:1px solid #eee; font-size:14px;}
+th{background:#f5f5f5; color:var(--primaire);}
+
+.ligne-produit, .ligne-facture, .ligne-impaye, .ligne-client, .ligne-code{padding:12px; margin:8px 0; background:#f9f9f9; border-radius:8px;}
+.ligne-code{background:rgba(106,13,173,0.05); border-left:3px solid var(--or);}
+.alerte-stock{border-left:4px solid var(--alerte); background:#fff3cd !important;}
+
+.facture{background:white; color:#333; padding:25px; border-radius:15px; max-width:450px; margin:0 auto;}
+.facture-titre{text-align:center; border-bottom:2px solid var(--primaire); padding-bottom:15px; margin-bottom:15px;}
+.facture-info{margin:5px 0; font-size:14px;}
+.facture-table{width:100%; margin:15px 0;}
+.facture-total{font-size:18px; font-weight:bold; text-align:right; margin-top:10px;}
+
+.recherche{margin-bottom:15px; position:relative;}
+.resultats{position:absolute; top:100%; left:0; right:0; background:white; border:1px solid #ddd; border-top:none; max-height:200px; overflow-y:auto; z-index:50; box-shadow:0 5px 15px rgba(0,0,0,0.1);}
+.res-item{padding:10px; cursor:pointer; border-bottom:1px solid #eee;}
+.res-item:hover{background:#f0f0f0;}
+
+.logo-apercu{max-width:120px; max-height:60px; margin:10px auto; display:block; border-radius:8px;}
+
 .cache-impression{display:none;}
-@media print{.barre-navigation, button, .cache-impression{display:none !important;}}
-.texte-rouge{color:var(--danger); font-weight:bold;}
-.texte-vert{color:var(--succes); font-weight:bold;}
+@media print{
+.barre-navigation, .entete, .btn-deco, .cache-impression{display:none !important;}
+.facture{box-shadow:none; padding:0;}
+body{background:white;}
+}
 </style>
 </head>
 <body>
 
-<div id="ecranConnexion" class="ecran ecran-connexion actif">
-<div class="carte-or">
-<h1>🛒 Gestion Commerciale</h1>
-<p class="sous-titre">Ventes • Stock • Facturation</p>
+<!-- === Écran d'Inscription / Connexion === -->
+<div id="ecranConnexion" class="ecran ecran-connexion">
+<div class="carte carte-or">
+<h1 style="color:#6A0DAD; font-size:24px;">🛒 Gestion Commerciale</h1>
+<p style="color:#666; margin-bottom:20px;">Ventes • Stock • Facturation</p>
 
 <div id="formInscription">
-<h3 style="text-align:center; color:var(--primaire); margin-bottom:15px;">📝 Créer mon compte</h3>
-<input type="text" id="nomUtilisateur" placeholder="Nom et Prénom">
-<input type="tel" id="telUtilisateur" placeholder="Numéro WhatsApp (ex: 621657979)">
-<button class="btn btn-primaire" onclick="creerCompte()">✅ S'inscrire — Essai 7 jours</button>
-<p style="text-align:center; margin-top:15px;">Déjà un compte ? <a href="#" onclick="basculerConnexion()" style="color:var(--primaire); font-weight:bold;">Se connecter</a></p>
+<h3 style="margin-bottom:15px; color:#4B0082;">📝 Créer mon compte</h3>
+<input type="text" id="nomUtil" class="champ" placeholder="Nom & Prénom">
+<input type="tel" id="telUtil" class="champ" placeholder="Numéro WhatsApp">
+<button class="btn btn-primaire" onclick="creerCompte()">✅ S'inscrire (Essai gratuit 7 jours)</button>
+<p style="margin-top:15px; font-size:14px;">
+Déjà un compte ? <a href="#" onclick="basculerFormulaire('connexion')" style="color:#6A0DAD; font-weight:bold;">Se connecter</a>
+</p>
 </div>
 
-<div id="formConnexion" style="display:none;">
-<h3 style="text-align:center; color:var(--primaire); margin-bottom:15px;">🔐 Se connecter</h3>
-<input type="tel" id="telConnexion" placeholder="Votre numéro WhatsApp">
-<button class="btn btn-primaire" onclick="seConnecter()">🔑 Accéder</button>
-<p style="text-align:center; margin-top:15px;">Nouveau ? <a href="#" onclick="basculerInscription()" style="color:var(--primaire); font-weight:bold;">Créer un compte</a></p>
+<div id="formConnexion" class="cacher">
+<h3 style="margin-bottom:15px; color:#4B0082;">🔑 Se connecter</h3>
+<input type="tel" id="telConnexion" class="champ" placeholder="Numéro WhatsApp">
+<input type="password" id="codeAcces" class="champ" placeholder="Code d'accès (si abonné)">
+<button class="btn btn-primaire" onclick="seConnecter()">🔓 Accéder</button>
+<p style="margin-top:15px; font-size:14px;">
+Nouveau ? <a href="#" onclick="basculerFormulaire('inscription')" style="color:#6A0DAD; font-weight:bold;">S'inscrire</a>
+</p>
+<p style="margin-top:10px; font-size:12px; color:#888;">
+Admin : saisissez votre code spécial
+</p>
 </div>
-
-<div id="formVerrouille" style="display:none;">
-<h3 style="text-align:center; color:var(--danger); margin-bottom:15px;">🔒 Essai terminé</h3>
-<div class="alerte alerte-rouge">
-Veuillez appeler le <strong>621657979</strong> pour obtenir votre code d'accès illimité.
-</div>
-<input type="text" id="codeAcces" placeholder="Entrez votre code">
-<button class="btn btn-succes" onclick="validerCode()">✅ Valider</button>
-</div>
-</div>
-</div>
-
-<div id="ecranPrincipal" class="ecran">
-<div class="barre-navigation">
-<button class="onglet actif" data-onglet="accueil">🏠 Accueil</button>
-<button class="onglet" data-onglet="produits">📦 Produits</button>
-<button class="onglet" data-onglet="vente">💰 Vente</button>
-<button class="onglet" data-onglet="impayes">💳 Impayés</button>
-<button class="onglet" data-onglet="admin" id="ongletAdminBtn" style="display:none;">⚙️ Admin</button>
-<button class="onglet btn-petit" style="background:#fee2e2; color:#b91c1c;" onclick="deconnecter()">🚪 Déconnexion</button>
-</div>
-
-<div class="contenu actif" id="onglet-accueil">
-<h2 style="color:var(--primaire); margin-bottom:15px;">🏠 Tableau de bord</h2>
-<div class="grid">
-<div class="carte-valeur"><div class="titre">CA du jour</div><div id="caJour">0 GNF</div></div>
-<div class="carte-valeur succes"><div class="titre">CA Total</div><div id="caTotal">0 GNF</div></div>
-<div class="carte-valeur danger"><div class="titre">Impayés</div><div id="totalImpayes">0 GNF</div></div>
 </div>
 </div>
 
-<div class="contenu" id="onglet-produits">
-<h2 style="color:var(--primaire); margin-bottom:15px;">📦 Produits</h2>
-<input type="text" id="nomProduit" placeholder="Nom du produit">
-<input type="number" id="prixVente" placeholder="Prix de vente (GNF)">
-<button class="btn btn-primaire" onclick="enregistrerProduit()">✅ Enregistrer</button>
-<div id="listeProduits" style="margin-top:20px;"></div>
+<!-- === Écran Verrouillé / Abonnement === -->
+<div id="ecranVerrouille" class="ecran ecran-verrouille cacher">
+<div class="carte carte-verrou">
+<h2 style="color:#dc3545; font-size:22px;">🔒 ACCÈS SUSPENDU</h2>
+<p id="msgVerrou" style="margin:20px 0; font-size:15px;"></p>
+
+<div style="background:#fff3cd; padding:20px; border-radius:12px; margin:20px 0;">
+<p style="font-size:16px; font-weight:bold; color:#856404;">💳 PAIEMENT SUR ORANGE MONEY</p>
+<p style="font-size:20px; font-weight:bold; color:#6A0DAD; margin:10px 0;">622 149 602</p>
 </div>
 
-<div class="contenu" id="onglet-vente">
-<h2 style="color:var(--primaire); margin-bottom:15px;">💰 Nouvelle Vente</h2>
-<input type="text" id="nomClient" placeholder="Nom du client">
-<input type="tel" id="telClient" placeholder="Téléphone du client">
-<select id="selProduit" onchange="majPrix()">
-<option value="">-- Choisir un produit --</option>
+<div style="display:flex; gap:8px; margin:15px 0;">
+<button class="btn btn-vert btn-ligne" onclick="afficherFormule(30)">
+30 Jours<br><strong>250 000 GNF</strong>
+</button>
+<button class="btn btn-orange btn-ligne" onclick="afficherFormule(7)">
+7 Jours<br><strong>50 000 GNF</strong>
+</button>
+</div>
+
+<p id="formuleChoisie" style="font-weight:bold; margin:10px 0;"></p>
+
+<input type="password" id="codeSaisi" class="champ" placeholder="🔑 Saisissez le code reçu...">
+<button class="btn btn-or" onclick="validerAbonnement()">✅ Activer mon accès</button>
+
+<p style="margin-top:15px; font-size:12px; color:#999;">
+Un code = un seul téléphone
+</p>
+</div>
+</div>
+
+<!-- === Application Principale === -->
+<div id="appPrincipale" class="cacher">
+<div class="entete">
+<div class="nom-app" id="nomEntrepriseTete">
+<span id="affichageNomUtil"></span>
+<span id="badgeRole" class="badge-admin">UTILISATEUR</span>
+<span id="badgeAbonnement" class="badge-essai"></span>
+</div>
+<button class="btn-deco" onclick="deconnexion()">🚪 Déconnexion</button>
+</div>
+
+<div id="alerteRenouvellement" class="avertissement cacher">
+⚠️ Votre abonnement expire dans <span id="joursRestantsAbonnement">5</span> jours. Pensez à renouveler !
+</div>
+
+<div id="bandeauAdmin" class="mode-admin cacher">👑 MODE ADMINISTRATEUR — Contrôle Total</div>
+
+<div class="contenu">
+<!-- Accueil / Tableau de Bord -->
+<div id="ongletAccueil" class="onglet actif">
+<h2 style="margin-bottom:20px; color:white;">📊 Tableau de Bord</h2>
+<div class="grille">
+<div class="stat"><div id="nbProduits" class="valeur">0</div><div>Produits</div></div>
+<div class="stat"><div id="nbVentes" class="valeur">0</div><div>Ventes</div></div>
+<div class="stat"><div id="caJour" class="valeur">0</div><div>CA Jour</div></div>
+<div class="stat"><div id="totalImpayes" class="valeur">0</div><div>Impayés</div></div>
+</div>
+
+<h3 style="margin:25px 0 10px; color:white;">⚠️ Alertes Stock</h3>
+<div id="alertesStock"></div>
+</div>
+
+<!-- Entreprise -->
+<div id="ongletEntreprise" class="onglet">
+<h2 style="margin-bottom:15px; color:white;">🏢 Mon Entreprise</h2>
+<div class="bloc">
+<input type="text" id="nomEntreprise" class="champ" placeholder="Nom de l'entreprise">
+<input type="text" id="adresseEntreprise" class="champ" placeholder="Adresse complète">
+<input type="tel" id="telEntreprise" class="champ" placeholder="Téléphone">
+<input type="text" id="rccmEntreprise" class="champ" placeholder="N° RCCM">
+<textarea id="infosEntreprise" class="champ" rows="2" placeholder="Slogan / Compléments"></textarea>
+
+<div style="margin:15px 0;">
+<label style="font-weight:bold; display:block; margin-bottom:5px;">📷 Logo de l'entreprise :</label>
+<input type="file" id="logoEntreprise" accept="image/*" onchange="apercuLogo(this)" class="champ" style="padding:8px;">
+<img id="apercuLogoImg" class="logo-apercu cacher" alt="Logo">
+</div>
+
+<button class="btn btn-primaire" onclick="sauvegarderEntreprise()">💾 Enregistrer</button>
+</div>
+</div>
+
+<!-- Produits -->
+<div id="ongletProduits" class="onglet">
+<h2 style="margin-bottom:15px; color:white;">📦 Produits & Stock</h2>
+<div class="bloc">
+<input type="text" id="nomProd" class="champ" placeholder="Nom du produit">
+<input type="number" id="prixAchat" class="champ" placeholder="Prix d'achat (GNF)">
+<input type="number" id="prixVente" class="champ" placeholder="Prix de vente (GNF)">
+<input type="number" id="stockActuel" class="champ" placeholder="Stock actuel" min="0">
+<input type="number" id="stockAlerte" class="champ" placeholder="Seuil d'alerte" min="0" value="5">
+<button class="btn btn-primaire" onclick="ajouterProduit()">➕ Ajouter Produit</button>
+</div>
+<div id="listeProduits"></div>
+</div>
+
+<!-- Vente -->
+<div id="ongletVente" class="onglet">
+<h2 style="margin-bottom:15px; color:white;">🛒 Nouvelle Vente</h2>
+
+<div class="recherche">
+<input type="text" id="rechercheClient" class="champ" placeholder="🔍 Rechercher client par nom ou téléphone..." oninput="afficherResultatsRecherche(this.value)">
+<div id="resultatsRecherche" class="resultats cacher"></div>
+</div>
+
+<div class="bloc">
+<input type="text" id="nomClient" class="champ" placeholder="Nom du client">
+<input type="tel" id="telClient" class="champ" placeholder="Téléphone du client">
+
+<h4 style="margin:18px 0 10px;">Ajouter au panier</h4>
+<select id="choixProduit" class="champ" onchange="majPrixProduit()">
+<option value="">-- Sélectionner un produit --</option>
 </select>
-<input type="number" id="qte" placeholder="Quantité" min="1">
-<p>Sous-total : <span id="sousTotal">0</span> GNF</p>
-<button class="btn btn-succes" onclick="ajouterPanier()">🛒 Ajouter au panier</button>
-<h3 style="margin-top:20px;">Panier</h3>
-<div id="panier"></div>
-<p style="font-size:18px; font-weight:bold;">Total : <span id="totalFinal">0</span> GNF</p>
-<input type="number" id="verse" placeholder="Montant versé">
-<p>Reste : <span id="resteFinal">0</span> GNF</p>
-<button class="btn btn-primaire" onclick="validerVente()">✅ Valider & Facturer</button>
+<input type="number" id="qteProduit" class="champ" placeholder="Quantité" min="1" value="1">
+<p style="margin:8px 0;">Prix unitaire : <span id="prixUnitaire">0</span> GNF | Stock : <span id="stockDispo">-</span></p>
+<button class="btn btn-primaire" onclick="ajouterAuPanier()">➕ Ajouter au panier</button>
+
+<h4 style="margin:20px 0 10px;">Panier</h4>
+<div id="listePanier"></div>
+<p style="font-size:19px; font-weight:bold; margin-top:15px;">Total : <span id="totalPanier">0</span> GNF</p>
+
+<div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:10px;">
+<input type="number" id="montantPaye" class="champ" placeholder="Montant versé" min="0" value="0">
+<p style="padding:14px; font-weight:bold;">Reste : <span id="resteAPayer">0</span> GNF</p>
 </div>
 
-<div class="contenu" id="onglet-impayes">
-<h2 style="color:var(--primaire); margin-bottom:15px;">💳 Crédits Impayés</h2>
+<button class="btn btn-vert" style="margin-top:15px;" onclick="genererFacture()">🧾 Générer la facture</button>
+</div>
+</div>
+
+<!-- Impayés -->
+<div id="ongletImpayes" class="onglet">
+<h2 style="margin-bottom:15px; color:white;">💬 Crédits Impayés</h2>
 <div id="listeImpayes"></div>
 </div>
 
-<div class="contenu" id="onglet-admin">
-<h2 style="color:var(--primaire); margin-bottom:15px;">⚙️ Espace Administrateur</h2>
-<p>✅ Connecté en tant qu'Administrateur</p>
+<!-- Factures -->
+<div id="ongletFactures" class="onglet">
+<h2 style="margin-bottom:15px; color:white;">🧾 Historique & Factures</h2>
+<div class="recherche">
+<input type="text" id="rechercheFacture" class="champ" placeholder="🔍 Rechercher facture..." oninput="filtrerFactures(this.value)">
+</div>
+<div id="zoneFacture" class="cacher"></div>
+<button class="btn btn-primaire cache-impression" style="margin-bottom:15px;" onclick="afficherHistorique()">📋 Voir tout l'historique</button>
+<div id="listeFactures"></div>
+</div>
+
+<!-- Gestion Utilisateurs (Admin) -->
+<div id="ongletAdmin" class="onglet">
+<h2 style="margin-bottom:15px; color:white;">👥 Utilisateurs Connectés</h2>
 <div id="listeUtilisateurs"></div>
 </div>
 </div>
 
+<!-- Navigation -->
+<div class="barre-navigation">
+<a class="nav-item actif" data-onglet="Accueil">🏠 Accueil</a>
+<a class="nav-item" data-onglet="Entreprise">🏢 Entreprise</a>
+<a class="nav-item" data-onglet="Produits">📦 Produits</a>
+<a class="nav-item" data-onglet="Vente">🛒 Vente</a>
+<a class="nav-item" data-onglet="Impayes">💬 Impayés</a>
+<a class="nav-item" data-onglet="Factures">🧾 Factures</a>
+<a class="nav-item cacher" id="lienAdmin" data-onglet="Admin">⚙️ Admin</a>
+</div>
+</div>
+
 <script>
-const CLE_USER = 'gestion_Utilisateur';
-const CLE_PRODUITS = 'gestion_Produits';
-const CLE_FACTURES = 'gestion_Factures';
-const ADMIN_TEL = '621657979';
+// ═══════════════════════════════════════════════════════════
+// CONFIGURATION
+// ═══════════════════════════════════════════════════════════
+const CODE_ADMIN = "ADMIN-ENSEB-2026";
+const NUMERO_PAIEMENT = "622149602";
+const MONTANT_ABONNEMENT_30J = 250000;
+const MONTANT_ABONNEMENT_7J = 50000;
+const DUREE_ESSAI_JOURS = 7;
+const JOURS_ALERTE_RENOUVELLEMENT = 5;
 
-let utilisateur = null;
+let utilisateurActuel = null;
+let estAdmin = false;
 let panier = [];
+let produits = [];
+let factures = [];
+let impayes = {};
+let infosEntreprise = { logo: '' };
+let idAppareil = null;
+let factureCourante = null;
+let formuleSelectionnee = null;
 
-function idAppareil(){
-let id = localStorage.getItem('idApp');
-if(!id){ id = 'APP-'+Math.random().toString(36).substr(2,8).toUpperCase(); localStorage.setItem('idApp',id); }
-return id;
+// ═══════════════════════════════════════════════════════════
+// INITIALISATION
+// ═══════════════════════════════════════════════════════════
+window.onload = function(){
+idAppareil = genererIDAppareil();
+verifierStatutAcces();
+
+document.querySelectorAll('.nav-item').forEach(btn => {
+btn.onclick = function(){
+document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('actif'));
+this.classList.add('actif');
+const nom = this.getAttribute('data-onglet');
+document.querySelectorAll('.onglet').forEach(o => o.classList.remove('actif'));
+document.getElementById('onglet'+nom).classList.add('actif');
+
+if(nom === 'Accueil'){ actualiserTableauBord(); verifierAlertesStock(); }
+if(nom === 'Produits') afficherListeProduits();
+if(nom === 'Vente') mettreAJourSelectProduits();
+if(nom === 'Impayes') afficherImpayes();
+if(nom === 'Factures') afficherHistorique();
+if(nom === 'Admin') afficherListeUtilisateurs();
+};
+});
+};
+
+function genererIDAppareil(){
+let stock = localStorage.getItem('id_appareil');
+if(!stock){
+stock = 'DEV-' + Math.random().toString(36).substr(2, 10).toUpperCase() + '-' + Date.now().toString(36);
+localStorage.setItem('id_appareil', stock);
 }
-function creerCompte(){
-const nom = document.getElementById('nomUtilisateur').value.trim();
-const tel = document.getElementById('telUtilisateur').value.trim();
+return stock;
+}
 
-if(!nom || !tel) {
-alert('Veuillez remplir tous les champs !');
+function basculerFormulaire(type){
+document.getElementById('formInscription').classList.toggle('cacher', type !== 'inscription');
+document.getElementById('formConnexion').classList.toggle('cacher', type !== 'connexion');
+}
+
+// ═══════════════════════════════════════════════════════════
+// INSCRIPTION & CONNEXION
+// ═══════════════════════════════════════════════════════════
+function creerCompte(){
+const nom = document.getElementById('nomUtil').value.trim();
+const tel = document.getElementById('telUtil').value.trim().replace(/\s/g,'');
+
+if(!nom || !tel) return alert("Remplissez nom et téléphone !");
+if(!/^\d{8,12}$/.test(tel)) return alert("Numéro invalide !");
+
+const comptes = JSON.parse(localStorage.getItem('comptes_utilisateurs') || '{}');
+if(comptes[tel]) return alert("Ce numéro existe déjà ! Veuillez vous connecter.");
+
+const debutEssai = new Date().toISOString();
+comptes[tel] = {
+nom,
+telephone: tel,
+debut_essai: debutEssai,
+statut: 'essai',
+abonnement_expire_le: null,
+code_acces: null,
+appareil_id: idAppareil,
+date_creation: debutEssai
+};
+localStorage.setItem('comptes_utilisateurs', JSON.stringify(comptes));
+
+utilisateurActuel = comptes[tel];
+utilisateurActuel.cle_connexion = tel;
+localStorage.setItem('utilisateur_connecte', tel);
+
+alert(`✅ Bienvenue ${nom} !\nEssai gratuit de ${DUREE_ESSAI_JOURS} jours activé !`);
+ouvrirSession();
+}
+
+function seConnecter(){
+const tel = document.getElementById('telConnexion').value.trim().replace(/\s/g,'');
+const code = document.getElementById('codeAcces').value.trim();
+
+if(code === CODE_ADMIN){
+estAdmin = true;
+utilisateurActuel = { nom: 'ADMINISTRATEUR', telephone: 'ADMIN', statut: 'admin', cle_connexion: 'ADMIN' };
+localStorage.setItem('utilisateur_connecte', 'ADMIN');
+ouvrirSession();
 return;
 }
 
-// Création de l'utilisateur
-utilisateur = {
-nom: nom,
-tel: tel,
-debutEssai: Date.now(),
-finEssai: Date.now() + (7 * 24 * 60 * 60 * 1000), // 7 jours
-estAdmin: tel === ADMIN_TEL
+if(!tel) return alert("Saisissez votre numéro !");
+
+const comptes = JSON.parse(localStorage.getItem('comptes_utilisateurs') || '{}');
+const compte = comptes[tel];
+
+if(!compte) return alert("Aucun compte trouvé ! Veuillez d'abord vous inscrire.");
+
+if(compte.code_acces && compte.code_acces !== code) return alert("❌ Code d'accès incorrect !");
+
+if(compte.appareil_id && compte.appareil_id !== idAppareil){
+return alert("❌ Ce compte est utilisé sur un autre téléphone !");
+}
+
+utilisateurActuel = compte;
+utilisateurActuel.cle_connexion = tel;
+localStorage.setItem('utilisateur_connecte', tel);
+
+if(!verifierStatutAbonnement(compte)) return;
+
+ouvrirSession();
+}
+
+// ═══════════════════════════════════════════════════════════
+// GESTION ABONNEMENT
+// ═══════════════════════════════════════════════════════════
+function verifierStatutAcces(){
+const cle = localStorage.getItem('utilisateur_connecte');
+if(!cle){
+document.getElementById('ecranConnexion').classList.remove('cacher');
+return;
+}
+
+if(cle === 'ADMIN'){
+estAdmin = true;
+utilisateurActuel = { nom: 'ADMINISTRATEUR', telephone: 'ADMIN', statut: 'admin', cle_connexion: 'ADMIN' };
+ouvrirSession();
+return;
+}
+
+const comptes = JSON.parse(localStorage.getItem('comptes_utilisateurs') || '{}');
+const compte = comptes[cle];
+if(!compte){
+document.getElementById('ecranConnexion').classList.remove('cacher');
+return;
+}
+
+utilisateurActuel = compte;
+utilisateurActuel.cle_connexion = cle;
+
+if(!verifierStatutAbonnement(compte)) return;
+
+ouvrirSession();
+}
+
+function verifierStatutAbonnement(compte){
+const maintenant = new Date();
+
+if(compte.statut === 'admin') return true;
+
+if(compte.statut === 'essai'){
+const debut = new Date(compte.debut_essai);
+const joursEcoules = Math.floor((maintenant - debut) / (1000 * 60 * 60 * 24));
+if(joursEcoules >= DUREE_ESSAI_JOURS){
+afficherEcranVerrouillage("Votre période d'essai de 7 jours est terminée !");
+return false;
+}
+return true;
+}
+
+if(compte.statut === 'abonne'){
+const expiration = new Date(compte.abonnement_expire_le);
+const joursRestants = Math.ceil((expiration - maintenant) / (1000 * 60 * 60 * 24));
+
+if(joursRestants <= 0){
+afficherEcranVerrouillage("Votre abonnement est expiré !");
+return false;
+}
+
+if(joursRestants <= JOURS_ALERTE_RENOUVELLEMENT){
+document.getElementById('alerteRenouvellement').classList.remove('cacher');
+document.getElementById('joursRestantsAbonnement').textContent = joursRestants;
+}
+return true;
+}
+
+afficherEcranVerrouillage("Accès à vérifier");
+return false;
+}
+
+function afficherEcranVerrouillage(message){
+document.getElementById('ecranConnexion').classList.add('cacher');
+document.getElementById('appPrincipale').classList.add('cacher');
+document.getElementById('msgVerrou').textContent = message;
+document.getElementById('ecranVerrouille').classList.remove('cacher');
+}
+
+function afficherFormule(duree){
+formuleSelectionnee = duree;
+const montant = duree === 30 ? MONTANT_ABONNEMENT_30J : MONTANT_ABONNEMENT_7J;
+document.getElementById('formuleChoisie').innerHTML = 
+`✅ ${duree} Jours — <strong>${montant.toLocaleString('fr-FR')} GNF</strong><br>
+Paiement sur : ${NUMERO_PAIEMENT}`;
+}
+
+function validerAbonnement(){
+if(!formuleSelectionnee) return alert("Choisissez d'abord une formule !");
+
+const codeSaisi = document.getElementById('codeSaisi').value.trim();
+if(!codeSaisi) return alert("Saisissez le code reçu après paiement !");
+
+const comptes = JSON.parse(localStorage.getItem('comptes_utilisateurs') || '{}');
+const cleUtil = utilisateurActuel?.cle_connexion || Object.keys(comptes).pop();
+const compte = comptes[cleUtil];
+
+if(!compte) return alert("Erreur : compte introuvable. Veuillez vous inscrire d'abord.");
+
+if(compte.code_acces && compte.code_acces !== codeSaisi){
+return alert("❌ Code incorrect !");
+}
+
+if(compte.code_acces && compte.appareil_id && compte.appareil_id !== idAppareil){
+return alert("❌ Ce code est déjà utilisé sur un autre téléphone !");
+}
+
+const maintenant = new Date();
+const dureeMs = formuleSelectionnee * 24 * 60 * 60 * 1000;
+const nouvelleExpiration = new Date(maintenant.getTime() + dureeMs);
+
+compte.statut = 'abonne';
+compte.code_acces = codeSaisi;
+compte.abonnement_expire_le = nouvelleExpiration.toISOString();
+compte.appareil_id = idAppareil;
+
+localStorage.setItem('comptes_utilisateurs', JSON.stringify(comptes));
+
+alert(`✅ Abonnement activé pour ${formuleSelectionnee} jours !\nExpire le : ${nouvelleExpiration.toLocaleDateString('fr-FR')}`);
+
+document.getElementById('ecranVerrouille').classList.add('cacher');
+utilisateurActuel = compte;
+ouvrirSession();
+}
+
+// ═══════════════════════════════════════════════════════════
+// OUVERTURE SESSION & NAVIGATION
+// ═══════════════════════════════════════════════════════════
+function ouvrirSession(){
+document.getElementById('ecranConnexion').classList.add('cacher');
+document.getElementById('ecranVerrouille').classList.add('cacher');
+document.getElementById('appPrincipale').classList.remove('cacher');
+
+document.getElementById('affichageNomUtil').textContent = utilisateurActuel.nom + ' | ';
+document.getElementById('badgeRole').textContent = estAdmin ? 'ADMIN' : 'UTILISATEUR';
+document.getElementById('lienAdmin').classList.toggle('cacher', !estAdmin);
+document.getElementById('bandeauAdmin').classList.toggle('cacher', !estAdmin);
+
+let texteAbonnement = '';
+if(utilisateurActuel.statut === 'essai'){
+const debut = new Date(utilisateurActuel.debut_essai);
+const jours = Math.max(0, DUREE_ESSAI_JOURS - Math.floor((new Date() - debut) / (1000*60*60*24)));
+texteAbonnement = `⏳ Essai: ${jours}j`;
+} else if(utilisateurActuel.statut === 'abonne'){
+const exp = new Date(utilisateurActuel.abonnement_expire_le);
+const jours = Math.ceil((exp - new Date()) / (1000*60*60*24));
+texteAbonnement = `✅ Expire: ${jours}j`;
+} else if(estAdmin){
+texteAbonnement = '👑 Illimité';
+}
+document.getElementById('badgeAbonnement').textContent = texteAbonnement;
+
+chargerDonnees();
+chargerInfosEntreprise();
+actualiserTableauBord();
+mettreAJourSelectProduits();
+verifierAlertesStock();
+}
+
+function deconnexion(){
+if(confirm("Voulez-vous vraiment vous déconnecter ?")){
+localStorage.removeItem('utilisateur_connecte');
+location.reload();
+}
+}
+
+// ═══════════════════════════════════════════════════════════
+// ADMIN : VOIR & DÉCONNECTER UTILISATEURS
+// ═══════════════════════════════════════════════════════════
+function afficherListeUtilisateurs(){
+if(!estAdmin){
+document.getElementById('listeUtilisateurs').innerHTML = 
+'<p style="color:#ffd700; padding:20px; text-align:center;">🔒 Réservé à l\'administrateur</p>';
+return;
+}
+
+const comptes = JSON.parse(localStorage.getItem('comptes_utilisateurs') || '{}');
+const bloc = document.getElementById('listeUtilisateurs');
+
+if(Object.keys(comptes).length === 0){
+bloc.innerHTML = '<p style="color:#ccc; padding:20px; text-align:center;">Aucun utilisateur inscrit</p>';
+return;
+}
+
+bloc.innerHTML = '<p style="color:#ffd700; font-weight:bold; margin-bottom:15px;">👥 Tous les comptes :</p>';
+for(const [tel, compte] of Object.entries(comptes)){
+const exp = compte.abonnement_expire_le ? new Date(compte.abonnement_expire_le).toLocaleDateString('fr-FR') : '—';
+const statutTexte = compte.statut === 'essai' ? '⏳ Essai' : 
+compte.statut === 'abonne' ? '✅ Abonné' : compte.statut;
+bloc.innerHTML += `
+<div class="ligne-code">
+<strong>${compte.nom}</strong><br>
+📞 ${tel} | ${statutTexte}
+${compte.code_acces ? `<br>🔑 Code: ${compte.code_acces}` : ''}
+${exp !== '—' ? `<br>📅 Expire: ${exp}` : ''}
+<br><small style="color:#999;">Appareil: ${compte.appareil_id ? compte.appareil_id.substring(0,18)+'...' : 'Non connecté'}</small>
+<div style="margin-top:8px;">
+<button class="btn btn-rouge btn-petit" onclick="supprimerUtilisateur('${tel}')">🗑️ Supprimer</button>
+</div>
+</div>`;
+}
+}
+
+function supprimerUtilisateur(tel){
+if(!estAdmin) return;
+if(confirm("Supprimer définitivement cet utilisateur ?")){
+const comptes = JSON.parse(localStorage.getItem('comptes_utilisateurs') || '{}');
+delete comptes[tel];
+localStorage.setItem('comptes_utilisateurs', JSON.stringify(comptes));
+alert("✅ Utilisateur supprimé !");
+afficherListeUtilisateurs();
+}
+}
+
+// ═══════════════════════════════════════════════════════════
+// SAUVEGARDE / CHARGEMENT DONNÉES
+// ═══════════════════════════════════════════════════════════
+function sauvegarderDonnees(){
+const prefixe = estAdmin ? 'admin_' : (utilisateurActuel?.cle_connexion || 'defaut') + '_';
+localStorage.setItem(prefixe+'produits', JSON.stringify(produits));
+localStorage.setItem(prefixe+'factures', JSON.stringify(factures));
+localStorage.setItem(prefixe+'impayes', JSON.stringify(impayes));
+}
+
+function chargerDonnees(){
+const prefixe = estAdmin ? 'admin_' : (utilisateurActuel?.cle_connexion || 'defaut') + '_';
+produits = JSON.parse(localStorage.getItem(prefixe+'produits') || '[]');
+factures = JSON.parse(localStorage.getItem(prefixe+'factures') || '[]');
+impayes = JSON.parse(localStorage.getItem(prefixe+'impayes') || '{}');
+}
+
+// ═══════════════════════════════════════════════════════════
+// ENTREPRISE & LOGO
+// ═══════════════════════════════════════════════════════════
+function apercuLogo(input){
+if(input.files && input.files[0]){
+const lecteur = new FileReader();
+lecteur.onload = e => {
+document.getElementById('apercuLogoImg').src = e.target.result;
+document.getElementById('apercuLogoImg').classList.remove('cacher');
 };
-
-// Sauvegarde
-localStorage.setItem(CLE_USER, JSON.stringify(utilisateur));
-
-// Message de bienvenue
-alert(`Bienvenue ${nom} !\nVotre essai de 7 jours commence.`);
-
-// PASSAGE À L'ÉCRAN PRINCIPAL — CETTE LIGNE ÉTAIT MANQUANTE !
-ouvrirApplication();
-}
-
-
-function seConnecter(){
-const tel = document.getElementById('telConnexion').value.trim();
-const sauvegarde = JSON.parse(localStorage.getItem(CLE_USER)||'null');
-if(sauvegarde && sauvegarde.tel === tel){
-utilisateur = sauvegarde;
-return verifierAcces();
-}
-alert('Aucun compte — Créez-en un');
-basculerInscription();
-}
-
-function verifierAcces(){
-if(!utilisateur) return;
-if(utilisateur.estAdmin) document.getElementById('ongletAdminBtn').style.display = 'inline-block';
-if(utilisateur.valide || Date.now() < utilisateur.finEssai){
-ouvrirApplication();
-} else {
-document.getElementById('formInscription').style.display = 'none';
-document.getElementById('formConnexion').style.display = 'none';
-document.getElementById('formVerrouille').style.display = 'block';
+lecteur.readAsDataURL(input.files[0]);
 }
 }
 
-function validerCode(){
-const code = document.getElementById('codeAcces').value.trim();
-if(code.length >= 6){
-utilisateur.valide = true;
-localStorage.setItem(CLE_USER, JSON.stringify(utilisateur));
-alert('✅ Accès illimité activé !');
-ouvrirApplication();
-} else alert('Code invalide');
+function chargerInfosEntreprise(){
+const stock = localStorage.getItem('infosEntreprise_' + (utilisateurActuel?.cle_connexion || 'defaut'));
+if(stock){
+infosEntreprise = JSON.parse(stock);
+document.getElementById('nomEntreprise').value = infosEntreprise.nom || '';
+document.getElementById('adresseEntreprise').value = infosEntreprise.adresse || '';
+document.getElementById('telEntreprise').value = infosEntreprise.telephone || '';
+document.getElementById('rccmEntreprise').value = infosEntreprise.rccm || '';
+document.getElementById('infosEntreprise').value = infosEntreprise.infos || '';
+if(infosEntreprise.logo){
+document.getElementById('apercuLogoImg').src = infosEntreprise.logo;
+document.getElementById('apercuLogoImg').classList.remove('cacher');
+}
+}
 }
 
-function basculerConnexion(){
-document.getElementById('formInscription').style.display = 'none';
-document.getElementById('formConnexion').style.display = 'block';
-document.getElementById('formVerrouille').style.display = 'none';
-}
-function basculerInscription(){
-document.getElementById('formInscription').style.display = 'block';
-document.getElementById('formConnexion').style.display = 'none';
-document.getElementById('formVerrouille').style.display = 'none';
-}
-function deconnecter(){
-localStorage.removeItem(CLE_USER);
-utilisateur = null;
-document.getElementById('ecranPrincipal').classList.remove('actif');
-document.getElementById('ecranConnexion').classList.add('actif');
-basculerInscription();
-}
-
-function ouvrirApplication(){
-document.getElementById('ecranConnexion').classList.remove('actif');
-document.getElementById('ecranPrincipal').classList.add('actif');
-if(utilisateur?.estAdmin) document.getElementById('ongletAdminBtn').style.display = 'inline-block';
-
-document.querySelectorAll('.onglet').forEach(b => {
-b.onclick = () => {
-document.querySelectorAll('.onglet').forEach(o => o.classList.remove('actif'));
-b.classList.add('actif');
-document.querySelectorAll('.contenu').forEach(c => c.classList.remove('actif'));
-document.getElementById(`onglet-${b.dataset.onglet}`).classList.add('actif');
-if(b.dataset.onglet === 'produits') afficherProduits();
-if(b.dataset.onglet === 'vente') chargerSelectProduits();
+function sauvegarderEntreprise(){
+const logoImg = document.getElementById('apercuLogoImg').src || infosEntreprise.logo;
+infosEntreprise = {
+nom: document.getElementById('nomEntreprise').value.trim() || 'Gestion Commerciale',
+adresse: document.getElementById('adresseEntreprise').value.trim(),
+telephone: document.getElementById('telEntreprise').value.trim(),
+rccm: document.getElementById('rccmEntreprise').value.trim(),
+infos: document.getElementById('infosEntreprise').value.trim(),
+logo: logoImg
 };
-});
-chargerSelectProduits();
+localStorage.setItem('infosEntreprise_' + (utilisateurActuel?.cle_connexion || 'defaut'), JSON.stringify(infosEntreprise));
+chargerInfosEntreprise();
+alert("✅ Informations enregistrées !");
 }
 
-function produits(){ return JSON.parse(localStorage.getItem(CLE_PRODUITS)||'[]'); }
-function sauverProduits(liste){ localStorage.setItem(CLE_PRODUITS, JSON.stringify(liste)); }
-function factures(){ return JSON.parse(localStorage.getItem(CLE_FACTURES)||'[]'); }
-function sauverFactures(liste){ localStorage.setItem(CLE_FACTURES, JSON.stringify(liste)); }
+// ═══════════════════════════════════════════════════════════
+// PRODUITS & STOCK
+// ═══════════════════════════════════════════════════════════
+function ajouterProduit(){
+const nom = document.getElementById('nomProd').value.trim();
+const achat = parseFloat(document.getElementById('prixAchat').value) || 0;
+const vente = parseFloat(document.getElementById('prixVente').value) || 0;
+const stock = parseInt(document.getElementById('stockActuel').value) || 0;
+const seuil = parseInt(document.getElementById('stockAlerte').value) || 5;
 
-function enregistrerProduit(){
-const nom = document.getElementById('nomProduit').value.trim();
-const prix = parseFloat(document.getElementById('prixVente').value);
-if(!nom || !prix) return alert('Champs obligatoires');
-const liste = produits();
-liste.push({id:Date.now(), nom, prix});
-sauverProduits(liste);
-alert('✅ Produit enregistré');
-document.getElementById('nomProduit').value = '';
+if(!nom || !vente) return alert("Remplissez nom et prix de vente !");
+if(produits.some(p => p.nom === nom)) return alert("❌ Produit déjà existant !");
+
+produits.push({id:Date.now(), nom, achat, vente, stockActuel:stock, stockAlerte:seuil});
+sauvegarderDonnees();
+alert("✅ Produit ajouté !");
+
+document.getElementById('nomProd').value = '';
+document.getElementById('prixAchat').value = '';
 document.getElementById('prixVente').value = '';
-afficherProduits();
-chargerSelectProduits();
+document.getElementById('stockActuel').value = '';
+
+afficherListeProduits();
+mettreAJourSelectProduits();
+actualiserTableauBord();
+verifierAlertesStock();
 }
 
-function afficherProduits(){
-document.getElementById('listeProduits').innerHTML = produits().map(p => `
-<div class="carte">${p.nom} — ${p.prix.toLocaleString('fr-FR')} GNF</div>
-`).join('');
+function afficherListeProduits(){
+const bloc = document.getElementById('listeProduits');
+if(produits.length === 0){
+bloc.innerHTML = '<p style="color:#ccc; text-align:center; padding:20px;">Aucun produit enregistré</p>';
+return;
+}
+bloc.innerHTML = produits.map(p => {
+const alerte = p.stockActuel <= p.stockAlerte;
+return `
+<div class="ligne-produit ${alerte ? 'alerte-stock' : ''}">
+<strong>${p.nom}</strong>
+${alerte ? '<span style="color:#ffc107; float:right; font-weight:bold;">⚠️ STOCK BAS</span>' : ''}<br>
+Achat: ${p.achat.toLocaleString('fr-FR')} GNF | Vente: ${p.vente.toLocaleString('fr-FR')} GNF<br>
+Stock: ${p.stockActuel} (seuil: ${p.stockAlerte})
+<div style="margin-top:10px;">
+<button class="btn btn-primaire btn-petit" onclick="modifierStock(${p.id})">📦 Ajuster</button>
+<button class="btn btn-rouge btn-petit" style="float:right;" onclick="supprimerProduit(${p.id})">🗑️ Supprimer</button>
+</div>
+</div>`;
+}).join('');
 }
 
-function chargerSelectProduits(){
-document.getElementById('selProduit').innerHTML = '<option value="">-- Choisir --</option>' +
-produits().map(p => `<option value="${p.id}" data-prix="${p.prix}">${p.nom} — ${p.prix} GNF</option>`).join('');
+function modifierStock(id){
+const prod = produits.find(p => p.id === id);
+const nvStock = prompt(`Nouveau stock pour « ${prod.nom} » :`, prod.stockActuel);
+if(nvStock !== null && !isNaN(nvStock)){
+prod.stockActuel = Math.max(0, parseInt(nvStock) || 0);
+sauvegarderDonnees();
+afficherListeProduits();
+verifierAlertesStock();
+}
 }
 
-function majPrix(){
-const opt = document.getElementById('selProduit').selectedOptions[0];
-const prix = parseFloat(opt?.dataset.prix) || 0;
-const qte = parseInt(document.getElementById('qte').value) || 0;
-document.getElementById('sousTotal').textContent = (prix*qte).toLocaleString('fr-FR');
+function supprimerProduit(id){
+if(confirm("Supprimer ce produit ?")){
+produits = produits.filter(p => p.id !== id);
+sauvegarderDonnees();
+afficherListeProduits();
+mettreAJourSelectProduits();
+actualiserTableauBord();
+verifierAlertesStock();
+}
 }
 
-function ajouterPanier(){
-const opt = document.getElementById('selProduit').selectedOptions[0];
-if(!opt) return alert('Choisissez un produit');
-const nom = opt.textContent.split(' — ')[0];
-const prix = parseFloat(opt.dataset.prix);
-const qte = parseInt(document.getElementById('qte').value) || 1;
-panier.push({nom, prix, qte, total:prix*qte});
+function mettreAJourSelectProduits(){
+const sel = document.getElementById('choixProduit');
+sel.innerHTML = '<option value="">-- Sélectionner un produit --</option>' +
+produits.filter(p => p.stockActuel > 0).map(p => 
+`<option value="${p.id}">${p.nom}</option>`
+).join('');
+}
+
+function majPrixProduit(){
+const id = parseInt(document.getElementById('choixProduit').value);
+const prod = produits.find(p => p.id === id);
+if(prod){
+document.getElementById('prixUnitaire').textContent = prod.vente.toLocaleString('fr-FR');
+document.getElementById('stockDispo').textContent = prod.stockActuel;
+} else {
+document.getElementById('prixUnitaire').textContent = '0';
+document.getElementById('stockDispo').textContent = '-';
+}
+}
+
+// ═══════════════════════════════════════════════════════════
+// PANIER & VENTE
+// ═══════════════════════════════════════════════════════════
+function ajouterAuPanier(){
+const id = parseInt(document.getElementById('choixProduit').value);
+const qte = parseInt(document.getElementById('qteProduit').value) || 1;
+const prod = produits.find(p => p.id === id);
+
+if(!prod) return alert("Sélectionnez un produit !");
+if(qte > prod.stockActuel) return alert(`Stock insuffisant ! Disponible : ${prod.stockActuel}`);
+
+panier.push({
+id: prod.id,
+nom: prod.nom,
+prix: prod.vente,
+quantite: qte,
+total: prod.vente * qte
+});
+
+prod.stockActuel -= qte;
+sauvegarderDonnees();
+
+document.getElementById('choixProduit').value = '';
+document.getElementById('qteProduit').value = 1;
+document.getElementById('prixUnitaire').textContent = '0';
+document.getElementById('stockDispo').textContent = '-';
+
 majAffichagePanier();
+mettreAJourSelectProduits();
+verifierAlertesStock();
 }
 
 function majAffichagePanier(){
-document.getElementById('panier').innerHTML = panier.map((a,i) => 
-`<div>${a.nom} × ${a.qte} = ${a.total.toLocaleString('fr-FR')} GNF 
-<button class="btn btn-danger btn-petit" onclick="panier.splice(${i},1);majAffichagePanier()">✕</button></div>`
-).join('');
-const total = panier.reduce((s,a)=>s+a.total,0);
-const verse = parseFloat(document.getElementById('verse').value)||0;
-document.getElementById('totalFinal').textContent = total.toLocaleString('fr-FR');
-document.getElementById('resteFinal').textContent = Math.max(0, total-verse).toLocaleString('fr-FR');
+const bloc = document.getElementById('listePanier');
+if(panier.length === 0){
+bloc.innerHTML = '<p style="color:#999;">Panier vide</p>';
+document.getElementById('totalPanier').textContent = '0';
+majReste();
+return;
 }
 
-document.getElementById('qte').oninput = majPrix;
-document.getElementById('verse').oninput = majAffichagePanier;
+bloc.innerHTML = panier.map((item, idx) => `
+<div style="display:flex; justify-content:space-between; align-items:center; padding:8px 0; border-bottom:1px solid #eee;">
+<div>
+<strong>${item.nom}</strong> × ${item.quantite}<br>
+${item.prix.toLocaleString('fr-FR')} × ${item.quantite} = ${item.total.toLocaleString('fr-FR')} GNF
+</div>
+<button class="btn btn-rouge btn-petit" onclick="retirerDuPanier(${idx})">✕</button>
+</div>
+`).join('');
+const total = panier.reduce((s, i) => s + i.total, 0);
+document.getElementById('totalPanier').textContent = total.toLocaleString('fr-FR');
+majReste();
+}
 
-function validerVente(){
-if(!panier.length) return alert('Panier vide');
-const nomClient = document.getElementById('nomClient').value||'Client';
-const telClient = document.getElementById('telClient').value||'';
-const total = panier.reduce((s,a)=>s+a.total,0);
-const verse = parseFloat(document.getElementById('verse').value)||0;
-const reste = total - verse;
+function retirerDuPanier(index){
+const item = panier[index];
+const prod = produits.find(p => p.id === item.id);
+if(prod) prod.stockActuel += item.quantite;
+panier.splice(index, 1);
+sauvegarderDonnees();
+majAffichagePanier();
+mettreAJourSelectProduits();
+}
 
-const nouvelleFacture = {
-id: Date.now(),
-date: new Date().toLocaleString('fr-FR'),
-nom: nomClient, tel: telClient,
-articles: [...panier], total, verse, reste
+function majReste(){
+const total = panier.reduce((s, i) => s + i.total, 0);
+const verse = parseFloat(document.getElementById('montantPaye').value) || 0;
+const reste = Math.max(0, total - verse);
+document.getElementById('resteAPayer').textContent = reste.toLocaleString('fr-FR');
+}
+
+// ═══════════════════════════════════════════════════════════
+// RECHERCHE CLIENT
+// ═══════════════════════════════════════════════════════════
+function afficherResultatsRecherche(valeur){
+const zone = document.getElementById('resultatsRecherche');
+if(!valeur.trim()){
+zone.classList.add('cacher');
+return;
+}
+
+const correspondants = Object.entries(impayes).filter(([key, data]) => 
+key.toLowerCase().includes(valeur.toLowerCase()) ||
+(data.telephone && data.telephone.includes(valeur))
+);
+
+if(correspondants.length === 0){
+zone.innerHTML = '<div class="res-item" style="color:#999;">Aucun client trouvé</div>';
+} else {
+zone.innerHTML = correspondants.map(([nom, data]) => `
+<div class="res-item" onclick="chargerClient('${nom.split(' | ')[0]}', '${data.telephone || ''}')">
+<strong>${nom.split(' | ')[0]}</strong><br>
+<small>${data.telephone || 'Sans téléphone'}</small>
+</div>
+`).join('');
+}
+zone.classList.remove('cacher');
+}
+
+function chargerClient(nom, tel){
+document.getElementById('nomClient').value = nom;
+document.getElementById('telClient').value = tel;
+document.getElementById('resultatsRecherche').classList.add('cacher');
+}
+
+// ═══════════════════════════════════════════════════════════
+// FACTURATION
+// ═══════════════════════════════════════════════════════════
+function genererFacture(){
+const nomClient = document.getElementById('nomClient').value.trim();
+const telClient = document.getElementById('telClient').value.trim();
+const montantPaye = parseFloat(document.getElementById('montantPaye').value) || 0;
+const total = panier.reduce((s, i) => s + i.total, 0);
+const reste = Math.max(0, total - montantPaye);
+
+if(!nomClient) return alert("Indiquez le nom du client !");
+if(panier.length === 0) return alert("Ajoutez des produits au panier !");
+
+const numFacture = 'FACT-' + Date.now();
+const date = new Date().toLocaleString('fr-FR');
+
+factureCourante = {
+numero: numFacture,
+date: date,
+nomClient,
+telephone: telClient,
+articles: [...panier],
+total,
+verse: montantPaye,
+reste,
+dateFacture: new Date().toISOString()
 };
+factures.unshift(factureCourante);
 
-const liste = factures();
-liste.unshift(nouvelleFacture);
-sauverFactures(liste);
+const cleClient = nomClient + (telClient ? ` | ${telClient}` : '');
+if(!impayes[cleClient]){
+impayes[cleClient] = {
+nom: nomClient,
+telephone: telClient,
+reste_total: 0,
+historique: []
+};
+}
+impayes[cleClient].reste_total += reste;
+impayes[cleClient].historique.push({
+date: date,
+facture: numFacture,
+montant: total,
+verse: montantPaye,
+reste: reste
+});
+
+sauvegarderDonnees();
+
+document.getElementById('zoneFacture').classList.remove('cacher');
+document.getElementById('zoneFacture').innerHTML = genererHTMLFacture(factureCourante);
+document.getElementById('listeFactures').innerHTML = '';
 
 panier = [];
+majAffichagePanier();
 document.getElementById('nomClient').value = '';
 document.getElementById('telClient').value = '';
-document.getElementById('verse').value = '';
-majAffichagePanier();
+document.getElementById('montantPaye').value = 0;
 
-alert(`✅ Facture enregistrée !\nTotal : ${total.toLocaleString('fr-FR')} GNF\nReste : ${reste.toLocaleString('fr-FR')} GNF`);
+actualiserTableauBord();
+alert("✅ Facture générée !");
 }
 
-window.onload = function(){
-const sauvegarde = JSON.parse(localStorage.getItem(CLE_USER)||'null');
-if(sauvegarde){
-utilisateur = sauvegarde;
-verifierAcces();
+function genererHTMLFacture(f){
+const entreprise = infosEntreprise.nom || 'GESTION COMMERCIALE';
+const adresse = infosEntreprise.adresse || '';
+const telEnt = infosEntreprise.telephone || '';
+const rccm = infosEntreprise.rccm || '';
+const logo = infosEntreprise.logo;
+
+return `
+<div class="facture" id="blocFacture">
+<div class="facture-titre">
+${logo ? `<img src="${logo}" alt="Logo" style="max-width:140px; max-height:70px; margin:0 auto 10px; display:block;">` : ''}
+<h2 style="color:#6A0DAD; margin-bottom:5px;">${entreprise}</h2>
+<p class="facture-info">${adresse}</p>
+<p class="facture-info">Tél: ${telEnt}</p>
+<p class="facture-info">${rccm}</p>
+<h3 style="margin-top:10px; color:#4B0082;">FACTURE</h3>
+<p class="facture-info"><strong>N°</strong> ${f.numero}</p>
+<p class="facture-info"><strong>Date :</strong> ${f.date}</p>
+</div>
+
+<div style="margin-bottom:15px;">
+<p><strong>Client :</strong> ${f.nomClient}</p>
+<p><strong>Téléphone :</strong> ${f.telephone || 'Non renseigné'}</p>
+</div>
+
+<table class="facture-table">
+<thead>
+<tr style="background:#6A0DAD; color:white;">
+<th style="padding:10px;">Produit</th>
+<th style="padding:10px; text-align:center;">Qté</th>
+<th style="padding:10px; text-align:right;">Prix</th>
+<th style="padding:10px; text-align:right;">Total</th>
+</tr>
+</thead>
+<tbody>
+${f.articles.map(a => `
+<tr>
+<td>${a.nom}</td>
+<td style="text-align:center;">${a.quantite}</td>
+<td style="text-align:right;">${a.prix.toLocaleString('fr-FR')}</td>
+<td style="text-align:right;">${a.total.toLocaleString('fr-FR')}</td>
+</tr>`).join('')}
+</tbody>
+</table>
+
+<div class="facture-total">
+Total : ${f.total.toLocaleString('fr-FR')} GNF<br>
+Versé : ${f.verse.toLocaleString('fr-FR')} GNF<br>
+${f.reste > 0 ? `<span style="color:red;">Reste à payer : ${f.reste.toLocaleString('fr-FR')} GNF</span>` : `<span style="color:green;">✅ Payé en totalité</span>`}
+</div>
+
+<div style="margin-top:20px; display:flex; gap:10px; flex-wrap:wrap;">
+<button class="btn btn-primaire btn-petit cache-impression" onclick="window.print()">🖨️ Imprimer</button>
+<button class="btn btn-whatsapp btn-petit cache-impression" onclick="partagerSurWhatsapp('${f.numero}')">📲 Partager WhatsApp</button>
+<button class="btn btn-vert btn-petit cache-impression" onclick="document.getElementById('zoneFacture').classList.add('cacher')">↩ Retour</button>
+</div>
+</div>`;
 }
-};
+
+function partagerSurWhatsapp(numFacture){
+const fact = factures.find(x => x.numero === numFacture);
+if(!fact) return;
+
+const texte = `
+🧾 FACTURE N°${fact.numero}
+📅 Date: ${fact.date}
+👤 Client: ${fact.nomClient}
+📞 Tél: ${fact.telephone || 'Non renseigné'}
+
+--- Articles ---
+${fact.articles.map(a => `• ${a.nom} ×${a.quantite} = ${a.total.toLocaleString('fr-FR')} GNF`).join('\n')}
+
+💰 Total: ${fact.total.toLocaleString('fr-FR')} GNF
+💵 Versé: ${fact.verse.toLocaleString('fr-FR')} GNF
+${fact.reste > 0 ? `⚠️ Reste: ${fact.reste.toLocaleString('fr-FR')} GNF` : '✅ Payé en totalité'}
+
+— ${infosEntreprise.nom || 'Gestion Commerciale'} —
+`.trim();
+
+const url = `https://wa.me/${fact.telephone || ''}?text=${encodeURIComponent(texte)}`;
+window.open(url, '_blank');
+}
+
+function afficherHistorique(){
+document.getElementById('zoneFacture').classList.add('cacher');
+const bloc = document.getElementById('listeFactures');
+
+if(factures.length === 0){
+bloc.innerHTML = '<p style="color:#ccc; text-align:center; padding:20px;">Aucune facture enregistrée</p>';
+return;
+}
+
+bloc.innerHTML = factures.map(f => `
+<div class="ligne-facture" onclick="voirFacture('${f.numero}')" style="cursor:pointer;">
+<strong>${f.numero}</strong> — ${f.nomClient}<br>
+${f.date} | Total: ${f.total.toLocaleString('fr-FR')} GNF
+${f.reste > 0 ? `<span style="color:red;">🔴 Impayé: ${f.reste.toLocaleString('fr-FR')}</span>` : `<span style="color:green;">✅ Réglé</span>`}
+</div>
+`).join('');
+}
+
+function voirFacture(numero){
+const f = factures.find(x => x.numero === numero);
+if(f){
+document.getElementById('zoneFacture').classList.remove('cacher');
+document.getElementById('zoneFacture').innerHTML = genererHTMLFacture(f);
+document.getElementById('listeFactures').innerHTML = '';
+}
+}
+
+function filtrerFactures(valeur){
+if(!valeur.trim()){
+afficherHistorique();
+return;
+}
+const resultats = factures.filter(f => 
+f.numero.toLowerCase().includes(valeur.toLowerCase()) ||
+f.nomClient.toLowerCase().includes(valeur.toLowerCase()) ||
+(f.telephone && f.telephone.includes(valeur))
+);
+const bloc = document.getElementById('listeFactures');
+bloc.innerHTML = resultats.length === 0 
+? '<p style="color:#ccc; padding:15px;">Aucune facture trouvée</p>'
+: resultats.map(f => `
+<div class="ligne-facture" onclick="voirFacture('${f.numero}')" style="cursor:pointer;">
+<strong>${f.numero}</strong> — ${f.nomClient}<br>
+${f.date} | Total: ${f.total.toLocaleString('fr-FR')} GNF
+</div>
+`).join('');
+}
+
+// ═══════════════════════════════════════════════════════════
+// IMPAYÉS & PAIEMENT RESTE
+// ═══════════════════════════════════════════════════════════
+function afficherImpayes(){
+const bloc = document.getElementById('listeImpayes');
+const entries = Object.entries(impayes).filter(([_, d]) => d.reste_total > 0);
+
+if(entries.length === 0){
+bloc.innerHTML = '<p style="color:#ccc; text-align:center; padding:20px;">✅ Aucun impayé — Tous comptes réglés</p>';
+return;
+}
+
+bloc.innerHTML = entries.map(([cle, data]) => `
+<div class="ligne-impaye">
+<strong>${data.nom}</strong> — ${data.telephone || 'Sans téléphone'}<br>
+<span style="color:red; font-weight:bold;">💳 Reste dû : ${data.reste_total.toLocaleString('fr-FR')} GNF</span>
+<button class="btn btn-vert btn-petit" style="margin-top:8px;" onclick="payerReste('${cle}')">💰 Enregistrer un paiement</button>
+</div>
+`).join('');
+}
+
+function payerReste(cleClient){
+const montant = parseFloat(prompt("Montant versé :"));
+if(!montant || montant <= 0) return;
+
+const client = impayes[cleClient];
+if(!client) return;
+
+if(montant > client.reste_total){
+alert(`Le montant dépasse le reste dû !\nReste dû : ${client.reste_total.toLocaleString('fr-FR')} GNF`);
+return;
+}
+
+client.reste_total -= montant;
+client.historique.push({
+date: new Date().toLocaleString('fr-FR'),
+type: 'paiement partiel',
+montant: montant,
+nouveau_reste: client.reste_total
+});
+
+sauvegarderDonnees();
+alert(`✅ Paiement enregistré !\nNouveau reste dû : ${client.reste_total.toLocaleString('fr-FR')} GNF`);
+afficherImpayes();
+actualiserTableauBord();
+}
+
+// ═══════════════════════════════════════════════════════════
+// TABLEAU DE BORD & ALERTES
+// ═══════════════════════════════════════════════════════════
+function actualiserTableauBord(){
+document.getElementById('nbProduits').textContent = produits.length;
+document.getElementById('nbVentes').textContent = factures.length;
+
+const aujourdHui = new Date().toDateString();
+const caJour = factures
+.filter(f => new Date(f.dateFacture).toDateString() === aujourdHui)
+.reduce((s, f) => s + f.total, 0);
+document.getElementById('caJour').textContent = caJour.toLocaleString('fr-FR');
+
+const totalImp = Object.values(impayes).reduce((s, c) => s + (c.reste_total || 0), 0);
+document.getElementById('totalImpayes').textContent = totalImp.toLocaleString('fr-FR');
+}
+
+function verifierAlertesStock(){
+const bloc = document.getElementById('alertesStock');
+const alertes = produits.filter(p => p.stockActuel <= p.stockAlerte);
+
+if(alertes.length === 0){
+bloc.innerHTML = '<p style="color:#90EE90; padding:10px;">✅ Tous les stocks sont suffisants</p>';
+return;
+}
+
+bloc.innerHTML = alertes.map(p => `
+<div style="background:#fff3cd; padding:10px; border-radius:8px; margin:5px 0;">
+⚠️ <strong>${p.nom}</strong> — Stock : ${p.stockActuel} (seuil : ${p.stockAlerte})
+</div>
+`).join('');
+}
+
 </script>
 </body>
 </html>
