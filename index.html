@@ -1012,11 +1012,10 @@ ${fact.articles.map(art => `
 </table>
 
 <div class="facture-total">
-Total : ${fact.total.toLocaleString('fr-FR')} GNF<br>
-Versé : ${fact.verse.toLocaleString('fr-FR')} GNF<br>
-${fact.reste > 0 
-? `<span style="color:red; font-weight:bold;">Reste à payer : ${fact.reste.toLocaleString('fr-FR')} GNF</span>` 
+${fact.reste > 0
+? `<span style="color:red; font-weight:bold; font-size:18px;">Reste à payer : ${fact.reste.toLocaleString('fr-FR')} GNF</span>`
 : `<span style="color:green; font-weight:bold; font-size:18px;">✅ PAYÉ — LIVRÉ</span>`}
+
 
 </div>
 
@@ -1137,6 +1136,14 @@ return;
 client.reste_total -= montant;
 
 client.historique.push({
+  const factures = JSON.parse(localStorage.getItem('factures') || '[]');
+factures.forEach(f => {
+if (f.nomClient === client.nom || f.telClient === cleClient) {
+f.reste = client.reste_total;
+}
+});
+localStorage.setItem('factures', JSON.stringify(factures));
+
 date: new Date().toLocaleString('fr-FR'),
 montant: montant,
 nouveau_reste: client.reste_total
